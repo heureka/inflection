@@ -1,0 +1,22 @@
+{
+    "name": "heureka/inflection",
+    "description": "Class for czech inflection of names and words",
+    "authors": [
+        {
+            "name": "Pavel Sedlák",
+            "email": "pavel.sedlak@centrum.cz"
+        },
+        {
+            "name": "Heureka",
+            "email": "podpora@heureka.cz"
+        }
+
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.1.0"
+    },
+    "autoload": {
+        "files": ["src/Inflection.php"]
+    }
+}
