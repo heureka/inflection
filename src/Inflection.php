@@ -23,7 +23,6 @@
  * $tvary = $x->inflect('nejaky text'[, $zivtone=false[, $preferovanyRod='']]);
  *
  */
-
 class Inflection
 {
     /**
@@ -33,365 +32,355 @@ class Inflection
     const GENUS_MASCULINE = 'm';
     const GENUS_NEUTER = 's';
 
-    public function __construct()
-    {
-        //
-        //  Databaze vzoru pro sklonovani
-        //
-        $this->vzor = Array();
-        $nvz = 0;
-        $this->isDbgMode = false;
-        //
+    private $isDebugMode = false;
+
+    // Ve zvl. pripadech je mozne pomoci teto promenne "pretypovat" rod jmena
+    protected $PrefRod = "0"; // smi byt "0", "m", "ž", "s"
+
+    /**
+     * Přídavná jména a zájmena
+     */
+
+    protected $vzor = array(
         // Přídavná jména a zájmena
-        //
-        $this->vzor[$nvz++] = Array("m", "-ký", "kého", "kému", "ký/kého", "ký", "kém", "kým", "-ké/-cí", "kých", "kým", "ké", "-ké/-cí", "kých", "kými");
-        $this->vzor[$nvz++] = Array("m", "-rý", "rého", "rému", "rý/rého", "rý", "rém", "rým", "-ré/-ří", "rých", "rým", "ré", "-ré/-ří", "rých", "rými");
-        $this->vzor[$nvz++] = Array("m", "-chý", "chého", "chému", "chý/chého", "chý", "chém", "chým", "-ché/-ší", "chých", "chým", "ché", "-ché/-ší", "chých", "chými");
-        $this->vzor[$nvz++] = Array("m", "-hý", "hého", "hému", "hý/hého", "hý", "hém", "hým", "-hé/-zí", "hých", "hým", "hé", "-hé/-zí", "hých", "hými");
-        $this->vzor[$nvz++] = Array("m", "-ý", "ého", "ému", "ý/ého", "ý", "ém", "ým", "-é/-í", "ých", "ým", "é", "-é/-í", "ých", "ými");
-        $this->vzor[$nvz++] = Array("m", "-[aeěií]cí", "0cího", "0címu", "0cí/0cího", "0cí", "0cím", "0cím", "0cí", "0cích", "0cím", "0cí", "0cí", "0cích", "0cími");
-        $this->vzor[$nvz++] = Array("ž", "-[aeěií]cí", "0cí", "0cí", "0cí", "0cí", "0cí", "0cí", "0cí", "0cích", "0cím", "0cí", "0cí", "0cích", "0cími");
-        $this->vzor[$nvz++] = Array("s", "-[aeěií]cí", "0cího", "0címu", "0cí/0cího", "0cí", "0cím", "0cím", "0cí", "0cích", "0cím", "0cí", "0cí", "0cích", "0cími");
-        $this->vzor[$nvz++] = Array("m", "-[bcčdhklmnprsštvzž]ní", "0ního", "0nímu", "0ní/0ního", "0ní", "0ním", "0ním", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními");
-        $this->vzor[$nvz++] = Array("ž", "-[bcčdhklmnprsštvzž]ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními");
-        $this->vzor[$nvz++] = Array("s", "-[bcčdhklmnprsštvzž]ní", "0ního", "0nímu", "0ní/0ního", "0ní", "0ním", "0ním", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními");
+        array("m", "-ký", "kého", "kému", "ký/kého", "ký", "kém", "kým", "-ké/-cí", "kých", "kým", "ké", "-ké/-cí", "kých", "kými")
+    , array("m", "-rý", "rého", "rému", "rý/rého", "rý", "rém", "rým", "-ré/-ří", "rých", "rým", "ré", "-ré/-ří", "rých", "rými")
+    , array("m", "-chý", "chého", "chému", "chý/chého", "chý", "chém", "chým", "-ché/-ší", "chých", "chým", "ché", "-ché/-ší", "chých", "chými")
+    , array("m", "-hý", "hého", "hému", "hý/hého", "hý", "hém", "hým", "-hé/-zí", "hých", "hým", "hé", "-hé/-zí", "hých", "hými")
+    , array("m", "-ý", "ého", "ému", "ý/ého", "ý", "ém", "ým", "-é/-í", "ých", "ým", "é", "-é/-í", "ých", "ými")
+    , array("m", "-[aeěií]cí", "0cího", "0címu", "0cí/0cího", "0cí", "0cím", "0cím", "0cí", "0cích", "0cím", "0cí", "0cí", "0cích", "0cími")
+    , array("ž", "-[aeěií]cí", "0cí", "0cí", "0cí", "0cí", "0cí", "0cí", "0cí", "0cích", "0cím", "0cí", "0cí", "0cích", "0cími")
+    , array("s", "-[aeěií]cí", "0cího", "0címu", "0cí/0cího", "0cí", "0cím", "0cím", "0cí", "0cích", "0cím", "0cí", "0cí", "0cích", "0cími")
+    , array("m", "-[bcčdhklmnprsštvzž]ní", "0ního", "0nímu", "0ní/0ního", "0ní", "0ním", "0ním", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními")
+    , array("ž", "-[bcčdhklmnprsštvzž]ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními")
+    , array("s", "-[bcčdhklmnprsštvzž]ní", "0ního", "0nímu", "0ní/0ního", "0ní", "0ním", "0ním", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními")
 
-        $this->vzor[$nvz++] = Array("m", "-[i]tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "0telé", "0telů", "0telům", "0tele", "0telé", "0telích", "0teli");
-        $this->vzor[$nvz++] = Array("m", "-[í]tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "átelé", "áteli", "átelům", "átele", "átelé", "átelích", "áteli");
+    , array("m", "-[i]tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "0telé", "0telů", "0telům", "0tele", "0telé", "0telích", "0teli")
+    , array("m", "-[í]tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "átelé", "áteli", "átelům", "átele", "átelé", "átelích", "áteli")
 
-
-        $this->vzor[$nvz++] = Array("s", "-é", "ého", "ému", "é", "é", "ém", "ým", "-á", "ých", "ým", "á", "á", "ých", "ými");
-        $this->vzor[$nvz++] = Array("ž", "-á", "é", "é", "ou", "á", "é", "ou", "-é", "ých", "ým", "é", "é", "ých", "ými");
-        $this->vzor[$nvz++] = Array("-", "já", "mne", "mně", "mne/mě", "já", "mně", "mnou", "my", "nás", "nám", "nás", "my", "nás", "námi");
-        $this->vzor[$nvz++] = Array("-", "ty", "tebe", "tobě", "tě/tebe", "ty", "tobě", "tebou", "vy", "vás", "vám", "vás", "vy", "vás", "vámi");
-        $this->vzor[$nvz++] = Array("-", "my", "", "", "", "", "", "", "my", "nás", "nám", "nás", "my", "nás", "námi");
-        $this->vzor[$nvz++] = Array("-", "vy", "", "", "", "", "", "", "vy", "vás", "vám", "vás", "vy", "vás", "vámi");
-        $this->vzor[$nvz++] = Array("m", "on", "něho", "mu/jemu/němu", "ho/jej", "on", "něm", "ním", "oni", "nich", "nim", "je", "oni", "nich", "jimi/nimi");
-        $this->vzor[$nvz++] = Array("m", "oni", "", "", "", "", "", "", "oni", "nich", "nim", "je", "oni", "nich", "jimi/nimi");
-        $this->vzor[$nvz++] = Array("ž", "ony", "", "", "", "", "", "", "ony", "nich", "nim", "je", "ony", "nich", "jimi/nimi");
-        $this->vzor[$nvz++] = Array("s", "ono", "něho", "mu/jemu/němu", "ho/jej", "ono", "něm", "ním", "ona", "nich", "nim", "je", "ony", "nich", "jimi/nimi");
-        $this->vzor[$nvz++] = Array("ž", "ona", "ní", "ní", "ji", "ona", "ní", "ní", "ony", "nich", "nim", "je", "ony", "nich", "jimi/nimi");
-        $this->vzor[$nvz++] = Array("m", "ten", "toho", "tomu", "toho", "ten", "tom", "tím", "ti", "těch", "těm", "ty", "ti", "těch", "těmi");
-        $this->vzor[$nvz++] = Array("ž", "ta", "té", "té", "tu", "ta", "té", "tou", "ty", "těch", "těm", "ty", "ty", "těch", "těmi");
-        $this->vzor[$nvz++] = Array("s", "to", "toho", "tomu", "toho", "to", "tom", "tím", "ta", "těch", "těm", "ta", "ta", "těch", "těmi");
+    , array("s", "-é", "ého", "ému", "é", "é", "ém", "ým", "-á", "ých", "ým", "á", "á", "ých", "ými")
+    , array("ž", "-á", "é", "é", "ou", "á", "é", "ou", "-é", "ých", "ým", "é", "é", "ých", "ými")
+    , array("-", "já", "mne", "mně", "mne/mě", "já", "mně", "mnou", "my", "nás", "nám", "nás", "my", "nás", "námi")
+    , array("-", "ty", "tebe", "tobě", "tě/tebe", "ty", "tobě", "tebou", "vy", "vás", "vám", "vás", "vy", "vás", "vámi")
+    , array("-", "my", "", "", "", "", "", "", "my", "nás", "nám", "nás", "my", "nás", "námi")
+    , array("-", "vy", "", "", "", "", "", "", "vy", "vás", "vám", "vás", "vy", "vás", "vámi")
+    , array("m", "on", "něho", "mu/jemu/němu", "ho/jej", "on", "něm", "ním", "oni", "nich", "nim", "je", "oni", "nich", "jimi/nimi")
+    , array("m", "oni", "", "", "", "", "", "", "oni", "nich", "nim", "je", "oni", "nich", "jimi/nimi")
+    , array("ž", "ony", "", "", "", "", "", "", "ony", "nich", "nim", "je", "ony", "nich", "jimi/nimi")
+    , array("s", "ono", "něho", "mu/jemu/němu", "ho/jej", "ono", "něm", "ním", "ona", "nich", "nim", "je", "ony", "nich", "jimi/nimi")
+    , array("ž", "ona", "ní", "ní", "ji", "ona", "ní", "ní", "ony", "nich", "nim", "je", "ony", "nich", "jimi/nimi")
+    , array("m", "ten", "toho", "tomu", "toho", "ten", "tom", "tím", "ti", "těch", "těm", "ty", "ti", "těch", "těmi")
+    , array("ž", "ta", "té", "té", "tu", "ta", "té", "tou", "ty", "těch", "těm", "ty", "ty", "těch", "těmi")
+    , array("s", "to", "toho", "tomu", "toho", "to", "tom", "tím", "ta", "těch", "těm", "ta", "ta", "těch", "těmi")
 
         // přivlastňovací zájmena
-        $this->vzor[$nvz++] = Array("m", "můj", "mého", "mému", "mého", "můj", "mém", "mým", "mí", "mých", "mým", "mé", "mí", "mých", "mými");
-        $this->vzor[$nvz++] = Array("ž", "má", "mé", "mé", "mou", "má", "mé", "mou", "mé", "mých", "mým", "mé", "mé", "mých", "mými");
-        $this->vzor[$nvz++] = Array("ž", "moje", "mé", "mé", "mou", "má", "mé", "mou", "moje", "mých", "mým", "mé", "mé", "mých", "mými");
-        $this->vzor[$nvz++] = Array("s", "mé", "mého", "mému", "mé", "moje", "mém", "mým", "mé", "mých", "mým", "má", "má", "mých", "mými");
-        $this->vzor[$nvz++] = Array("s", "moje", "mého", "mému", "moje", "moje", "mém", "mým", "moje", "mých", "mým", "má", "má", "mých", "mými");
+    , array("m", "můj", "mého", "mému", "mého", "můj", "mém", "mým", "mí", "mých", "mým", "mé", "mí", "mých", "mými")
+    , array("ž", "má", "mé", "mé", "mou", "má", "mé", "mou", "mé", "mých", "mým", "mé", "mé", "mých", "mými")
+    , array("ž", "moje", "mé", "mé", "mou", "má", "mé", "mou", "moje", "mých", "mým", "mé", "mé", "mých", "mými")
+    , array("s", "mé", "mého", "mému", "mé", "moje", "mém", "mým", "mé", "mých", "mým", "má", "má", "mých", "mými")
+    , array("s", "moje", "mého", "mému", "moje", "moje", "mém", "mým", "moje", "mých", "mým", "má", "má", "mých", "mými")
 
-        $this->vzor[$nvz++] = Array("m", "tvůj", "tvého", "tvému", "tvého", "tvůj", "tvém", "tvým", "tví", "tvých", "tvým", "tvé", "tví", "tvých", "tvými");
-        $this->vzor[$nvz++] = Array("ž", "tvá", "tvé", "tvé", "tvou", "tvá", "tvé", "tvou", "tvé", "tvých", "tvým", "tvé", "tvé", "tvých", "tvými");
-        $this->vzor[$nvz++] = Array("ž", "tvoje", "tvé", "tvé", "tvou", "tvá", "tvé", "tvou", "tvé", "tvých", "tvým", "tvé", "tvé", "tvých", "tvými");
-        $this->vzor[$nvz++] = Array("s", "tvé", "tvého", "tvému", "tvého", "tvůj", "tvém", "tvým", "tvá", "tvých", "tvým", "tvé", "tvá", "tvých", "tvými");
-        $this->vzor[$nvz++] = Array("s", "tvoje", "tvého", "tvému", "tvého", "tvůj", "tvém", "tvým", "tvá", "tvých", "tvým", "tvé", "tvá", "tvých", "tvými");
+    , array("m", "tvůj", "tvého", "tvému", "tvého", "tvůj", "tvém", "tvým", "tví", "tvých", "tvým", "tvé", "tví", "tvých", "tvými")
+    , array("ž", "tvá", "tvé", "tvé", "tvou", "tvá", "tvé", "tvou", "tvé", "tvých", "tvým", "tvé", "tvé", "tvých", "tvými")
+    , array("ž", "tvoje", "tvé", "tvé", "tvou", "tvá", "tvé", "tvou", "tvé", "tvých", "tvým", "tvé", "tvé", "tvých", "tvými")
+    , array("s", "tvé", "tvého", "tvému", "tvého", "tvůj", "tvém", "tvým", "tvá", "tvých", "tvým", "tvé", "tvá", "tvých", "tvými")
+    , array("s", "tvoje", "tvého", "tvému", "tvého", "tvůj", "tvém", "tvým", "tvá", "tvých", "tvým", "tvé", "tvá", "tvých", "tvými")
 
-        $this->vzor[$nvz++] = Array("m", "náš", "našeho", "našemu", "našeho", "náš", "našem", "našim", "naši", "našich", "našim", "naše", "naši", "našich", "našimi");
-        $this->vzor[$nvz++] = Array("ž", "naše", "naší", "naší", "naši", "naše", "naší", "naší", "naše", "našich", "našim", "naše", "naše", "našich", "našimi");
-        $this->vzor[$nvz++] = Array("s", "naše", "našeho", "našemu", "našeho", "naše", "našem", "našim", "naše", "našich", "našim", "naše", "naše", "našich", "našimi");
+    , array("m", "náš", "našeho", "našemu", "našeho", "náš", "našem", "našim", "naši", "našich", "našim", "naše", "naši", "našich", "našimi")
+    , array("ž", "naše", "naší", "naší", "naši", "naše", "naší", "naší", "naše", "našich", "našim", "naše", "naše", "našich", "našimi")
+    , array("s", "naše", "našeho", "našemu", "našeho", "naše", "našem", "našim", "naše", "našich", "našim", "naše", "naše", "našich", "našimi")
 
-        $this->vzor[$nvz++] = Array("m", "váš", "vašeho", "vašemu", "vašeho", "váš", "vašem", "vašim", "vaši", "vašich", "vašim", "vaše", "vaši", "vašich", "vašimi");
-        $this->vzor[$nvz++] = Array("ž", "vaše", "vaší", "vaší", "vaši", "vaše", "vaší", "vaší", "vaše", "vašich", "vašim", "vaše", "vaše", "vašich", "vašimi");
-        $this->vzor[$nvz++] = Array("s", "vaše", "vašeho", "vašemu", "vašeho", "vaše", "vašem", "vašim", "vaše", "vašich", "vašim", "vaše", "vaše", "vašich", "vašimi");
+    , array("m", "váš", "vašeho", "vašemu", "vašeho", "váš", "vašem", "vašim", "vaši", "vašich", "vašim", "vaše", "vaši", "vašich", "vašimi")
+    , array("ž", "vaše", "vaší", "vaší", "vaši", "vaše", "vaší", "vaší", "vaše", "vašich", "vašim", "vaše", "vaše", "vašich", "vašimi")
+    , array("s", "vaše", "vašeho", "vašemu", "vašeho", "vaše", "vašem", "vašim", "vaše", "vašich", "vašim", "vaše", "vaše", "vašich", "vašimi")
 
-        $this->vzor[$nvz++] = Array("m", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho");
-        $this->vzor[$nvz++] = Array("ž", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho");
-        $this->vzor[$nvz++] = Array("s", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho");
+    , array("m", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho")
+    , array("ž", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho")
+    , array("s", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho", "jeho")
 
-        $this->vzor[$nvz++] = Array("m", "její", "jejího", "jejímu", "jejího", "její", "jejím", "jejím", "její", "jejích", "jejím", "její", "její", "jejích", "jejími");
-        $this->vzor[$nvz++] = Array("s", "její", "jejího", "jejímu", "jejího", "její", "jejím", "jejím", "její", "jejích", "jejím", "její", "její", "jejích", "jejími");
-        $this->vzor[$nvz++] = Array("ž", "její", "její", "její", "její", "její", "její", "její", "její", "jejích", "jejím", "její", "její", "jejích", "jejími");
+    , array("m", "její", "jejího", "jejímu", "jejího", "její", "jejím", "jejím", "její", "jejích", "jejím", "její", "její", "jejích", "jejími")
+    , array("s", "její", "jejího", "jejímu", "jejího", "její", "jejím", "jejím", "její", "jejích", "jejím", "její", "její", "jejích", "jejími")
+    , array("ž", "její", "její", "její", "její", "její", "její", "její", "její", "jejích", "jejím", "její", "její", "jejích", "jejími")
 
-        $this->vzor[$nvz++] = Array("m", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich");
-        $this->vzor[$nvz++] = Array("s", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich");
-        $this->vzor[$nvz++] = Array("ž", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich");
-
+    , array("m", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich")
+    , array("s", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich")
+    , array("ž", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich", "jejich")
 
         // výjimky (zvl. běžná slova)
-        $this->vzor[$nvz++] = Array("m", "-bůh", "boha", "bohu", "boha", "bože", "bohovi", "bohem", "bozi/bohové", "bohů", "bohům", "bohy", "bozi/bohové", "bozích", "bohy");
-        $this->vzor[$nvz++] = Array("m", "-pan", "pana", "panu", "pana", "pane", "panu", "panem", "páni/pánové", "pánů", "pánům", "pány", "páni/pánové", "pánech", "pány");
-        $this->vzor[$nvz++] = Array("s", "moře", "moře", "moři", "moře", "moře", "moři", "mořem", "moře", "moří", "mořím", "moře", "moře", "mořích", "moři");
-        $this->vzor[$nvz++] = Array("-", "dveře", "", "", "", "", "", "", "dveře", "dveří", "dveřím", "dveře", "dveře", "dveřích", "dveřmi");
-        $this->vzor[$nvz++] = Array("-", "housle", "", "", "", "", "", "", "housle", "houslí", "houslím", "housle", "housle", "houslích", "houslemi");
-        $this->vzor[$nvz++] = Array("-", "šle", "", "", "", "", "", "", "šle", "šlí", "šlím", "šle", "šle", "šlích", "šlemi");
-        $this->vzor[$nvz++] = Array("-", "muka", "", "", "", "", "", "", "muka", "muk", "mukám", "muka", "muka", "mukách", "mukami");
-        $this->vzor[$nvz++] = Array("s", "ovoce", "ovoce", "ovoci", "ovoce", "ovoce", "ovoci", "ovocem", "", "", "", "", "", "", "");
-        $this->vzor[$nvz++] = Array("m", "humus", "humusu", "humusu", "humus", "humuse", "humusu", "humusem", "humusy", "humusů", "humusům", "humusy", "humusy", "humusech", "humusy");
-        $this->vzor[$nvz++] = Array("m", "-vztek", "vzteku", "vzteku", "vztek", "vzteku", "vzteku", "vztekem", "vzteky", "vzteků", "vztekům", "vzteky", "vzteky", "vztecích", "vzteky");
-        $this->vzor[$nvz++] = Array("m", "-dotek", "doteku", "doteku", "dotek", "doteku", "doteku", "dotekem", "doteky", "doteků", "dotekům", "doteky", "doteky", "dotecích", "doteky");
-        $this->vzor[$nvz++] = Array("ž", "-hra", "hry", "hře", "hru", "hro", "hře", "hrou", "hry", "her", "hrám", "hry", "hry", "hrách", "hrami");
-        $this->vzor[$nvz++] = Array("m", "Zeus", "Dia", "Diovi", "Dia", "Die", "Diovi", "Diem", "Diové", "Diů", "Diům", "?", "Diové", "?", "?");
-        $this->vzor[$nvz++] = Array("ž", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol");
-        $this->vzor[$nvz++] = Array("m", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol");
+    , array("m", "-bůh", "boha", "bohu", "boha", "bože", "bohovi", "bohem", "bozi/bohové", "bohů", "bohům", "bohy", "bozi/bohové", "bozích", "bohy")
+    , array("m", "-pan", "pana", "panu", "pana", "pane", "panu", "panem", "páni/pánové", "pánů", "pánům", "pány", "páni/pánové", "pánech", "pány")
+    , array("s", "moře", "moře", "moři", "moře", "moře", "moři", "mořem", "moře", "moří", "mořím", "moře", "moře", "mořích", "moři")
+    , array("-", "dveře", "", "", "", "", "", "", "dveře", "dveří", "dveřím", "dveře", "dveře", "dveřích", "dveřmi")
+    , array("-", "housle", "", "", "", "", "", "", "housle", "houslí", "houslím", "housle", "housle", "houslích", "houslemi")
+    , array("-", "šle", "", "", "", "", "", "", "šle", "šlí", "šlím", "šle", "šle", "šlích", "šlemi")
+    , array("-", "muka", "", "", "", "", "", "", "muka", "muk", "mukám", "muka", "muka", "mukách", "mukami")
+    , array("s", "ovoce", "ovoce", "ovoci", "ovoce", "ovoce", "ovoci", "ovocem", "", "", "", "", "", "", "")
+    , array("m", "humus", "humusu", "humusu", "humus", "humuse", "humusu", "humusem", "humusy", "humusů", "humusům", "humusy", "humusy", "humusech", "humusy")
+    , array("m", "-vztek", "vzteku", "vzteku", "vztek", "vzteku", "vzteku", "vztekem", "vzteky", "vzteků", "vztekům", "vzteky", "vzteky", "vztecích", "vzteky")
+    , array("m", "-dotek", "doteku", "doteku", "dotek", "doteku", "doteku", "dotekem", "doteky", "doteků", "dotekům", "doteky", "doteky", "dotecích", "doteky")
+    , array("ž", "-hra", "hry", "hře", "hru", "hro", "hře", "hrou", "hry", "her", "hrám", "hry", "hry", "hrách", "hrami")
+    , array("m", "Zeus", "Dia", "Diovi", "Dia", "Die", "Diovi", "Diem", "Diové", "Diů", "Diům", null, "Diové", null, null)
+    , array("ž", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol")
 
         // číslovky
-        $this->vzor[$nvz++] = Array("-", "-tdva", "tidvou", "tidvoum", "tdva", "tdva", "tidvou", "tidvěmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tdvě", "tidvou", "tidvěma", "tdva", "tdva", "tidvou", "tidvěmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-ttři", "titří", "titřem", "ttři", "ttři", "titřech", "titřemi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tčtyři", "tičtyřech", "tičtyřem", "tčtyři", "tčtyři", "tičtyřech", "tičtyřmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tpět", "tipěti", "tipěti", "tpět", "tpět", "tipěti", "tipěti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tšest", "tišesti", "tišesti", "tšest", "tšest", "tišesti", "tišesti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tsedm", "tisedmi", "tisedmi", "tsedm", "tsedm", "tisedmi", "tisedmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tosm", "tiosmi", "tiosmi", "tosm", "tosm", "tiosmi", "tiosmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tdevět", "tidevíti", "tidevíti", "tdevět", "tdevět", "tidevíti", "tidevíti", "?", "?", "?", "?", "?", "?", "?");
+    , array("-", "-tdva", "tidvou", "tidvoum", "tdva", "tdva", "tidvou", "tidvěmi", null, null, null, null, null, null, null)
+    , array("-", "-tdvě", "tidvou", "tidvěma", "tdva", "tdva", "tidvou", "tidvěmi", null, null, null, null, null, null, null)
+    , array("-", "-ttři", "titří", "titřem", "ttři", "ttři", "titřech", "titřemi", null, null, null, null, null, null, null)
+    , array("-", "-tčtyři", "tičtyřech", "tičtyřem", "tčtyři", "tčtyři", "tičtyřech", "tičtyřmi", null, null, null, null, null, null, null)
+    , array("-", "-tpět", "tipěti", "tipěti", "tpět", "tpět", "tipěti", "tipěti", null, null, null, null, null, null, null)
+    , array("-", "-tšest", "tišesti", "tišesti", "tšest", "tšest", "tišesti", "tišesti", null, null, null, null, null, null, null)
+    , array("-", "-tsedm", "tisedmi", "tisedmi", "tsedm", "tsedm", "tisedmi", "tisedmi", null, null, null, null, null, null, null)
+    , array("-", "-tosm", "tiosmi", "tiosmi", "tosm", "tosm", "tiosmi", "tiosmi", null, null, null, null, null, null, null)
+    , array("-", "-tdevět", "tidevíti", "tidevíti", "tdevět", "tdevět", "tidevíti", "tidevíti", null, null, null, null, null, null, null)
 
-        $this->vzor[$nvz++] = Array("ž", "-jedna", "jedné", "jedné", "jednu", "jedno", "jedné", "jednou", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("m", "-jeden", "jednoho", "jednomu", "jednoho", "jeden", "jednom", "jedním", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("s", "-jedno", "jednoho", "jednomu", "jednoho", "jedno", "jednom", "jedním", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-dva", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-dvě", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-tři", "tří", "třem", "tři", "tři", "třech", "třemi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-čtyři", "čtyřech", "čtyřem", "čtyři", "čtyři", "čtyřech", "čtyřmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-pět", "pěti", "pěti", "pět", "pět", "pěti", "pěti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-šest", "šesti", "šesti", "šest", "šest", "šesti", "šesti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-sedm", "sedmi", "sedmi", "sedm", "sedm", "sedmi", "sedmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-osm", "osmi", "osmi", "osm", "osm", "osmi", "osmi", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-devět", "devíti", "devíti", "devět", "devět", "devíti", "devíti", "?", "?", "?", "?", "?", "?", "?");
+    , array("ž", "-jedna", "jedné", "jedné", "jednu", "jedno", "jedné", "jednou", null, null, null, null, null, null, null)
+    , array("m", "-jeden", "jednoho", "jednomu", "jednoho", "jeden", "jednom", "jedním", null, null, null, null, null, null, null)
+    , array("s", "-jedno", "jednoho", "jednomu", "jednoho", "jedno", "jednom", "jedním", null, null, null, null, null, null, null)
+    , array("-", "-dva", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", null, null, null, null, null, null, null)
+    , array("-", "-dvě", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", null, null, null, null, null, null, null)
+    , array("-", "-tři", "tří", "třem", "tři", "tři", "třech", "třemi", null, null, null, null, null, null, null)
+    , array("-", "-čtyři", "čtyřech", "čtyřem", "čtyři", "čtyři", "čtyřech", "čtyřmi", null, null, null, null, null, null, null)
+    , array("-", "-pět", "pěti", "pěti", "pět", "pět", "pěti", "pěti", null, null, null, null, null, null, null)
+    , array("-", "-šest", "šesti", "šesti", "šest", "šest", "šesti", "šesti", null, null, null, null, null, null, null)
+    , array("-", "-sedm", "sedmi", "sedmi", "sedm", "sedm", "sedmi", "sedmi", null, null, null, null, null, null, null)
+    , array("-", "-osm", "osmi", "osmi", "osm", "osm", "osmi", "osmi", null, null, null, null, null, null, null)
+    , array("-", "-devět", "devíti", "devíti", "devět", "devět", "devíti", "devíti", null, null, null, null, null, null, null)
 
-        $this->vzor[$nvz++] = Array("-", "deset", "deseti", "deseti", "deset", "deset", "deseti", "deseti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-ná[cs]t", "ná0ti", "ná0ti", "ná0t", "náct", "ná0ti", "ná0ti", "?", "?", "?", "?", "?", "?", "?");
+    , array("-", "deset", "deseti", "deseti", "deset", "deset", "deseti", "deseti", null, null, null, null, null, null, null)
+    , array("-", "-ná[cs]t", "ná0ti", "ná0ti", "ná0t", "náct", "ná0ti", "ná0ti", null, null, null, null, null, null, null)
 
-        $this->vzor[$nvz++] = Array("-", "-dvacet", "dvaceti", "dvaceti", "dvacet", "dvacet", "dvaceti", "dvaceti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-třicet", "třiceti", "třiceti", "třicet", "třicet", "třiceti", "třiceti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-čtyřicet", "čtyřiceti", "čtyřiceti", "čtyřicet", "čtyřicet", "čtyřiceti", "čtyřiceti", "?", "?", "?", "?", "?", "?", "?");
-        $this->vzor[$nvz++] = Array("-", "-desát", "desáti", "desáti", "desát", "desát", "desáti", "desáti", "?", "?", "?", "?", "?", "?", "?");
+    , array("-", "-dvacet", "dvaceti", "dvaceti", "dvacet", "dvacet", "dvaceti", "dvaceti", null, null, null, null, null, null, null)
+    , array("-", "-třicet", "třiceti", "třiceti", "třicet", "třicet", "třiceti", "třiceti", null, null, null, null, null, null, null)
+    , array("-", "-čtyřicet", "čtyřiceti", "čtyřiceti", "čtyřicet", "čtyřicet", "čtyřiceti", "čtyřiceti", null, null, null, null, null, null, null)
+    , array("-", "-desát", "desáti", "desáti", "desát", "desát", "desáti", "desáti", null, null, null, null, null, null, null)
 
 
         //
         // Spec. přídady skloňování(+předseda, srdce jako úplná výjimka)
         //
-        $this->vzor[$nvz++] = Array("m", "-[i]sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "-0sté", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty");
-        $this->vzor[$nvz++] = Array("m", "-[o]sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "-0stové", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty");
-        $this->vzor[$nvz++] = Array("m", "-předseda", "předsedy", "předsedovi", "předsedu", "předsedo", "předsedovi", "předsedou", "předsedové", "předsedů", "předsedům", "předsedy", "předsedové", "předsedech", "předsedy");
-        $this->vzor[$nvz++] = Array("m", "-srdce", "srdce", "srdi", "sdrce", "srdce", "srdci", "srdcem", "srdce", "srdcí", "srdcím", "srdce", "srdce", "srdcích", "srdcemi");
-        $this->vzor[$nvz++] = Array("m", "-[db]ce", "0ce", "0ci", "0ce", "0če", "0ci", "0cem", "0ci/0cové", "0ců", "0cům", "0ce", "0ci/0cové", "0cích", "0ci");
-        $this->vzor[$nvz++] = Array("m", "-[jň]ev", "0evu", "0evu", "0ev", "0eve", "0evu", "0evem", "-0evy", "0evů", "0evům", "0evy", "0evy", "0evech", "0evy");
-        $this->vzor[$nvz++] = Array("m", "-[lř]ev", "0evu/0va", "0evu/0vovi", "0ev/0va", "0eve/0ve", "0evu/0vovi", "0evem/0vem", "-0evy/0vové", "0evů/0vů", "0evům/0vům", "0evy/0vy", "0evy/0vové", "0evech/0vech", "0evy/0vy");
+    , array("m", "-[i]sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "-0sté", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty")
+    , array("m", "-[o]sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "-0stové", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty")
+    , array("m", "-předseda", "předsedy", "předsedovi", "předsedu", "předsedo", "předsedovi", "předsedou", "předsedové", "předsedů", "předsedům", "předsedy", "předsedové", "předsedech", "předsedy")
+    , array("m", "-srdce", "srdce", "srdi", "sdrce", "srdce", "srdci", "srdcem", "srdce", "srdcí", "srdcím", "srdce", "srdce", "srdcích", "srdcemi")
+    , array("m", "-[db]ce", "0ce", "0ci", "0ce", "0če", "0ci", "0cem", "0ci/0cové", "0ců", "0cům", "0ce", "0ci/0cové", "0cích", "0ci")
+    , array("m", "-[jň]ev", "0evu", "0evu", "0ev", "0eve", "0evu", "0evem", "-0evy", "0evů", "0evům", "0evy", "0evy", "0evech", "0evy")
+    , array("m", "-[lř]ev", "0evu/0va", "0evu/0vovi", "0ev/0va", "0eve/0ve", "0evu/0vovi", "0evem/0vem", "-0evy/0vové", "0evů/0vů", "0evům/0vům", "0evy/0vy", "0evy/0vové", "0evech/0vech", "0evy/0vy")
 
-        $this->vzor[$nvz++] = Array("m", "-ů[lz]", "o0u/o0a", "o0u/o0ovi", "ů0/o0a", "o0e", "o0u", "o0em", "o-0y/o-0ové", "o0ů", "o0ům", "o0y", "o0y/o0ové", "o0ech", "o0y");
+    , array("m", "-ů[lz]", "o0u/o0a", "o0u/o0ovi", "ů0/o0a", "o0e", "o0u", "o0em", "o-0y/o-0ové", "o0ů", "o0ům", "o0y", "o0y/o0ové", "o0ech", "o0y")
 
         // výj. nůž ($this->vzor muž)
-        $this->vzor[$nvz++] = Array("m", "nůž", "nože", "noži", "nůž", "noži", "noži", "nožem", "nože", "nožů", "nožům", "nože", "nože", "nožích", "noži");
-
+    , array("m", "nůž", "nože", "noži", "nůž", "noži", "noži", "nožem", "nože", "nožů", "nožům", "nože", "nože", "nožích", "noži")
 
         //
         // $this->vzor kolo
         //
-        $this->vzor[$nvz++] = Array("s", "-[bcčdghksštvzž]lo", "0la", "0lu", "0lo", "0lo", "0lu", "0lem", "-0la", "0el", "0lům", "0la", "0la", "0lech", "0ly");
-        $this->vzor[$nvz++] = Array("s", "-[bcčdnsštvzž]ko", "0ka", "0ku", "0ko", "0ko", "0ku", "0kem", "-0ka", "0ek", "0kům", "0ka", "0ka", "0cích/0kách", "0ky");
-        $this->vzor[$nvz++] = Array("s", "-[bcčdksštvzž]no", "0na", "0nu", "0no", "0no", "0nu", "0nem", "-0na", "0en", "0nům", "0na", "0na", "0nech/0nách", "0ny");
-        $this->vzor[$nvz++] = Array("s", "-o", "a", "u", "o", "o", "u", "em", "-a", "", "ům", "a", "a", "ech", "y");
-
+    , array("s", "-[bcčdghksštvzž]lo", "0la", "0lu", "0lo", "0lo", "0lu", "0lem", "-0la", "0el", "0lům", "0la", "0la", "0lech", "0ly")
+    , array("s", "-[bcčdnsštvzž]ko", "0ka", "0ku", "0ko", "0ko", "0ku", "0kem", "-0ka", "0ek", "0kům", "0ka", "0ka", "0cích/0kách", "0ky")
+    , array("s", "-[bcčdksštvzž]no", "0na", "0nu", "0no", "0no", "0nu", "0nem", "-0na", "0en", "0nům", "0na", "0na", "0nech/0nách", "0ny")
+    , array("s", "-o", "a", "u", "o", "o", "u", "em", "-a", "", "ům", "a", "a", "ech", "y")
 
         //
         // $this->vzor stavení
         //
-        $this->vzor[$nvz++] = Array("s", "-í", "í", "í", "í", "í", "í", "ím", "-í", "í", "ím", "í", "í", "ích", "ími");
+    , array("s", "-í", "í", "í", "í", "í", "í", "ím", "-í", "í", "ím", "í", "í", "ích", "ími")
         //
         // $this->vzor děvče  (če,dě,tě,ně,pě) výj.-také sele
         //
-        $this->vzor[$nvz++] = Array("s", "-[čďť][e]", "10te", "10ti", "10", "10", "10ti", "10tem", "1-ata", "1at", "1atům", "1ata", "1ata", "1atech", "1aty");
-        $this->vzor[$nvz++] = Array("s", "-[pb][ě]", "10te", "10ti", "10", "10", "10ti", "10tem", "1-ata", "1at", "1atům", "1ata", "1ata", "1atech", "1aty");
+    , array("s", "-[čďť][e]", "10te", "10ti", "10", "10", "10ti", "10tem", "1-ata", "1at", "1atům", "1ata", "1ata", "1atech", "1aty")
+    , array("s", "-[pb][ě]", "10te", "10ti", "10", "10", "10ti", "10tem", "1-ata", "1at", "1atům", "1ata", "1ata", "1atech", "1aty")
 
         //
         // $this->vzor žena
         //
-        $this->vzor[$nvz++] = Array("ž", "-[aeiouyáéíóúý]ka", "0ky", "0ce", "0ku", "0ko", "0ce", "0kou", "-0ky", "0k", "0kám", "0ky", "0ky", "0kách", "0kami");
-        $this->vzor[$nvz++] = Array("ž", "-ka", "ky", "ce", "ku", "ko", "ce", "kou", "-ky", "ek", "kám", "ky", "ky", "kách", "kami");
-        $this->vzor[$nvz++] = Array("ž", "-[bdghkmnptvz]ra", "0ry", "0ře", "0ru", "0ro", "0ře", "0rou", "-0ry", "0er", "0rám", "0ry", "0ry", "0rách", "0rami");
-        $this->vzor[$nvz++] = Array("ž", "-ra", "ry", "ře", "ru", "ro", "ře", "rou", "-ry", "r", "rám", "ry", "ry", "rách", "rami");
-        $this->vzor[$nvz++] = Array("ž", "-[tdbnvmp]a", "0y", "0ě", "0u", "0o", "0ě", "0ou", "-0y", "0", "0ám", "0y", "0y", "0ách", "0ami");
-        $this->vzor[$nvz++] = Array("ž", "-cha", "chy", "še", "chu", "cho", "še", "chou", "-chy", "ch", "chám", "chy", "chy", "chách", "chami");
-        $this->vzor[$nvz++] = Array("ž", "-[gh]a", "0y", "ze", "0u", "0o", "ze", "0ou", "-0y", "0", "0ám", "0y", "0y", "0ách", "0ami");
-        $this->vzor[$nvz++] = Array("ž", "-ňa", "ni", "ně", "ňou", "ňo", "ni", "ňou", "-ně/ničky", "ň", "ňám", "ně/ničky", "ně/ničky", "ňách", "ňami");
-        $this->vzor[$nvz++] = Array("ž", "-[šč]a", "0i", "0e", "0u", "0o", "0e", "0ou", "-0e/0i", "0", "0ám", "0e/0i", "0e/0i", "0ách", "0ami");
-        $this->vzor[$nvz++] = Array("ž", "-a", "y", "e", "u", "o", "e", "ou", "-y", "", "ám", "y", "y", "ách", "ami");
+    , array("ž", "-[aeiouyáéíóúý]ka", "0ky", "0ce", "0ku", "0ko", "0ce", "0kou", "-0ky", "0k", "0kám", "0ky", "0ky", "0kách", "0kami")
+    , array("ž", "-ka", "ky", "ce", "ku", "ko", "ce", "kou", "-ky", "ek", "kám", "ky", "ky", "kách", "kami")
+    , array("ž", "-[bdghkmnptvz]ra", "0ry", "0ře", "0ru", "0ro", "0ře", "0rou", "-0ry", "0er", "0rám", "0ry", "0ry", "0rách", "0rami")
+    , array("ž", "-ra", "ry", "ře", "ru", "ro", "ře", "rou", "-ry", "r", "rám", "ry", "ry", "rách", "rami")
+    , array("ž", "-[tdbnvmp]a", "0y", "0ě", "0u", "0o", "0ě", "0ou", "-0y", "0", "0ám", "0y", "0y", "0ách", "0ami")
+    , array("ž", "-cha", "chy", "še", "chu", "cho", "še", "chou", "-chy", "ch", "chám", "chy", "chy", "chách", "chami")
+    , array("ž", "-[gh]a", "0y", "ze", "0u", "0o", "ze", "0ou", "-0y", "0", "0ám", "0y", "0y", "0ách", "0ami")
+    , array("ž", "-ňa", "ni", "ně", "ňou", "ňo", "ni", "ňou", "-ně/ničky", "ň", "ňám", "ně/ničky", "ně/ničky", "ňách", "ňami")
+    , array("ž", "-[šč]a", "0i", "0e", "0u", "0o", "0e", "0ou", "-0e/0i", "0", "0ám", "0e/0i", "0e/0i", "0ách", "0ami")
+    , array("ž", "-a", "y", "e", "u", "o", "e", "ou", "-y", "", "ám", "y", "y", "ách", "ami")
 
         // vz. píseň
-        $this->vzor[$nvz++] = Array("ž", "-eň", "ně", "ni", "eň", "ni", "ni", "ní", "-ně", "ní", "ním", "ně", "ně", "ních", "němi");
-        $this->vzor[$nvz++] = Array("ž", "-oň", "oně", "oni", "oň", "oni", "oni", "oní", "-oně", "oní", "oním", "oně", "oně", "oních", "oněmi");
-        $this->vzor[$nvz++] = Array("ž", "-[ě]j", "0je", "0ji", "0j", "0ji", "0ji", "0jí", "-0je", "0jí", "0jím", "0je", "0je", "0jích", "0jemi");
+    , array("ž", "-eň", "ně", "ni", "eň", "ni", "ni", "ní", "-ně", "ní", "ním", "ně", "ně", "ních", "němi")
+    , array("ž", "-oň", "oně", "oni", "oň", "oni", "oni", "oní", "-oně", "oní", "oním", "oně", "oně", "oních", "oněmi")
+    , array("ž", "-[ě]j", "0je", "0ji", "0j", "0ji", "0ji", "0jí", "-0je", "0jí", "0jím", "0je", "0je", "0jích", "0jemi")
 
         //
         // $this->vzor růže
         //
-        $this->vzor[$nvz++] = Array("ž", "-ev", "ve", "vi", "ev", "vi", "vi", "ví", "-ve", "ví", "vím", "ve", "ve", "vích", "vemi");
-        $this->vzor[$nvz++] = Array("ž", "-ice", "ice", "ici", "ici", "ice", "ici", "icí", "-ice", "ic", "icím", "ice", "ice", "icích", "icemi");
-        $this->vzor[$nvz++] = Array("ž", "-e", "e", "i", "i", "e", "i", "í", "-e", "í", "ím", "e", "e", "ích", "emi");
+    , array("ž", "-ev", "ve", "vi", "ev", "vi", "vi", "ví", "-ve", "ví", "vím", "ve", "ve", "vích", "vemi")
+    , array("ž", "-ice", "ice", "ici", "ici", "ice", "ici", "icí", "-ice", "ic", "icím", "ice", "ice", "icích", "icemi")
+    , array("ž", "-e", "e", "i", "i", "e", "i", "í", "-e", "í", "ím", "e", "e", "ích", "emi")
 
         //
         // $this->vzor píseň
         //
-        $this->vzor[$nvz++] = Array("ž", "-[eaá][jžň]", "10e/10i", "10i", "10", "10i", "10i", "10í", "-10e/10i", "10í", "10ím", "10e", "10e", "10ích", "10emi");
-        $this->vzor[$nvz++] = Array("ž", "-[eayo][š]", "10e/10i", "10i", "10", "10i", "10i", "10í", "10e/10i", "10í", "10ím", "10e", "10e", "10ích", "10emi");
-        $this->vzor[$nvz++] = Array("ž", "-[íy]ň", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "-0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi");
-        $this->vzor[$nvz++] = Array("ž", "-[íyý]ňe", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "-0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi");
-        $this->vzor[$nvz++] = Array("ž", "-[ťďž]", "0e", "0i", "0", "0i", "0i", "0í", "-0e", "0í", "0ím", "0e", "0e", "0ích", "0emi");
-        $this->vzor[$nvz++] = Array("ž", "-toř", "toře", "toři", "toř", "toři", "toři", "toří", "-toře", "toří", "tořím", "toře", "toře", "tořích", "tořemi");
-        $this->vzor[$nvz++] = Array("ž", "-ep", "epi", "epi", "ep", "epi", "epi", "epí", "epi", "epí", "epím", "epi", "epi", "epích", "epmi");
+    , array("ž", "-[eaá][jžň]", "10e/10i", "10i", "10", "10i", "10i", "10í", "-10e/10i", "10í", "10ím", "10e", "10e", "10ích", "10emi")
+    , array("ž", "-[eayo][š]", "10e/10i", "10i", "10", "10i", "10i", "10í", "10e/10i", "10í", "10ím", "10e", "10e", "10ích", "10emi")
+    , array("ž", "-[íy]ň", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "-0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi")
+    , array("ž", "-[íyý]ňe", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "-0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi")
+    , array("ž", "-[ťďž]", "0e", "0i", "0", "0i", "0i", "0í", "-0e", "0í", "0ím", "0e", "0e", "0ích", "0emi")
+    , array("ž", "-toř", "toře", "toři", "toř", "toři", "toři", "toří", "-toře", "toří", "tořím", "toře", "toře", "tořích", "tořemi")
+    , array("ž", "-ep", "epi", "epi", "ep", "epi", "epi", "epí", "epi", "epí", "epím", "epi", "epi", "epích", "epmi")
 
         //
         // $this->vzor kost
         //
-        $this->vzor[$nvz++] = Array("ž", "-st", "sti", "sti", "st", "sti", "sti", "stí", "-sti", "stí", "stem", "sti", "sti", "stech", "stmi");
-        $this->vzor[$nvz++] = Array("ž", "ves", "vsi", "vsi", "ves", "vsi", "vsi", "vsí", "vsi", "vsí", "vsem", "vsi", "vsi", "vsech", "vsemi");
+    , array("ž", "-st", "sti", "sti", "st", "sti", "sti", "stí", "-sti", "stí", "stem", "sti", "sti", "stech", "stmi")
+    , array("ž", "ves", "vsi", "vsi", "ves", "vsi", "vsi", "vsí", "vsi", "vsí", "vsem", "vsi", "vsi", "vsech", "vsemi")
 
         //
         //
         // $this->vzor Amadeus, Celsius, Kumulus, rektikulum, praktikum
         //
-        $this->vzor[$nvz++] = Array("m", "-[e]us", "0a", "0u/0ovi", "0a", "0e", "0u/0ovi", "0em", "0ové", "0ů", "0ům", "0y", "0ové", "0ích", "0y");
-        $this->vzor[$nvz++] = Array("m", "-[i]us", "0a", "0u/0ovi", "0a", "0e", "0u/0ovi", "0em", "0ové", "0ů", "0ům", "0usy", "0ové", "0ích", "0usy");
-        $this->vzor[$nvz++] = Array("m", "-[i]s", "0se", "0su/0sovi", "0se", "0se/0si", "0su/0sovi", "0sem", "0sy/0sové", "0sů", "0sům", "0sy", "0sy/0ové", "0ech", "0sy");
-        $this->vzor[$nvz++] = Array("m", "výtrus", "výtrusu", "výtrusu", "výtrus", "výtruse", "výtrusu", "výtrusem", "výtrusy", "výtrusů", "výtrusům", "výtrusy", "výtrusy", "výtrusech", "výtrusy");
-        $this->vzor[$nvz++] = Array("m", "trus", "trusu", "trusu", "trus", "truse", "trusu", "trusem", "trusy", "trusů", "trusům", "trusy", "trusy", "trusech", "trusy");
-        $this->vzor[$nvz++] = Array("m", "-[aeioumpts][lnmrktp]us", "10u/10a", "10u/10ovi", "10us/10a", "10e", "10u/10ovi", "10em", "10y/10ové", "10ů", "10ům", "10y", "10y/10ové", "10ech", "10y");
-        $this->vzor[$nvz++] = Array("s", "-[l]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0", "0ům", "0a", "0a", "0ech", "0y");
-        $this->vzor[$nvz++] = Array("s", "-[k]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0", "0ům", "0a", "0a", "0cích", "0y");
-        $this->vzor[$nvz++] = Array("s", "-[i]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0í", "0ům", "0a", "0a", "0iích", "0y");
-        $this->vzor[$nvz++] = Array("s", "-[i]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0ejí", "0ům", "0a", "0a", "0ejích", "0y");
-        $this->vzor[$nvz++] = Array("s", "-io", "0a", "0u", "0", "0", "0u", "0em", "0a", "0í", "0ům", "0a", "0a", "0iích", "0y");
+    , array("m", "-[e]us", "0a", "0u/0ovi", "0a", "0e", "0u/0ovi", "0em", "0ové", "0ů", "0ům", "0y", "0ové", "0ích", "0y")
+    , array("m", "-[i]us", "0a", "0u/0ovi", "0a", "0e", "0u/0ovi", "0em", "0ové", "0ů", "0ům", "0usy", "0ové", "0ích", "0usy")
+    , array("m", "-[i]s", "0se", "0su/0sovi", "0se", "0se/0si", "0su/0sovi", "0sem", "0sy/0sové", "0sů", "0sům", "0sy", "0sy/0ové", "0ech", "0sy")
+    , array("m", "výtrus", "výtrusu", "výtrusu", "výtrus", "výtruse", "výtrusu", "výtrusem", "výtrusy", "výtrusů", "výtrusům", "výtrusy", "výtrusy", "výtrusech", "výtrusy")
+    , array("m", "trus", "trusu", "trusu", "trus", "truse", "trusu", "trusem", "trusy", "trusů", "trusům", "trusy", "trusy", "trusech", "trusy")
+    , array("m", "-[aeioumpts][lnmrktp]us", "10u/10a", "10u/10ovi", "10us/10a", "10e", "10u/10ovi", "10em", "10y/10ové", "10ů", "10ům", "10y", "10y/10ové", "10ech", "10y")
+    , array("s", "-[l]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0", "0ům", "0a", "0a", "0ech", "0y")
+    , array("s", "-[k]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0", "0ům", "0a", "0a", "0cích", "0y")
+    , array("s", "-[i]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0í", "0ům", "0a", "0a", "0iích", "0y")
+    , array("s", "-[i]um", "0a", "0u", "0um", "0um", "0u", "0em", "0a", "0ejí", "0ům", "0a", "0a", "0ejích", "0y")
+    , array("s", "-io", "0a", "0u", "0", "0", "0u", "0em", "0a", "0í", "0ům", "0a", "0a", "0iích", "0y")
 
         //
         // $this->vzor sedlák
         //
 
-        $this->vzor[$nvz++] = Array("m", "-[aeiouyáéíóúý]r", "0ru/0ra", "0ru/0rovi", "0r/0ra", "0re", "0ru/0rovi", "0rem", "-0ry/-0rové", "0rů", "0rům", "0ry", "0ry/0rové", "0rech", "0ry");
-        // $this->vzor[$nvz++] = Array( "m","-[aeiouyáéíóúý]r","0ru/0ra","0ru/0rovi","0r/0ra","0re","0ru/0rovi","0rem",     "-0ry/-0ři","0rů","0rům","0ry","0ry/0ři", "0rech","0ry" );
-        $this->vzor[$nvz++] = Array("m", "-r", "ru/ra", "ru/rovi", "r/ra", "ře", "ru/rovi", "rem", "-ry/-rové", "rů", "rům", "ry", "ry/rové", "rech", "ry");
-        // $this->vzor[$nvz++] = Array( "m","-r",              "ru/ra",  "ru/rovi",  "r/ra",  "ře", "ru/rovi",   "rem",     "-ry/-ři", "rů","rům","ry",    "ry/ři",  "rech", "ry" );
-        $this->vzor[$nvz++] = Array("m", "-[mnp]en", "0enu/0ena", "0enu/0enovi", "0en/0na", "0ene", "0enu/0enovi", "0enem", "-0eny/0enové", "0enů", "0enům", "0eny", "0eny/0enové", "0enech", "0eny");
-        $this->vzor[$nvz++] = Array("m", "-[bcčdstvz]en", "0nu/0na", "0nu/0novi", "0en/0na", "0ne", "0nu/0novi", "0nem", "-0ny/0nové", "0nů", "0nům", "0ny", "0ny/0nové", "0nech", "0ny");
-        $this->vzor[$nvz++] = Array("m", "-[dglmnpbtvzs]", "0u/0a", "0u/0ovi", "0/0a", "0e", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y");
-        $this->vzor[$nvz++] = Array("m", "-[x]", "0u/0e", "0u/0ovi", "0/0e", "0i", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y");
-        $this->vzor[$nvz++] = Array("m", "sek", "seku/seka", "seku/sekovi", "sek/seka", "seku", "seku/sekovi", "sekem", "seky/sekové", "seků", "sekům", "seky", "seky/sekové", "secích", "seky");
-        $this->vzor[$nvz++] = Array("m", "výsek", "výseku/výseka", "výseku/výsekovi", "výsek/výseka", "výseku", "výseku/výsekovi", "výsekem", "výseky/výsekové", "výseků", "výsekům", "výseky", "výseky/výsekové", "výsecích", "výseky");
-        $this->vzor[$nvz++] = Array("m", "zásek", "záseku/záseka", "záseku/zásekovi", "zásek/záseka", "záseku", "záseku/zásekovi", "zásekem", "záseky/zásekové", "záseků", "zásekům", "záseky", "záseky/zásekové", "zásecích", "záseky");
-        $this->vzor[$nvz++] = Array("m", "průsek", "průseku/průseka", "průseku/průsekovi", "průsek/průseka", "průseku", "průseku/průsekovi", "průsekem", "průseky/průsekové", "průseků", "výsekům", "průseky", "průseky/průsekové", "průsecích", "průseky");
-        $this->vzor[$nvz++] = Array("m", "-[cčšždnňmpbrstvz]ek", "0ku/0ka", "0ku/0kovi", "0ek/0ka", "0ku", "0ku/0kovi", "0kem", "-0ky/0kové", "0ků", "0kům", "0ky", "0ky/0kové", "0cích", "0ky");
-        $this->vzor[$nvz++] = Array("m", "-[k]", "0u/0a", "0u/0ovi", "0/0a", "0u", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "cích", "0y");
-        $this->vzor[$nvz++] = Array("m", "-ch", "chu/cha", "chu/chovi", "ch/cha", "chu/cha", "chu/chovi", "chem", "-chy/chové", "chů", "chům", "chy", "chy/chové", "ších", "chy");
-        $this->vzor[$nvz++] = Array("m", "-[h]", "0u/0a", "0u/0ovi", "0/0a", "0u", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "zích", "0y");
-        $this->vzor[$nvz++] = Array("m", "-e[mnz]", "0u/0a", "0u/0ovi", "e0/e0a", "0e", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y");
+    , array("m", "-[aeiouyáéíóúý]r", "0ru/0ra", "0ru/0rovi", "0r/0ra", "0re", "0ru/0rovi", "0rem", "-0ry/-0rové", "0rů", "0rům", "0ry", "0ry/0rové", "0rech", "0ry")
+        // , array( "m","-[aeiouyáéíóúý]r","0ru/0ra","0ru/0rovi","0r/0ra","0re","0ru/0rovi","0rem",     "-0ry/-0ři","0rů","0rům","0ry","0ry/0ři", "0rech","0ry" )
+    , array("m", "-r", "ru/ra", "ru/rovi", "r/ra", "ře", "ru/rovi", "rem", "-ry/-rové", "rů", "rům", "ry", "ry/rové", "rech", "ry")
+        // , array( "m","-r",              "ru/ra",  "ru/rovi",  "r/ra",  "ře", "ru/rovi",   "rem",     "-ry/-ři", "rů","rům","ry",    "ry/ři",  "rech", "ry" )
+    , array("m", "-[mnp]en", "0enu/0ena", "0enu/0enovi", "0en/0na", "0ene", "0enu/0enovi", "0enem", "-0eny/0enové", "0enů", "0enům", "0eny", "0eny/0enové", "0enech", "0eny")
+    , array("m", "-[bcčdstvz]en", "0nu/0na", "0nu/0novi", "0en/0na", "0ne", "0nu/0novi", "0nem", "-0ny/0nové", "0nů", "0nům", "0ny", "0ny/0nové", "0nech", "0ny")
+    , array("m", "-[dglmnpbtvzs]", "0u/0a", "0u/0ovi", "0/0a", "0e", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y")
+    , array("m", "-[x]", "0u/0e", "0u/0ovi", "0/0e", "0i", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y")
+    , array("m", "sek", "seku/seka", "seku/sekovi", "sek/seka", "seku", "seku/sekovi", "sekem", "seky/sekové", "seků", "sekům", "seky", "seky/sekové", "secích", "seky")
+    , array("m", "výsek", "výseku/výseka", "výseku/výsekovi", "výsek/výseka", "výseku", "výseku/výsekovi", "výsekem", "výseky/výsekové", "výseků", "výsekům", "výseky", "výseky/výsekové", "výsecích", "výseky")
+    , array("m", "zásek", "záseku/záseka", "záseku/zásekovi", "zásek/záseka", "záseku", "záseku/zásekovi", "zásekem", "záseky/zásekové", "záseků", "zásekům", "záseky", "záseky/zásekové", "zásecích", "záseky")
+    , array("m", "průsek", "průseku/průseka", "průseku/průsekovi", "průsek/průseka", "průseku", "průseku/průsekovi", "průsekem", "průseky/průsekové", "průseků", "výsekům", "průseky", "průseky/průsekové", "průsecích", "průseky")
+    , array("m", "-[cčšždnňmpbrstvz]ek", "0ku/0ka", "0ku/0kovi", "0ek/0ka", "0ku", "0ku/0kovi", "0kem", "-0ky/0kové", "0ků", "0kům", "0ky", "0ky/0kové", "0cích", "0ky")
+    , array("m", "-[k]", "0u/0a", "0u/0ovi", "0/0a", "0u", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "cích", "0y")
+    , array("m", "-ch", "chu/cha", "chu/chovi", "ch/cha", "chu/cha", "chu/chovi", "chem", "-chy/chové", "chů", "chům", "chy", "chy/chové", "ších", "chy")
+    , array("m", "-[h]", "0u/0a", "0u/0ovi", "0/0a", "0u", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "zích", "0y")
+    , array("m", "-e[mnz]", "0u/0a", "0u/0ovi", "e0/e0a", "0e", "0u/0ovi", "0em", "-0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y")
 
-        //
         //
         // $this->vzor muž
         //
-        $this->vzor[$nvz++] = Array("m", "-ec", "ce", "ci/covi", "ec/ce", "če", "ci/covi", "cem", "-ce/cové", "ců", "cům", "ce", "ce/cové", "cích", "ci");
-        $this->vzor[$nvz++] = Array("m", "-[cčďšňřťž]", "0e", "0i/0ovi", "0e", "0i", "0i/0ovi", "0em", "-0e/0ové", "0ů", "0ům", "0e", "0e/0ové", "0ích", "0i");
-        $this->vzor[$nvz++] = Array("m", "-oj", "oje", "oji/ojovi", "oj/oje", "oji", "oji/ojovi", "ojem", "-oje/ojové", "ojů", "ojům", "oje", "oje/ojové", "ojích", "oji");
+    , array("m", "-ec", "ce", "ci/covi", "ec/ce", "če", "ci/covi", "cem", "-ce/cové", "ců", "cům", "ce", "ce/cové", "cích", "ci")
+    , array("m", "-[cčďšňřťž]", "0e", "0i/0ovi", "0e", "0i", "0i/0ovi", "0em", "-0e/0ové", "0ů", "0ům", "0e", "0e/0ové", "0ích", "0i")
+    , array("m", "-oj", "oje", "oji/ojovi", "oj/oje", "oji", "oji/ojovi", "ojem", "-oje/ojové", "ojů", "ojům", "oje", "oje/ojové", "ojích", "oji")
 
         // $this->vzory pro přetypování rodu
-        $this->vzor[$nvz++] = Array("m", "-[gh]a", "0y", "0ovi", "0u", "0o", "0ovi", "0ou", "0ové", "0ů", "0ům", "0y", "0ové", "zích", "0y");
-        $this->vzor[$nvz++] = Array("m", "-[k]a", "0y", "0ovi", "0u", "0o", "0ovi", "0ou", "0ové", "0ů", "0ům", "0y", "0ové", "cích", "0y");
-        $this->vzor[$nvz++] = Array("m", "-a", "y", "ovi", "u", "o", "ovi", "ou", "ové", "ů", "ům", "y", "ové", "ech", "y");
+    , array("m", "-[gh]a", "0y", "0ovi", "0u", "0o", "0ovi", "0ou", "0ové", "0ů", "0ům", "0y", "0ové", "zích", "0y")
+    , array("m", "-[k]a", "0y", "0ovi", "0u", "0o", "0ovi", "0ou", "0ové", "0ů", "0ům", "0y", "0ové", "cích", "0y")
+    , array("m", "-a", "y", "ovi", "u", "o", "ovi", "ou", "ové", "ů", "ům", "y", "ové", "ech", "y")
 
-        $this->vzor[$nvz++] = Array("ž", "-l", "le", "li", "l", "li", "li", "lí", "le", "lí", "lím", "le", "le", "lích", "lemi");
-        $this->vzor[$nvz++] = Array("ž", "-í", "í", "í", "í", "í", "í", "í", "í", "ích", "ím", "í", "í", "ích", "ími");
-        $this->vzor[$nvz++] = Array("ž", "-[jř]", "0e", "0i", "0", "0i", "0i", "0í", "0e", "0í", "0ím", "0e", "0e", "0ích", "0emi");
-        $this->vzor[$nvz++] = Array("ž", "-[č]", "0i", "0i", "0", "0i", "0i", "0í", "0i", "0í", "0ím", "0i", "0i", "0ích", "0mi");
-        $this->vzor[$nvz++] = Array("ž", "-[š]", "0i", "0i", "0", "0i", "0i", "0í", "0i", "0í", "0ím", "0i", "0i", "0ích", "0emi");
+    , array("ž", "-l", "le", "li", "l", "li", "li", "lí", "le", "lí", "lím", "le", "le", "lích", "lemi")
+    , array("ž", "-í", "í", "í", "í", "í", "í", "í", "í", "ích", "ím", "í", "í", "ích", "ími")
+    , array("ž", "-[jř]", "0e", "0i", "0", "0i", "0i", "0í", "0e", "0í", "0ím", "0e", "0e", "0ích", "0emi")
+    , array("ž", "-[č]", "0i", "0i", "0", "0i", "0i", "0í", "0i", "0í", "0ím", "0i", "0i", "0ích", "0mi")
+    , array("ž", "-[š]", "0i", "0i", "0", "0i", "0i", "0í", "0i", "0í", "0ím", "0i", "0i", "0ích", "0emi")
 
-        $this->vzor[$nvz++] = Array("s", "-[sljřň]e", "0ete", "0eti", "0e", "0e", "0eti", "0etem", "0ata", "0at", "0atům", "0ata", "0ata", "0atech", "0aty");
-        // $this->vzor[$nvz++] = Array( "ž","-cí",        "cí", "cí",  "cí", "cí", "cí", "cí",   "cí", "cích", "cím", "cí", "cí", "cích", "cími" );
+    , array("s", "-[sljřň]e", "0ete", "0eti", "0e", "0e", "0eti", "0etem", "0ata", "0at", "0atům", "0ata", "0ata", "0atech", "0aty")
+        // , array( "ž","-cí",        "cí", "cí",  "cí", "cí", "cí", "cí",   "cí", "cích", "cím", "cí", "cí", "cích", "cími" )
         // čaj, prodej, Ondřej, žokej
-        $this->vzor[$nvz++] = Array("m", "-j", "je", "ji", "j", "ji", "ji", "jem", "je/jové", "jů", "jům", "je", "je/jové", "jích", "ji");
+    , array("m", "-j", "je", "ji", "j", "ji", "ji", "jem", "je/jové", "jů", "jům", "je", "je/jové", "jích", "ji")
         // Josef, Detlef, ... ?
-        $this->vzor[$nvz++] = Array("m", "-f", "fa", "fu/fovi", "f/fa", "fe", "fu/fovi", "fem", "fy/fové", "fů", "fům", "fy", "fy/fové", "fech", "fy");
+    , array("m", "-f", "fa", "fu/fovi", "f/fa", "fe", "fu/fovi", "fem", "fy/fové", "fů", "fům", "fy", "fy/fové", "fech", "fy")
         // zbroj, výzbroj, výstroj, trofej, neteř
         // jiří, podkoní, ... ?
-        $this->vzor[$nvz++] = Array("m", "-í", "ího", "ímu", "ího", "í", "ímu", "ím", "í", "ích", "ím", "í", "í", "ích", "ími");
+    , array("m", "-í", "ího", "ímu", "ího", "í", "ímu", "ím", "í", "ích", "ím", "í", "í", "ích", "ími")
         // Hugo
-        $this->vzor[$nvz++] = Array("m", "-go", "a", "govi", "ga", "ga", "govi", "gem", "gové", "gů", "gům", "gy", "gové", "zích", "gy");
+    , array("m", "-go", "a", "govi", "ga", "ga", "govi", "gem", "gové", "gů", "gům", "gy", "gové", "zích", "gy")
         // Kvido
-        $this->vzor[$nvz++] = Array("m", "-o", "a", "ovi", "a", "a", "ovi", "em", "ové", "ů", "ům", "y", "ové", "ech", "y");
+    , array("m", "-o", "a", "ovi", "a", "a", "ovi", "em", "ové", "ů", "ům", "y", "ové", "ech", "y")
 
 
         // doplňky
         // některá pomnožná jména
-        $this->vzor[$nvz++] = Array("?", "-[tp]y", "?", "?", "?", "?", "?", "?", "-0y", "0", "0ům", "0y", "0y", "0ech", "0ami");
-        $this->vzor[$nvz++] = Array("?", "-[k]y", "?", "?", "?", "?", "?", "?", "-0y", "e0", "0ám", "0y", "0y", "0ách", "0ami");
+    , array(null, "-[tp]y", null, null, null, null, null, null, "-0y", "0", "0ům", "0y", "0y", "0ech", "0ami")
+    , array(null, "-[k]y", null, null, null, null, null, null, "-0y", "e0", "0ám", "0y", "0y", "0ách", "0ami")
 
         // změny rodu
-        $this->vzor[$nvz++] = Array("ž", "-ar", "ary", "aře", "ar", "ar", "ar", "ar", "ary", "ar", "arám", "ary", "ary", "arách", "arami");
-        $this->vzor[$nvz++] = Array("ž", "-am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am");
-        $this->vzor[$nvz++] = Array("ž", "-er", "er", "er", "er", "er", "er", "er", "ery", "er", "erám", "ery", "ery", "erách", "erami");
+    , array("ž", "-ar", "ary", "aře", "ar", "ar", "ar", "ar", "ary", "ar", "arám", "ary", "ary", "arách", "arami")
+    , array("ž", "-am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am", "am")
+    , array("ž", "-er", "er", "er", "er", "er", "er", "er", "ery", "er", "erám", "ery", "ery", "erách", "erami")
 
-        $this->vzor[$nvz++] = Array("m", "-oe", "oema", "oemovi", "oema", "oeme", "emovi", "emem", "oemové", "oemů", "oemům", "oemy", "oemové", "oemech", "oemy");
+    , array("m", "-oe", "oema", "oemovi", "oema", "oeme", "emovi", "emem", "oemové", "oemů", "oemům", "oemy", "oemové", "oemech", "oemy")
 
-        $this->aCmpReg = Array();
-        $nCmpReg = 0;
-        $this->aCmpReg[0] = "";
-        $this->aCmpReg[1] = "";
-        $this->aCmpReg[2] = "";
-        $this->aCmpReg[3] = "";
-        $this->aCmpReg[4] = "";
-        $this->aCmpReg[5] = "";
-        $this->aCmpReg[6] = "";
-        $this->aCmpReg[7] = "";
-        $this->aCmpReg[8] = "";
-        $this->aCmpReg[9] = "";
+    );
 
-        //  Výjimky:
-        //  $this->v1 - přehlásky
-        // :  důl ... dol, stůl ... stol, nůž ... nož, hůl ... hole, půl ... půle
-        $nv1 = 0;
-        $this->v1 = Array();
-        //                      1.p   náhrada   4.p.
-        //
-        $this->v1[$nv1++] = Array("osel", "osl", "osla");
-        $this->v1[$nv1++] = Array("karel", "karl", "karla");
-        $this->v1[$nv1++] = Array("Karel", "Karl", "Karla");
-        $this->v1[$nv1++] = Array("pavel", "pavl", "pavla");
-        $this->v1[$nv1++] = Array("Pavel", "Pavl", "Pavla");
-        $this->v1[$nv1++] = Array("Havel", "Havl", "Havla");
-        $this->v1[$nv1++] = Array("havel", "havl", "havla");
-        $this->v1[$nv1++] = Array("Bořek", "Bořk", "Bořka");
-        $this->v1[$nv1++] = Array("bořek", "bořk", "bořka");
-        $this->v1[$nv1++] = Array("Luděk", "Luďk", "Luďka");
-        $this->v1[$nv1++] = Array("luděk", "luďk", "luďka");
-        $this->v1[$nv1++] = Array("pes", "ps", "psa");
-        $this->v1[$nv1++] = Array("pytel", "pytl", "pytel");
-        $this->v1[$nv1++] = Array("ocet", "oct", "octa");
-        $this->v1[$nv1++] = Array("chléb", "chleb", "chleba");
-        $this->v1[$nv1++] = Array("chleba", "chleb", "chleba");
-        $this->v1[$nv1++] = Array("pavel", "pavl", "pavla");
-        $this->v1[$nv1++] = Array("kel", "kl", "kel");
-        $this->v1[$nv1++] = Array("sopel", "sopl", "sopel");
-        $this->v1[$nv1++] = Array("kotel", "kotl", "kotel");
-        $this->v1[$nv1++] = Array("posel", "posl", "posla");
-        $this->v1[$nv1++] = Array("důl", "dol", "důl");
-        $this->v1[$nv1++] = Array("sůl", "sole", "sůl");
-        $this->v1[$nv1++] = Array("vůl", "vol", "vola");
-        $this->v1[$nv1++] = Array("půl", "půle", "půli");
-        $this->v1[$nv1++] = Array("hůl", "hole", "hůl");
-        $this->v1[$nv1++] = Array("stůl", "stol", "stůl");
-        $this->v1[$nv1++] = Array("líh", "lih", "líh");
-        $this->v1[$nv1++] = Array("sníh", "sněh", "sníh");
-        $this->v1[$nv1++] = Array("zář", "záře", "zář");
-        $this->v1[$nv1++] = Array("svatozář", "svatozáře", "svatozář");
-        $this->v1[$nv1++] = Array("kůň", "koň", "koně");
-        $this->v1[$nv1++] = Array("tůň", "tůňe", "tůň");
+    //  Výjimky:
+    //  $this->v1 - přehlásky
+    // :  důl ... dol, stůl ... stol, nůž ... nož, hůl ... hole, půl ... půle
+    //                      1.p   náhrada   4.p.
+    protected $v1 = array(
+        array("osel", "osl", "osla")
+    , array("karel", "karl", "karla")
+    , array("Karel", "Karl", "Karla")
+    , array("pavel", "pavl", "pavla")
+    , array("Pavel", "Pavl", "Pavla")
+    , array("Havel", "Havl", "Havla")
+    , array("havel", "havl", "havla")
+    , array("Bořek", "Bořk", "Bořka")
+    , array("bořek", "bořk", "bořka")
+    , array("Luděk", "Luďk", "Luďka")
+    , array("luděk", "luďk", "luďka")
+    , array("pes", "ps", "psa")
+    , array("pytel", "pytl", "pytel")
+    , array("ocet", "oct", "octa")
+    , array("chléb", "chleb", "chleba")
+    , array("chleba", "chleb", "chleba")
+    , array("pavel", "pavl", "pavla")
+    , array("kel", "kl", "kel")
+    , array("sopel", "sopl", "sopel")
+    , array("kotel", "kotl", "kotel")
+    , array("posel", "posl", "posla")
+    , array("důl", "dol", "důl")
+    , array("sůl", "sole", "sůl")
+    , array("vůl", "vol", "vola")
+    , array("půl", "půle", "půli")
+    , array("hůl", "hole", "hůl")
+    , array("stůl", "stol", "stůl")
+    , array("líh", "lih", "líh")
+    , array("sníh", "sněh", "sníh")
+    , array("zář", "záře", "zář")
+    , array("svatozář", "svatozáře", "svatozář")
+    , array("kůň", "koň", "koně")
+    , array("tůň", "tůňe", "tůň")
         // --- !
-        $this->v1[$nv1++] = Array("prsten", "prstýnek", "prstýnku");
-        $this->v1[$nv1++] = Array("smrt", "smrť", "smrt");
-        $this->v1[$nv1++] = Array("vítr", "větr", "vítr");
-        $this->v1[$nv1++] = Array("stupeň", "stupň", "stupeň");
-        $this->v1[$nv1++] = Array("peň", "pň", "peň");
-        $this->v1[$nv1++] = Array("cyklus", "cykl", "cyklus");
-        $this->v1[$nv1++] = Array("dvůr", "dvor", "dvůr");
-        $this->v1[$nv1++] = Array("zeď", "zď", "zeď");
-        $this->v1[$nv1++] = Array("účet", "účt", "účet");
-        $this->v1[$nv1++] = Array("mráz", "mraz", "mráz");
-        $this->v1[$nv1++] = Array("hnůj", "hnoj", "hnůj");
-        $this->v1[$nv1++] = Array("skrýš", "skrýše", "skrýš");
-        $this->v1[$nv1++] = Array("nehet", "neht", "nehet");
-        $this->v1[$nv1++] = Array("veš", "vš", "veš");
-        $this->v1[$nv1++] = Array("déšť", "dešť", "déšť");
-        $this->v1[$nv1++] = Array("myš", "myše", "myš");
+    , array("prsten", "prstýnek", "prstýnku")
+    , array("smrt", "smrť", "smrt")
+    , array("vítr", "větr", "vítr")
+    , array("stupeň", "stupň", "stupeň")
+    , array("peň", "pň", "peň")
+    , array("cyklus", "cykl", "cyklus")
+    , array("dvůr", "dvor", "dvůr")
+    , array("zeď", "zď", "zeď")
+    , array("účet", "účt", "účet")
+    , array("mráz", "mraz", "mráz")
+    , array("hnůj", "hnoj", "hnůj")
+    , array("skrýš", "skrýše", "skrýš")
+    , array("nehet", "neht", "nehet")
+    , array("veš", "vš", "veš")
+    , array("déšť", "dešť", "déšť")
+    , array("myš", "myše", "myš")
+    );
+
+    protected $aCmpReg = array();
+
+
+    public function __construct()
+    {
+
+        $this->aCmpReg = array_fill(0, 9, "");
 
         // $this->v10 - zmena rodu na muzsky
         $this->v10 = Array();
@@ -615,11 +604,17 @@ class Inflection
         $this->v3[$nv3++] = "Zoe";
         $this->v3[$nv3++] = "zoe";
 
-// Ve zvl. pripadech je mozne pomoci teto promenne "pretypovat" rod jmena
-        $this->PrefRod = "0"; // smi byt "0", "m", "ž", "s"
-
 
         $this->astrTvar = Array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+    }
+
+    /**
+     * @author Jan Navratil <jan.navratil@heureka.cz>
+     * @param bool $debugMode
+     */
+    public function setDebugMode(bool $debugMode)
+    {
+        $this->isDebugMode = $debugMode;
     }
 
 //
@@ -777,8 +772,8 @@ class Inflection
         if ($kndx < 0 || $nPad < 1 || $nPad > 14) //8-14 je pro plural
             return "???";
 
-        if ($this->vzor[$vzndx][$nPad] == "?")
-            return "?";
+        if ($this->vzor[$vzndx][$nPad] == null)
+            return null;
 
         if (!$this->isDbgMode & $nPad == 1) // 1. pad nemenime
             $rv = $this->Xdetene($txt3);
@@ -898,7 +893,7 @@ class Inflection
                 $this->PrefRod = $this->astrTvar[0];
 
             // pokud nenajdeme $this->vzor tak nesklonujeme
-            if ($i < count($aTxt) - 1 && mb_substr($this->astrTvar[0], 0, 1, 'UTF-8') == '?' && mb_substr($this->PrefRod, 0, 1, 'UTF-8') != '?') {
+            if ($i < count($aTxt) - 1 && null === $this->astrTvar[0] && mb_substr($this->PrefRod, 0, 1, 'UTF-8') != '?') {
                 for ($j = 1; $j < 15; $j++)
                     $this->astrTvar[$j] = $aTxt[$i];
             }
@@ -907,11 +902,16 @@ class Inflection
                 $this->astrTvar[0] = '';
 
             if ($i < count($aTxt)) {
-                for ($j = 1; $j < 15; $j++)
-                    @$out[$j] = $this->astrTvar[$j] . ' ' . @$out[$j];
+                for ($j = 1; $j < 15; $j++) {
+                    if (null === $this->astrTvar[$j] && !isset($out[$j])) {
+                        $out[$j] = $this->astrTvar[$j];
+                    } else {
+                        $out[$j] = $this->astrTvar[$j] . (isset($out[$j]) ? ' ' . $out[$j] : '');
+                    }
+                }
             } else {
                 for ($j = 1; $j < 15; $j++)
-                    @$out[$j] = $this->astrTvar[$j];
+                    $out[$j] = $this->astrTvar[$j];
             }
         }
         return $out;
@@ -1052,15 +1052,15 @@ class Inflection
     }
 
     /**
-     * Try to detect female genus by given surname
+     * Try to detect feminine genus by given surname
      * - only basic detection
      * @author Jan Navratil <jan.navratil@heureka.cz>
      * @param $surname
      * @return null|string
      */
-    public function isFemaleGenusSurname($surname)
+    public function isFeminineGenusSurname($surname)
     {
-        if ('ova' == str_replace('á', 'a', mb_substr(mb_strtolower($surname), -3))) {
+        if ('ova' == str_replace('á', 'a', mb_substr(mb_strtolower($surname, 'UTF-8'), -3, 3, 'UTF-8'))) {
             return self::GENUS_FEMININE;
         } else {
             return null;
