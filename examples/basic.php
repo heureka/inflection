@@ -1,8 +1,9 @@
 <?php
 
-require_once 'Inflection.php';
+require_once '../src/Inflection.php';
 
 $name = 'František';
-$inflected = (new Inflection())->inflect($name, true);
+$inflection = new Inflection();
+$inflected = $inflection->inflect($name, true);
 
-print "Dobrý den " . $inflected[5];
+print "Dobrý den " . $inflected[5] . PHP_EOL;
