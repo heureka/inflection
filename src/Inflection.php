@@ -19,7 +19,7 @@
  * @url: http://www.pteryx.net/sklonovani.html
  *
  * Usage:
- * $x = new Sklonovani();
+ * $x = new Inflection();
  * $tvary = $x->inflect('nejaky text'[, $zivtone=false[, $preferovanyRod='']]);
  *
  */
@@ -379,11 +379,11 @@ class Inflection
 
     public function __construct()
     {
-
+        
         $this->aCmpReg = array_fill(0, 9, "");
 
         // $this->v10 - zmena rodu na muzsky
-        $this->v10 = Array();
+        $this->v10 = array();
         $nv10 = 0;
         $this->v10[$nv10++] = "sleď";
         $this->v10[$nv10++] = "saša";
@@ -493,7 +493,7 @@ class Inflection
         $this->v10[$nv10++] = "Noe";
 
         // $this->v11 - zmena rodu na zensky
-        $this->v11 = Array();
+        $this->v11 = array();
         $nv11 = 0;
         $this->v11[$nv11++] = "vš";
         $this->v11[$nv11++] = "dešť";
@@ -532,7 +532,7 @@ class Inflection
 
         // $this->v11[$nv11++] = "transmise"
         // $this->v12 - zmena rodu na stredni
-        $this->v12 = Array();
+        $this->v12 = array();
         $nv12 = 0;
         $this->v12[$nv12++] = "nemluvňe";
         $this->v12[$nv12++] = "slůně";
@@ -548,7 +548,7 @@ class Inflection
 
 
         // $this->v0 - nedořešené výjimky
-        $this->v0 = Array();
+        $this->v0 = array();
         $nv0 = 0;
         $this->v0[$nv0++] = "sten";
 //  $this->v0[nv0++] = "Ester"
@@ -571,7 +571,7 @@ class Inflection
         // $this->v3 - různé odchylky ve skloňování
         //    - časem by bylo vhodné opravit
         $nv3 = 0;
-        $this->v3 = Array();
+        $this->v3 = array();
         $this->v3[$nv3++] = "jméno";
         $this->v3[$nv3++] = "myš";
         $this->v3[$nv3++] = "vězeň";
@@ -605,7 +605,7 @@ class Inflection
         $this->v3[$nv3++] = "zoe";
 
 
-        $this->astrTvar = Array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        $this->astrTvar = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
     }
 
     /**
@@ -625,7 +625,7 @@ class Inflection
     private function isShoda($vz, $txt)
     {
         $txt = mb_strtolower($txt, 'UTF-8');
-        $vz = mb_strtolower($vz, 'UTF-8');;
+        $vz = mb_strtolower($vz, 'UTF-8');
         $i = mb_strlen($vz, 'UTF-8');
         $j = mb_strlen($txt, 'UTF-8');
 
@@ -637,11 +637,12 @@ class Inflection
         $nCmpReg = 0;
 
         while ($i >= 0 && $j >= 0) {
+            $charJ = mb_substr($txt, $j, 1, 'UTF-8');
             if (mb_substr($vz, $i, 1, 'UTF-8') == "]") {
                 $i--;
                 $quit = 1;
                 while ($i >= 0 && mb_substr($vz, $i, 1, 'UTF-8') != "[") {
-                    if (mb_substr($vz, $i, 1, 'UTF-8') == mb_substr($txt, $j, 1, 'UTF-8')) {
+                    if (mb_substr($vz, $i, 1, 'UTF-8') == $charJ) {
                         $quit = 0;
                         $this->aCmpReg[$nCmpReg] = mb_substr($vz, $i, 1, 'UTF-8');
                         $nCmpReg++;
@@ -654,7 +655,7 @@ class Inflection
             } else {
                 if (mb_substr($vz, $i, 1, 'UTF-8') == '-')
                     return $j + 1;
-                if (mb_substr($vz, $i, 1, 'UTF-8') != mb_substr($txt, $j, 1, 'UTF-8'))
+                if (mb_substr($vz, $i, 1, 'UTF-8') != $charJ)
                     return -1;
             }
             $i--;
@@ -675,30 +676,33 @@ class Inflection
     private function Xdetene($txt2)
     {
         $XdeteneRV = "";
-        for ($XdeteneI = 0; $XdeteneI < mb_strlen($txt2, 'UTF-8') - 1; $XdeteneI++) {
-            if (mb_substr($txt2, $XdeteneI, 1, 'UTF-8') == "ď" && (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "e" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "i" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "í")) {
+        $length = mb_strlen($txt2, 'UTF-8');
+        for ($XdeteneI = 0; $XdeteneI < $length - 1; $XdeteneI++) {
+            $charN = mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
+            $charNplus1 = mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8');
+            if ($charN == "ď" && ($charNplus1 == "e" || $charNplus1 == "i" || $charNplus1 == "í")) {
                 $XdeteneRV .= "d";
-                if (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "e") {
+                if ($charNplus1 == "e") {
                     $XdeteneRV .= "ě";
                     $XdeteneI++;
                 }
-            } else if (mb_substr($txt2, $XdeteneI, 1, 'UTF-8') == "ť" && (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "e" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "i" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "í")) {
+            } else if ($charN == "ť" && ($charNplus1 == "e" || $charNplus1 == "i" || $charNplus1 == "í")) {
                 $XdeteneRV .= "t";
-                if (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "e") {
+                if ($charNplus1 == "e") {
                     $XdeteneRV .= "ě";
                     $XdeteneI++;
                 }
-            } else if (mb_substr($txt2, $XdeteneI, 1, 'UTF-8') == "ň" && (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "e" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "i" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "í")) {
+            } else if ($charN == "ň" && ($charNplus1 == "e" || $charNplus1 == "i" || $charNplus1 == "í")) {
                 $XdeteneRV .= "n";
-                if (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "e") {
+                if ($charNplus1 == "e") {
                     $XdeteneRV .= "ě";
                     $XdeteneI++;
                 }
             } else
-                $XdeteneRV .= mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
+                $XdeteneRV .= $charN;
         }
 
-        if ($XdeteneI == mb_strlen($txt2, 'UTF-8') - 1)
+        if ($XdeteneI == $length - 1)
             $XdeteneRV .= mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
 
         return $XdeteneRV;
@@ -710,30 +714,35 @@ class Inflection
     private function Xedeten($txt2)
     {
         $XdeteneRV = "";
-        for ($XdeteneI = 0; $XdeteneI < mb_strlen($txt2, 'UTF-8') - 1; $XdeteneI++) {
-            if (mb_substr($txt2, $XdeteneI, 1, 'UTF-8') == "d" && (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "ě" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "i")) {
+        $length = mb_strlen($txt2, 'UTF-8');
+        for ($XdeteneI = 0; $XdeteneI < $length - 1; $XdeteneI++) {
+            
+            $charN = mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
+            $charNplus1 = mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8');
+            
+            if ($charN == "d" && ($charNplus1 == "ě" || $charNplus1 == "i")) {
                 $XdeteneRV .= "ď";
-                if (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "ě") {
+                if ($charNplus1 == "ě") {
                     $XdeteneRV .= "e";
                     $XdeteneI++;
                 }
-            } else if (mb_substr($txt2, $XdeteneI, 1, 'UTF-8') == "t" && (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "ě" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "i")) {
+            } else if ($charN == "t" && ($charNplus1 == "ě" || $charNplus1 == "i")) {
                 $XdeteneRV .= "ť";
-                if (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "ě") {
+                if ($charNplus1 == "ě") {
                     $XdeteneRV .= "e";
                     $XdeteneI++;
                 }
-            } else if (mb_substr($txt2, $XdeteneI, 1, 'UTF-8') == "n" && (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "ě" || mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "i")) {
+            } else if ($charN == "n" && ($charNplus1 == "ě" || $charNplus1 == "i")) {
                 $XdeteneRV .= "ň";
-                if (mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8') == "ě") {
+                if ($charNplus1 == "ě") {
                     $XdeteneRV .= "e";
                     $XdeteneI++;
                 }
             } else
-                $XdeteneRV .= mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
+                $XdeteneRV .= $charN;
         }
 
-        if ($XdeteneI == mb_strlen($txt2, 'UTF-8') - 1)
+        if ($XdeteneI == $length - 1)
             $XdeteneRV .= mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
 
         return $XdeteneRV;
@@ -746,25 +755,28 @@ class Inflection
     private function CmpFrm($txt)
     {
         $CmpFrmRV = "";
-        for ($CmpFrmI = 0; $CmpFrmI < mb_strlen($txt, 'UTF-8'); $CmpFrmI++)
-            if (mb_substr($txt, $CmpFrmI, 1, 'UTF-8') == "0")
+        $length = mb_strlen($txt, 'UTF-8');
+        for ($CmpFrmI = 0; $CmpFrmI < $length; $CmpFrmI++) {
+            $char = mb_substr($txt, $CmpFrmI, 1, 'UTF-8');
+            if ($char == "0")
                 $CmpFrmRV .= $this->aCmpReg[0];
-            else if (mb_substr($txt, $CmpFrmI, 1, 'UTF-8') == "1")
+            else if ($char == "1")
                 $CmpFrmRV .= $this->aCmpReg[1];
-            else if (mb_substr($txt, $CmpFrmI, 1, 'UTF-8') == "2")
+            else if ($char == "2")
                 $CmpFrmRV .= $this->aCmpReg[2];
             else
-                $CmpFrmRV .= mb_substr($txt, $CmpFrmI, 1, 'UTF-8');
+                $CmpFrmRV .= $char;
 
+        }
         return $CmpFrmRV;
     }
 
-// Funkce pro sklonovani slova do daneho podle 
+// Funkce pro sklonovani slova do daneho podle
 // daneho $this->vzoru
     private function Sklon($nPad, $vzndx, $txt, $zivotne = false)
     {
-
-        if ($vzndx >= count($this->vzor) || $vzndx < 0)
+        $cnt = count($this->vzor);
+        if ($vzndx >= $cnt || $vzndx < 0)
             return "???";
 
         $txt3 = $this->Xedeten($txt);
@@ -775,34 +787,35 @@ class Inflection
         if ($this->vzor[$vzndx][$nPad] == null)
             return null;
 
-        if (!$this->isDbgMode & $nPad == 1) // 1. pad nemenime
+        if (!$this->isDebugMode & $nPad == 1) // 1. pad nemenime
             $rv = $this->Xdetene($txt3);
         else
             $rv = $this->LeftStr($kndx, $txt3) . '-' . $this->CmpFrm($this->vzor[$vzndx][$nPad]);
 
-        if ($this->isDbgMode) //preskoceni filtrovani
+        if ($this->isDebugMode) //preskoceni filtrovani
             return $rv;
 
         // Formatovani zivotneho sklonovani
         // - nalezeni pomlcky
-        for ($nnn = 0; $nnn < mb_strlen($rv, 'UTF-8'); $nnn++)
+        $length = mb_strlen($rv, 'UTF-8');
+        for ($nnn = 0; $nnn < $length; $nnn++)
             if (mb_substr($rv, $nnn, 1, 'UTF-8') == "-")
                 break;
 
         $ndx1 = $nnn;
 
         // - nalezeni lomitka
-        for ($nnn = 0; $nnn < mb_strlen($rv, 'UTF-8'); $nnn++)
+        for ($nnn = 0; $nnn < $length; $nnn++)
             if (mb_substr($rv, $nnn, 1, 'UTF-8') == "/")
                 break;
 
         $ndx2 = $nnn;
 
 
-        if ($ndx1 != mb_strlen($rv, 'UTF-8') && $ndx2 != mb_strlen($rv, 'UTF-8')) {
+        if ($ndx1 != $length && $ndx2 != $length) {
             if ($zivotne)
                 // "text-xxx/yyy" -> "textyyy"
-                $rv = $this->LeftStr($ndx1, $rv) . $this->RightStr($ndx2 + 1, $rv);
+                $rv = $this->LeftStr($ndx1, $rv) . $this->RightStr($ndx2 + 1, $rv, $length);
             else
                 // "text-xxx/yyy" -> "text-xxx"
                 $rv = $this->LeftStr($ndx2, $rv);
@@ -811,10 +824,11 @@ class Inflection
 
         // vypusteni pomocnych znaku
         $txt3 = "";
-        for ($nnn = 0; $nnn < mb_strlen($rv, 'UTF-8'); $nnn++)
-            if (!(mb_substr($rv, $nnn, 1, 'UTF-8') == '-' || mb_substr($rv, $nnn, 1, 'UTF-8') == '/'))
-                $txt3 .= mb_substr($rv, $nnn, 1, 'UTF-8');
-
+        for ($nnn = 0; $nnn < $length; $nnn++) {
+            $char = mb_substr($rv, $nnn, 1, 'UTF-8');
+            if (!($char == '-' || $char == '/'))
+                $txt3 .= $char;
+        }
         $rv = $this->Xdetene($txt3);
 
         return $rv;
@@ -827,34 +841,28 @@ class Inflection
 // - levy retezec do indexu n (bez tohoto indexu)
     private function LeftStr($n, $txt)
     {
-        $rv = "";
-        for ($i = 0; $i < $n && $i < mb_strlen($txt, 'UTF-8'); $i++)
-            $rv .= mb_substr($txt, $i, 1, 'UTF-8');
-
-        return $rv;
+        return mb_substr($txt, 0, $n, 'UTF-8');
     }
 
 // - pravy retezec od indexu n (vcetne)
-    private function RightStr($n, $txt)
+    private function RightStr($n, $txt, $length)
     {
-        $rv = "";
-        for ($i = $n; $i < mb_strlen($txt, 'UTF-8'); $i++)
-            $rv .= mb_substr($txt, $i, 1, 'UTF-8');
-
-        return $rv;
+        return mb_substr($txt, $n, $length, 'UTF-8');
     }
 
 // Rozdeleni textu na slova
     private function txtSplit($txt)
     {
         $skp = 1;
-        $rv = Array();
+        $rv = array();
 
         $rvx = 0;
         $acc = "";
 
-        for ($i = 0; $i < mb_strlen($txt, 'UTF-8'); $i++) {
-            if (mb_substr($txt, $i, 1, 'UTF-8') == ' ') {
+        $length = mb_strlen($txt, 'UTF-8');
+        for ($i = 0; $i < $length; $i++) {
+            $char = mb_substr($txt, $i, 1, 'UTF-8');
+            if ($char == ' ') {
                 if ($skp)
                     continue;
                 $skp = 1;
@@ -863,7 +871,7 @@ class Inflection
                 continue;
             }
             $skp = 0;
-            $acc .= mb_substr($txt, $i, 1, 'UTF-8');
+            $acc .= $char;
         }
         if (!$skp)
             $rv[$rvx++] = $acc;
@@ -884,24 +892,27 @@ class Inflection
 
         $this->PrefRod = "0";
         $out = array();
-        for ($i = count($aTxt) - 1; $i >= 0; $i--) {
+        $cnt = count($aTxt);
+        $astrTvarFirst = mb_substr($this->astrTvar[0], 0, 1, 'UTF-8');
+        $prefRodFirst = mb_substr($this->PrefRod, 0, 1, 'UTF-8');
+        for ($i = $cnt - 1; $i >= 0; $i--) {
             // vysklonovani
             $this->skl2($aTxt[$i], $preferovanyRod, $zivotne);
 
             // vynuceni rodu podle posledniho slova
-            if ($i == count($aTxt) - 1)
+            if ($i == $cnt - 1)
                 $this->PrefRod = $this->astrTvar[0];
 
             // pokud nenajdeme $this->vzor tak nesklonujeme
-            if ($i < count($aTxt) - 1 && null === $this->astrTvar[0] && mb_substr($this->PrefRod, 0, 1, 'UTF-8') != '?') {
+            if (null === $this->astrTvar[0] && $i < $cnt - 1 && $prefRodFirst != '?') {
                 for ($j = 1; $j < 15; $j++)
                     $this->astrTvar[$j] = $aTxt[$i];
             }
 
-            if (mb_substr($this->astrTvar[0], 0, 1, 'UTF-8') == '?')
+            if ($astrTvarFirst == '?')
                 $this->astrTvar[0] = '';
 
-            if ($i < count($aTxt)) {
+            if ($i < $cnt) {
                 for ($j = 1; $j < 15; $j++) {
                     if (null === $this->astrTvar[$j] && !isset($out[$j])) {
                         $out[$j] = $this->astrTvar[$j];
@@ -920,12 +931,13 @@ class Inflection
 // Sklonovani podle standardniho seznamu pripon
     private function SklStd($slovo, $ii, $zivotne)
     {
-
-        if ($ii < 0 || $ii > count($this->vzor))
+        $cnt = count($this->vzor);
+        if ($ii < 0 || $ii > $cnt)
             $this->astrTvar[0] = "!!!???";
 
         // - seznam nedoresenych slov
-        for ($jj = 0; $jj < count($this->v0); $jj++)
+        $cnt = count($this->v0);
+        for ($jj = 0; $jj < $cnt; $jj++)
             if ($this->isShoda($this->v0[$jj], $slovo) >= 0) {
                 //str = "Seznam výjimek [" + $jj + "]. "
                 //alert(str + "Lituji, toto $slovo zatím neumím správně vyskloňovat.");
@@ -952,7 +964,8 @@ class Inflection
 // Pokud je index>=0, je $slovo výjimka ze seznamu "$vx"(v10,...), definovaného výše.
     private function NdxInVx($vx, $slovo)
     {
-        for ($vxi = 0; $vxi < count($vx); $vxi++)
+        $cnt = count($vx);
+        for ($vxi = 0; $vxi < $cnt; $vxi++)
             if ($slovo == $vx[$vxi])
                 return $vxi;
 
@@ -962,7 +975,8 @@ class Inflection
 // Pokud je index>=0, je $slovo výjimka ze seznamu "$vx", definovaného výše.
     private function ndxV1($slovo)
     {
-        for ($this->v1i = 0; $this->v1i < count($this->v1); $this->v1i++)
+        $cnt = count($this->v1);
+        for ($this->v1i = 0; $this->v1i < $cnt; $this->v1i++)
             if ($slovo == $this->v1[$this->v1i][0])
                 return $this->v1i;
 
@@ -971,16 +985,18 @@ class Inflection
 
     private function StdNdx($slovo)
     {
-        for ($iii = 0; $iii < count($this->vzor); $iii++) {
+        $cnt = count($this->vzor);
+        $char = mb_substr($this->PrefRod, 0, 1, 'UTF-8');
+        for ($iii = 0; $iii < $cnt; $iii++) {
             // filtrace rodu
-            if (mb_substr($this->PrefRod, 0, 1, 'UTF-8') != "0" && mb_substr($this->PrefRod, 0, 1, 'UTF-8') != mb_substr($this->vzor[$iii][0], 0, 1, 'UTF-8'))
+            if ($char != "0" && $char != mb_substr($this->vzor[$iii][0], 0, 1, 'UTF-8'))
                 continue;
 
             if ($this->isShoda($this->vzor[$iii][1], $slovo) >= 0)
                 break;
         }
 
-        if ($iii >= count($this->vzor))
+        if ($iii >= $cnt)
             return -1;
 
         return $iii;
@@ -1066,5 +1082,5 @@ class Inflection
             return null;
         }
     }
-
+    
 }
