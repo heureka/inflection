@@ -718,49 +718,24 @@ class Inflection
         if ($this->isDebugMode) //preskoceni filtrovani
             return $rv;
 
-	    $rvChar = preg_split('//u', $rv, -1, PREG_SPLIT_NO_EMPTY);
-
         // Formatovani zivotneho sklonovani
-        // - nalezeni pomlcky
-        $length = mb_strlen($rv, 'UTF-8');
-        for ($nnn = 0; $nnn < $length; $nnn++) // TODO use simple strpos
-            if ($rvChar[$nnn] == "-")
-                break;
+        $ndx1 = strpos($rv, '-');
+        $ndx2 = strpos($rv, '/');
 
-        $ndx1 = $nnn;
-
-        // - nalezeni lomitka
-        for ($nnn = 0; $nnn < $length; $nnn++) // TODO use simple strpos
-            if ($rvChar[$nnn] == "/")
-                break;
-
-        $ndx2 = $nnn;
-
-
-        if ($ndx1 != $length && $ndx2 != $length) {
+        if ($ndx1 != FALSE && $ndx2 != FALSE) {
             if ($zivotne) {
                 // "text-xxx/yyy" -> "textyyy"
-                $rv = $this->LeftStr($ndx1, $rv) . $this->RightStr($ndx2 + 1, $rv, $length);
+                $rv = $this->LeftStr($ndx1, $rv) . $this->RightStr($ndx2 + 1, $rv, mb_strlen($rv, 'UTF-8'));
             } else {
                 // "text-xxx/yyy" -> "text-xxx"
                 $rv = $this->LeftStr($ndx2, $rv);
             }
-            $length = mb_strlen($rv, 'UTF-8');
-            $rvChar = preg_split('//u', $rv, -1, PREG_SPLIT_NO_EMPTY);
         }
 
 
         // vypusteni pomocnych znaku
-        $txt3 = "";
-        for ($nnn = 0; $nnn < $length; $nnn++) { // TODO use simple strreplace
-            $char = $rvChar[$nnn];
-            if (!($char == '-' || $char == '/'))
-                $txt3 .= $char;
-        }
-        $rv = $this->Xdetene($txt3);
-
-        return $rv;
-//  return $this->LeftStr( $kndx, $txt ) + $this->vzor[$vzndx][$nPad];
+        $txt3 = strtr($rv, ['-' => '', '/' => '']);
+        return $this->Xdetene($txt3);
     }
 
 //
