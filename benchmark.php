@@ -14,7 +14,7 @@ for ($i = 0; $i < 10; $i++)
 
 	foreach ($words as $word)
 	{
-		$lib->fasterInflect($word);
+		$lib->inflect($word);
 	}
 
 	$duration = microtime(TRUE) - $start;

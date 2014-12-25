@@ -116,24 +116,6 @@ class InflectionTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function providerSurnames()
-    {
-        return array(
-            array(
-                "Nováková", 'f'
-            ),
-            array(
-                "Novák", null
-            ),
-            array(
-                "Brožová", 'f'
-            ),
-            array(
-                "Záhlavová-Strýcová", 'f'
-            )
-        );
-    }
-
     /**
      * @dataProvider providerNames
      */
@@ -143,11 +125,4 @@ class InflectionTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expected, $inflected);
     }
 
-    /**
-     * @dataProvider providerSurnames
-     */
-    public function testIsFeminineGenusSurname($surname, $expected)
-    {
-        $this->assertSame($this->inflection->isFeminineGenusSurname($surname), $expected);
-    }
 }

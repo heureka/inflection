@@ -57,9 +57,9 @@ class Inflection
 		// přítel
 		["m", "-([í])tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "átelé", "áteli", "átelům", "átele", "átelé", "átelích", "áteli"],
 		// malé
-		["s", "-é", "ého", "ému", "é", "é", "ém", "ým", "-á", "ých", "ým", "á", "á", "ých", "ými"],
+		["s", "-é", "ého", "ému", "é", "é", "ém", "ým", "á", "ých", "ým", "á", "á", "ých", "ými"],
 		// malá
-		["f", "-á", "é", "é", "ou", "á", "é", "ou", "-é", "ých", "ým", "é", "é", "ých", "ými"],
+		["f", "-á", "é", "é", "ou", "á", "é", "ou", "é", "ých", "ým", "é", "é", "ých", "ými"],
 
 		["-", "já", "mne", "mně", "mne/mě", "já", "mně", "mnou", "my", "nás", "nám", "nás", "my", "nás", "námi"],
 		["-", "ty", "tebe", "tobě", "tě/tebe", "ty", "tobě", "tebou", "vy", "vás", "vám", "vás", "vy", "vás", "vámi"],
@@ -156,8 +156,8 @@ class Inflection
 		["-", "-čtyřicet", "čtyřiceti", "čtyřiceti", "čtyřicet", "čtyřicet", "čtyřiceti", "čtyřiceti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
 		["-", "-desát", "desáti", "desáti", "desát", "desát", "desáti", "desáti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
 
-		["m", "-([i])sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "-0sté", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty"],
-		["m", "-([o])sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "-0stové", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty"],
+		["m", "-([i])sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "0sté", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty"],
+		["m", "-([o])sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "0stové", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty"],
 
 		["m", "-předseda", "předsedy", "předsedovi", "předsedu", "předsedo", "předsedovi", "předsedou", "předsedové", "předsedů", "předsedům", "předsedy", "předsedové", "předsedech", "předsedy"],
 		["m", "-srdce", "srdce", "srdi", "sdrce", "srdce", "srdci", "srdcem", "srdce", "srdcí", "srdcím", "srdce", "srdce", "srdcích", "srdcemi"],
@@ -165,76 +165,76 @@ class Inflection
 		// žalobce
 		["m", "-([db])ce", "0ce", "0ci", "0ce", "0če", "0ci", "0cem", "0ci/0cové", "0ců", "0cům", "0ce", "0ci/0cové", "0cích", "0ci"],
 		// jev
-		["m", "-([jň])ev", "0evu", "0evu", "0ev", "0eve", "0evu", "0evem", "-0evy", "0evů", "0evům", "0evy", "0evy", "0evech", "0evy"],
+		["m", "-([jň])ev", "0evu", "0evu", "0ev", "0eve", "0evu", "0evem", "0evy", "0evů", "0evům", "0evy", "0evy", "0evech", "0evy"],
 		// lev
 		["m", "-([lř])ev", "0evu/0va", "0evu/0vovi", "0ev/0va", "0eve/0ve", "0evu/0vovi", "0evem/0vem", "0evy/0vové", "0evů/0vů", "0evům/0vům", "0evy/0vy", "0evy/0vové", "0evech/0vech", "0evy/0vy"],
 		// vůz
-		["m", "-ů([lz])", "o0u/o0a", "o0u/o0ovi", "ů0/o0a", "o0e", "o0u", "o0em", "o0y/o-0ové", "o0ů", "o0ům", "o0y", "o0y/o0ové", "o0ech", "o0y"],
+		["m", "-ů([lz])", "o0u/o0a", "o0u/o0ovi", "ů0/o0a", "o0e", "o0u", "o0em", "o0y/o0ové", "o0ů", "o0ům", "o0y", "o0y/o0ové", "o0ech", "o0y"],
 
 		["m", "nůž", "nože", "noži", "nůž", "noži", "noži", "nožem", "nože", "nožů", "nožům", "nože", "nože", "nožích", "noži"],
 
 		// clo
-		["s", "-([bcčdghksštvzž])lo", "0la", "0lu", "0lo", "0lo", "0lu", "0lem", "-0la", "0el", "0lům", "0la", "0la", "0lech", "0ly"],
+		["s", "-([bcčdghksštvzž])lo", "0la", "0lu", "0lo", "0lo", "0lu", "0lem", "0la", "0el", "0lům", "0la", "0la", "0lech", "0ly"],
 		// ramínko
-		["s", "-([bcčdnsštvzž])ko", "0ka", "0ku", "0ko", "0ko", "0ku", "0kem", "-0ka", "0ek", "0kům", "0ka", "0ka", "0cích/0kách", "0ky"],
+		["s", "-([bcčdnsštvzž])ko", "0ka", "0ku", "0ko", "0ko", "0ku", "0kem", "0ka", "0ek", "0kům", "0ka", "0ka", "0cích/0kách", "0ky"],
 		// okno
-		["s", "-([bcčdksštvzž])no", "0na", "0nu", "0no", "0no", "0nu", "0nem", "-0na", "0en", "0nům", "0na", "0na", "0nech/0nách", "0ny"],
+		["s", "-([bcčdksštvzž])no", "0na", "0nu", "0no", "0no", "0nu", "0nem", "0na", "0en", "0nům", "0na", "0na", "0nech/0nách", "0ny"],
 		// kolo
-		["s", "-o", "a", "u", "o", "o", "u", "em", "-a", "", "ům", "a", "a", "ech", "y"],
+		["s", "-o", "a", "u", "o", "o", "u", "em", "a", "", "ům", "a", "a", "ech", "y"],
 		// stavení
-		["s", "-í", "í", "í", "í", "í", "í", "ím", "-í", "í", "ím", "í", "í", "ích", "ími"],
+		["s", "-í", "í", "í", "í", "í", "í", "ím", "í", "í", "ím", "í", "í", "ích", "ími"],
 		// děvče
-		["s", "-([čďť])([e])", "10te", "10ti", "10", "10", "10ti", "10tem", "1-ata", "1at", "1atům", "1ata", "1ata", "1atech", "1aty"],
+		["s", "-([čďť])([e])", "10te", "10ti", "10", "10", "10ti", "10tem", "1ata", "1at", "1atům", "1ata", "1ata", "1atech", "1aty"],
 		// veka
-		["f", "-([aeiouyáéíóúý])ka", "0ky", "0ce", "0ku", "0ko", "0ce", "0kou", "-0ky", "0k", "0kám", "0ky", "0ky", "0kách", "0kami"],
+		["f", "-([aeiouyáéíóúý])ka", "0ky", "0ce", "0ku", "0ko", "0ce", "0kou", "0ky", "0k", "0kám", "0ky", "0ky", "0kách", "0kami"],
 		// radka
-		["f", "-ka", "ky", "ce", "ku", "ko", "ce", "kou", "-ky", "ek", "kám", "ky", "ky", "kách", "kami"],
+		["f", "-ka", "ky", "ce", "ku", "ko", "ce", "kou", "ky", "ek", "kám", "ky", "ky", "kách", "kami"],
 		// kra
-		["f", "-([bdghkmnptvz])ra", "0ry", "0ře", "0ru", "0ro", "0ře", "0rou", "-0ry", "0er", "0rám", "0ry", "0ry", "0rách", "0rami"],
+		["f", "-([bdghkmnptvz])ra", "0ry", "0ře", "0ru", "0ro", "0ře", "0rou", "0ry", "0er", "0rám", "0ry", "0ry", "0rách", "0rami"],
 		// dcera
-		["f", "-ra", "ry", "ře", "ru", "ro", "ře", "rou", "-ry", "r", "rám", "ry", "ry", "rách", "rami"],
+		["f", "-ra", "ry", "ře", "ru", "ro", "ře", "rou", "ry", "r", "rám", "ry", "ry", "rách", "rami"],
 		// lampa
-		["f", "-([tdbnvmp])a", "0y", "0ě", "0u", "0o", "0ě", "0ou", "-0y", "0", "0ám", "0y", "0y", "0ách", "0ami"],
+		["f", "-([tdbnvmp])a", "0y", "0ě", "0u", "0o", "0ě", "0ou", "0y", "0", "0ám", "0y", "0y", "0ách", "0ami"],
 		// střecha
-		["f", "-cha", "chy", "še", "chu", "cho", "še", "chou", "-chy", "ch", "chám", "chy", "chy", "chách", "chami"],
+		["f", "-cha", "chy", "še", "chu", "cho", "še", "chou", "chy", "ch", "chám", "chy", "chy", "chách", "chami"],
 		// něha
-		["f", "-([gh])a", "0y", "ze", "0u", "0o", "ze", "0ou", "-0y", "0", "0ám", "0y", "0y", "0ách", "0ami"],
+		["f", "-([gh])a", "0y", "ze", "0u", "0o", "ze", "0ou", "0y", "0", "0ám", "0y", "0y", "0ách", "0ami"],
 		// Soňa
 		["f", "-ňa", "ni", "ně", "ňou", "ňo", "ni", "ňou", "ně/ničky", "ň", "ňám", "ně/ničky", "ně/ničky", "ňách", "ňami"],
 		// Dáša
 		["f", "-([šč])a", "0i", "0e", "0u", "0o", "0e", "0ou", "0e/0i", "0", "0ám", "0e/0i", "0e/0i", "0ách", "0ami"],
 		// žena
-		["f", "-a", "y", "e", "u", "o", "e", "ou", "-y", "", "ám", "y", "y", "ách", "ami"],
+		["f", "-a", "y", "e", "u", "o", "e", "ou", "y", "", "ám", "y", "y", "ách", "ami"],
 		// píseň
-		["f", "-eň", "ně", "ni", "eň", "ni", "ni", "ní", "-ně", "ní", "ním", "ně", "ně", "ních", "němi"],
+		["f", "-eň", "ně", "ni", "eň", "ni", "ni", "ní", "ně", "ní", "ním", "ně", "ně", "ních", "němi"],
 		// Třeboň
-		["f", "-oň", "oně", "oni", "oň", "oni", "oni", "oní", "-oně", "oní", "oním", "oně", "oně", "oních", "oněmi"],
+		["f", "-oň", "oně", "oni", "oň", "oni", "oni", "oní", "oně", "oní", "oním", "oně", "oně", "oních", "oněmi"],
 		// beznaděj
-		["f", "-([ě])j", "0je", "0ji", "0j", "0ji", "0ji", "0jí", "-0je", "0jí", "0jím", "0je", "0je", "0jích", "0jemi"],
+		["f", "-([ě])j", "0je", "0ji", "0j", "0ji", "0ji", "0jí", "0je", "0jí", "0jím", "0je", "0je", "0jích", "0jemi"],
 		// lahev
-		["f", "-ev", "ve", "vi", "ev", "vi", "vi", "ví", "-ve", "ví", "vím", "ve", "ve", "vích", "vemi"],
+		["f", "-ev", "ve", "vi", "ev", "vi", "vi", "ví", "ve", "ví", "vím", "ve", "ve", "vích", "vemi"],
 		// kytice
-		["f", "-ice", "ice", "ici", "ici", "ice", "ici", "icí", "-ice", "ic", "icím", "ice", "ice", "icích", "icemi"],
+		["f", "-ice", "ice", "ici", "ici", "ice", "ici", "icí", "ice", "ic", "icím", "ice", "ice", "icích", "icemi"],
 		// růže
-		["f", "-e", "e", "i", "i", "e", "i", "í", "-e", "í", "ím", "e", "e", "ích", "emi"],
+		["f", "-e", "e", "i", "i", "e", "i", "í", "e", "í", "ím", "e", "e", "ích", "emi"],
 		// epopej
 		["f", "-([eaá])([jžň])", "10e/10i", "10i", "10", "10i", "10i", "10í", "10e/10i", "10í", "10ím", "10e", "10e", "10ích", "10emi"],
 		// myš
 		["f", "-([eayo])([š])", "10e/10i", "10i", "10", "10i", "10i", "10í", "10e/10i", "10í", "10ím", "10e", "10e", "10ích", "10emi"],
 		// skříň
-		["f", "-([íy])ň", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "-0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi"],
+		["f", "-([íy])ň", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi"],
 		// kolegyně
 		// TODO verify ňe is ok
-		["f", "-([íyý])ňe", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "-0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi"],
+		["f", "-([íyý])ňe", "0ně", "0ni", "0ň", "0ni", "0ni", "0ní", "0ně", "0ní", "0ním", "0ně", "0ně", "0ních", "0němi"],
 		// trať
-		["f", "-([ťďž])", "0e", "0i", "0", "0i", "0i", "0í", "-0e", "0í", "0ím", "0e", "0e", "0ích", "0emi"],
+		["f", "-([ťďž])", "0e", "0i", "0", "0i", "0i", "0í", "0e", "0í", "0ím", "0e", "0e", "0ích", "0emi"],
 		// laboratoř
-		["f", "-toř", "toře", "toři", "toř", "toři", "toři", "toří", "-toře", "toří", "tořím", "toře", "toře", "tořích", "tořemi"],
+		["f", "-toř", "toře", "toři", "toř", "toři", "toři", "toří", "toře", "toří", "tořím", "toře", "toře", "tořích", "tořemi"],
 		// step
 		["f", "-ep", "epi", "epi", "ep", "epi", "epi", "epí", "epi", "epí", "epím", "epi", "epi", "epích", "epmi"],
 
 		// kost
-		["f", "-st", "sti", "sti", "st", "sti", "sti", "stí", "-sti", "stí", "stem", "sti", "sti", "stech", "stmi"],
+		["f", "-st", "sti", "sti", "st", "sti", "sti", "stí", "sti", "stí", "stem", "sti", "sti", "stech", "stmi"],
 
 		["f", "ves", "vsi", "vsi", "ves", "vsi", "vsi", "vsí", "vsi", "vsí", "vsem", "vsi", "vsi", "vsech", "vsemi"],
 
@@ -259,9 +259,9 @@ class Inflection
 		// rádio
 		["s", "-io", "0a", "0u", "0", "0", "0u", "0em", "0a", "0í", "0ům", "0a", "0a", "0iích", "0y"],
 		// bar
-		["m", "-([aeiouyáéíóúý])r", "0ru/0ra", "0ru/0rovi", "0r/0ra", "0re", "0ru/0rovi", "0rem", "0ry/0rové", "0rů", "0rům", "0ry", "0ry/0rové", "0rech", "0ry"],// , array( "m","-([aeiouyáéíóúý])r","0ru/0ra","0ru/0rovi","0r/0ra","0re","0ru/0rovi","0rem",     "0ry/0ři","0rů","0rům","0ry","0ry/0ři", "0rech","0ry" )
+		["m", "-([aeiouyáéíóúý])r", "0ru/0ra", "0ru/0rovi", "0r/0ra", "0re", "0ru/0rovi", "0rem", "0ry/0rové", "0rů", "0rům", "0ry", "0ry/0rové", "0rech", "0ry"],
 		// odběr
-		["m", "-r", "ru/ra", "ru/rovi", "r/ra", "ře", "ru/rovi", "rem", "ry/rové", "rů", "rům", "ry", "ry/rové", "rech", "ry"],// , array( "m","-r",              "ru/ra",  "ru/rovi",  "r/ra",  "ře", "ru/rovi",   "rem",     "ry/ři", "rů","rům","ry",    "ry/ři",  "rech", "ry" )
+		["m", "-r", "ru/ra", "ru/rovi", "r/ra", "ře", "ru/rovi", "rem", "ry/rové", "rů", "rům", "ry", "ry/rové", "rech", "ry"],
 		// kámen
 		["m", "-([mnp])en", "0enu/0ena", "0enu/0enovi", "0en/0na", "0ene", "0enu/0enovi", "0enem", "0eny/0enové", "0enů", "0enům", "0eny", "0eny/0enové", "0enech", "0eny"],
 		// hřeben
@@ -322,9 +322,9 @@ class Inflection
 		// Kvido
 		["m", "-o", "a", "ovi", "a", "a", "ovi", "em", "ové", "ů", "ům", "y", "ové", "ech", "y"],
 		// šaty
-		[NULL, "-([tp])y", NULL, NULL, NULL, NULL, NULL, NULL, "-0y", "0", "0ům", "0y", "0y", "0ech", "0ami"],
+		[NULL, "-([tp])y", NULL, NULL, NULL, NULL, NULL, NULL, "0y", "0", "0ům", "0y", "0y", "0ech", "0ami"],
 		// dřeváky
-		[NULL, "-([k])y", NULL, NULL, NULL, NULL, NULL, NULL, "-0y", "e0", "0ám", "0y", "0y", "0ách", "0ami"],
+		[NULL, "-([k])y", NULL, NULL, NULL, NULL, NULL, NULL, "0y", "e0", "0ám", "0y", "0y", "0ách", "0ami"],
 		// ???
 		["f", "-ar", "ary", "aře", "ar", "ar", "ar", "ar", "ary", "ar", "arám", "ary", "ary", "arách", "arami"],
 		// madam
@@ -437,7 +437,7 @@ class Inflection
 		$this->v3 = ["jméno", "myš", "vězeň", "sťežeň", "oko", "sole", "šach", "veš", "myš", "klášter", "kněz", "král", "zď", "sto", "smrt", "leden", "len", "les", "únor", "březen", "duben", "květen", "červen", "srpen", "říjen", "pantofel", "žába", "zoja", "zoja", "zoe", "zoe",];
 	}
 
-	public function fasterInflect($text, $animate = FALSE)
+	public function inflect($text, $animate = FALSE)
 	{
 		$words = array_reverse(explode(' ', $text));
 		$gender = NULL;
@@ -518,14 +518,12 @@ class Inflection
 		$matches = [];
 		if (preg_match('/' . substr($pattern, 1) . '$/u', $word, $matches))
 		{
-			$full = array_shift($matches);
-			$i = count($matches) - 1;
-			foreach ($matches as $match)
+			for ($i = count($matches) - 1; $i > 0; $i--)
 			{
-				$this->replacements[$i--] = $match;
+				$this->replacements[$i - 1] = $matches[$i];
 			}
 
-			return mb_strlen($word) - mb_strlen($full);
+			return mb_strlen($word) - mb_strlen($matches[0]);
 		}
 
 		return -1;
@@ -539,6 +537,14 @@ class Inflection
 	protected function fixAccents($word)
 	{
 		return strtr($word, ['ďi' => 'di', 'ťi' => 'ti', 'ňi' => 'ni', 'ďe' => 'dě', 'ťe' => 'tě', 'ňe' => 'ně']);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPatterns()
+	{
+		return $this->patterns;
 	}
 
 }
