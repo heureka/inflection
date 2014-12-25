@@ -634,15 +634,17 @@ class Inflection
 
         $nCmpReg = 0;
 
+	    $txtChar = preg_split('//u', $txt, -1, PREG_SPLIT_NO_EMPTY);
+	    $vzChar = preg_split('//u', $vz, -1, PREG_SPLIT_NO_EMPTY);
+
         while ($i >= 0 && $j >= 0) {
-            $charJ = mb_substr($txt, $j, 1, 'UTF-8');
-            if (mb_substr($vz, $i, 1, 'UTF-8') == "]") {
+            if ($vzChar[$i] == "]") {
                 $i--;
                 $quit = 1;
-                while ($i >= 0 && mb_substr($vz, $i, 1, 'UTF-8') != "[") {
-                    if (mb_substr($vz, $i, 1, 'UTF-8') == $charJ) {
+                while ($i >= 0 && $vzChar[$i] != "[") {
+                    if ($vzChar[$i] == $txtChar[$j]) {
                         $quit = 0;
-                        $this->aCmpReg[$nCmpReg] = mb_substr($vz, $i, 1, 'UTF-8');
+                        $this->aCmpReg[$nCmpReg] = $vzChar[$i];
                         $nCmpReg++;
                     }
                     $i--;
@@ -651,9 +653,9 @@ class Inflection
                 if ($quit == 1)
                     return -1;
             } else {
-                if (mb_substr($vz, $i, 1, 'UTF-8') == '-')
+                if ($vzChar[$i] == '-')
                     return $j + 1;
-                if (mb_substr($vz, $i, 1, 'UTF-8') != $charJ)
+                if ($vzChar[$i] != $txtChar[$j])
                     return -1;
             }
             $i--;
@@ -661,7 +663,7 @@ class Inflection
         }
         if ($i < 0 && $j < 0)
             return 0;
-        if (mb_substr($vz, $i, 1, 'UTF-8') == '-')
+        if ($i >= 0 && $vzChar[$i] == '-')
             return 0;
 
         return -1;
@@ -754,8 +756,9 @@ class Inflection
     {
         $CmpFrmRV = "";
         $length = mb_strlen($txt, 'UTF-8');
+	    $txtChar = preg_split('//u', $txt, -1, PREG_SPLIT_NO_EMPTY);
         for ($CmpFrmI = 0; $CmpFrmI < $length; $CmpFrmI++) {
-            $char = mb_substr($txt, $CmpFrmI, 1, 'UTF-8');
+            $char = $txtChar[$CmpFrmI];
             if ($char == "0")
                 $CmpFrmRV .= $this->aCmpReg[0];
             else if ($char == "1")
@@ -793,37 +796,42 @@ class Inflection
         if ($this->isDebugMode) //preskoceni filtrovani
             return $rv;
 
+	    $rvChar = preg_split('//u', $rv, -1, PREG_SPLIT_NO_EMPTY);
+
         // Formatovani zivotneho sklonovani
         // - nalezeni pomlcky
         $length = mb_strlen($rv, 'UTF-8');
         for ($nnn = 0; $nnn < $length; $nnn++)
-            if (mb_substr($rv, $nnn, 1, 'UTF-8') == "-")
+            if ($rvChar[$nnn] == "-")
                 break;
 
         $ndx1 = $nnn;
 
         // - nalezeni lomitka
         for ($nnn = 0; $nnn < $length; $nnn++)
-            if (mb_substr($rv, $nnn, 1, 'UTF-8') == "/")
+            if ($rvChar[$nnn] == "/")
                 break;
 
         $ndx2 = $nnn;
 
 
         if ($ndx1 != $length && $ndx2 != $length) {
-            if ($zivotne)
+            if ($zivotne) {
                 // "text-xxx/yyy" -> "textyyy"
                 $rv = $this->LeftStr($ndx1, $rv) . $this->RightStr($ndx2 + 1, $rv, $length);
-            else
+            } else {
                 // "text-xxx/yyy" -> "text-xxx"
                 $rv = $this->LeftStr($ndx2, $rv);
+            }
+            $length = mb_strlen($rv, 'UTF-8');
+            $rvChar = preg_split('//u', $rv, -1, PREG_SPLIT_NO_EMPTY);
         }
 
 
         // vypusteni pomocnych znaku
         $txt3 = "";
         for ($nnn = 0; $nnn < $length; $nnn++) {
-            $char = mb_substr($rv, $nnn, 1, 'UTF-8');
+            $char = $rvChar[$nnn];
             if (!($char == '-' || $char == '/'))
                 $txt3 .= $char;
         }
