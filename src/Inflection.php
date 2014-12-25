@@ -17,7 +17,7 @@ class Inflection
 	/**
 	 * @var string enum (0|m|f|s)
 	 */
-	protected $PrefRod = "0"; // smi byt "0", "m", "f", "s"
+	protected $gender = '0';
 
 	/**
 	 * Inflection patterns
@@ -38,7 +38,7 @@ class Inflection
 	 *   ... postfix for 5 remaining singular and 7 plural
 	 * }
 	 */
-	protected $vzor = [
+	protected $patterns = [
 		// hořký
 		["m", "-ký", "kého", "kému", "ký/kého", "ký", "kém", "kým", "-ké/-cí", "kých", "kým", "ké", "-ké/-cí", "kých", "kými"],
 		// modrý
@@ -341,11 +341,16 @@ class Inflection
 
 	];
 
-	//  Výjimky:
-	//  $this->v1 - přehlásky
-	// :  důl ... dol, stůl ... stol, nůž ... nož, hůl ... hole, půl ... půle
-	//                      1.p   náhrada   4.p.
-	protected $v1 = [["osel", "osl", "osla"],
+	/**
+	 * Výjimky:
+	 * @var array {
+	 *  @var string nominative
+	 *  @var string replacement
+	 *  @var string accusative
+	 * }
+	 */
+	protected $v1 = [
+		["osel", "osl", "osla"],
 		["karel", "karl", "karla"],
 		["karel", "karl", "karla"],
 		["pavel", "pavl", "pavla"],
@@ -377,8 +382,8 @@ class Inflection
 		["zář", "záře", "zář"],
 		["svatozář", "svatozáře", "svatozář"],
 		["kůň", "koň", "koně"],
-		["tůň", "tůňe", "tůň"]// --- !
-		, ["prsten", "prstýnek", "prstýnku"],
+		["tůň", "tůňe", "tůň"],
+		["prsten", "prstýnek", "prstýnku"],
 		["smrt", "smrť", "smrt"],
 		["vítr", "větr", "vítr"],
 		["stupeň", "stupň", "stupeň"],
@@ -393,16 +398,23 @@ class Inflection
 		["nehet", "neht", "nehet"],
 		["veš", "vš", "veš"],
 		["déšť", "dešť", "déšť"],
-		["myš", "myše", "myš"]];
+		["myš", "myše", "myš"]
+	];
 
+	/**
+	 * Group replacements
+	 * @TODO remove
+	 * @var array
+	 */
 	protected $aCmpReg = [];
 
 
 	public function __construct()
 	{
 
-		$this->aCmpReg = array_fill(0, 9, "");
+		$this->aCmpReg = array_fill(0, 9, ""); // TODO remove
 
+		// TODO move higher
 		// $this->v10 - zmena rodu na muzsky
 		$this->v10 = ["sleď", "saša", "saša", "dešť", "koň", "chlast", "plast", "termoplast", "vězeň", "sťežeň", "papež", "ďeda", "zeť", "háj", "lanýž", "sluha", "muž", "velmož", "maťej", "maťej", "táta", "kolega", "mluvka", "strejda", "polda", "moula", "šmoula", "slouha", "drákula", "test", "rest", "trest", "arest", "azbest", "ametyst", "chřest", "protest", "kontest", "motorest", "most", "host", "kříž", "stupeň", "peň", "čaj", "prodej", "výdej", "výprodej", "ďej", "zloďej", "žokej", "hranostaj", "dobroďej", "darmoďej", "čaroďej", "koloďej", "sprej", "displej", "aleš", "aleš", "ambrož", "ambrož", "tomáš", "lukáš", "tobiáš", "jiří", "tomáš", "lukáš", "tobiáš", "jiří", "podkoní", "komoří", "jirka", "jirka", "ilja", "ilja", "pepa", "ondřej", "ondřej", "andrej", "andrej", //  "josef",
 			"mikuláš", "mikuláš", "mikoláš", "mikoláš", "kvido", "kvido", "hugo", "hugo", "oto", "oto", "otto", "otto", "alexej", "alexej", "ivo", "ivo", "bruno", "bruno", "alois", "alois", "bartoloměj", "bartoloměj", "noe", "noe"];
@@ -457,56 +469,56 @@ class Inflection
 	//  nebo pri rovnosti slov (napr. isShoda("molo","molo").
 	//  Jinak je navratova hodnota -1.
 	//
-	public function isShoda($vz, $txt)
+
+	/**
+	 * @param string $pattern
+	 * @param string $word
+	 * @return int position from left where the pattern matched from right otherwise -1
+	 */
+	protected function match($pattern, $word)
 	{
-		if (substr($vz, 0, 1) === '-')
+		if (substr($pattern, 0, 1) !== '-')
 		{
-			$matches = [];
-			$regex = strtr(substr($vz, 1), ['[' => '([', ']' => '])']);
-			if (preg_match('/' . $regex . '$/', $txt, $matches))
-			{
-				$full = array_shift($matches);
-				$i = count($matches) - 1;
-				foreach ($matches as $match)
-				{
-					$this->aCmpReg[$i--] = $match;
-				}
-
-				return mb_strlen($txt) - mb_strlen($full);
-			}
-
-			return -1;
+			return strcmp($pattern, $word) === 0 ? 0 : -1;
 		}
 
-		return strcmp($vz, $txt) === 0 ? 0 : -1;
+		$matches = [];
+		$regex = strtr(substr($pattern, 1), ['[' => '([', ']' => '])']);
+		if (preg_match('/' . $regex . '$/', $word, $matches))
+		{
+			$full = array_shift($matches);
+			$i = count($matches) - 1;
+			foreach ($matches as $match)
+			{
+				$this->aCmpReg[$i--] = $match;
+			}
+
+			return mb_strlen($word) - mb_strlen($full);
+		}
+
+		return -1;
 	}
 
-	//
-	// Transformace: ďi,ťi,ňi,ďe,ťe,ňe ... di,ti,ni,dě,tě,ně
-	//               + "ch" -> "#"
-	//
-	private function Xdetene($txt2)
+	protected function breakAccents($word)
 	{
-		return strtr($txt2, ['ďi' => 'di', 'ťi' => 'ti', 'ňi' => 'ni', 'ďe' => 'dě', 'ťe' => 'tě', 'ňe' => 'ně',]);
+		return strtr($word, ['di' => 'ďi', 'ti' => 'ťi', 'ni' => 'ňi', 'dě' => 'ďe', 'tě' => 'ťe', 'ně' => 'ňe']);
 	}
 
-	//
-	// Transformace: di,ti,ni,dě,tě,ně ... ďi,ťi,ňi,ďe,ťe,ňe
-	//
-	private function Xedeten($txt2)
+	protected function fixAccents($word)
 	{
-		return strtr($txt2, ['di' => 'ďi', 'ti' => 'ťi', 'ni' => 'ňi', 'dě' => 'ďe', 'tě' => 'ťe', 'ně' => 'ňe',]);
+		return strtr($word, ['ďi' => 'di', 'ťi' => 'ti', 'ňi' => 'ni', 'ďe' => 'dě', 'ťe' => 'tě', 'ňe' => 'ně']);
 	}
 
-	//
-	// Funkce pro sklonovani
-	//
-
-	private function CmpFrm($txt)
+	/**
+	 * @todo DOCUMENT and refactor
+	 * @param $word
+	 * @return string
+	 */
+	protected function CmpFrm($word)
 	{
 		$CmpFrmRV = "";
-		$length = mb_strlen($txt, 'UTF-8');
-		$txtChar = preg_split('//u', $txt, -1, PREG_SPLIT_NO_EMPTY);
+		$length = mb_strlen($word, 'UTF-8');
+		$txtChar = preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY);
 		for ($CmpFrmI = 0; $CmpFrmI < $length; $CmpFrmI++)
 		{
 			$char = $txtChar[$CmpFrmI];
@@ -538,111 +550,106 @@ class Inflection
 		return $CmpFrmRV;
 	}
 
-	// Funkce pro sklonovani slova do daneho podle
-	// daneho $this->vzoru
-	private function Sklon($nPad, $vzndx, $txt, $zivotne = FALSE)
+	/**
+	 * @param int $case
+	 * @param int $patternN
+	 * @param string $word
+	 * @param bool $animate
+	 * @return string
+	 */
+	protected function inflectWordWithPattern($case, $patternN, $word, $animate = FALSE)
 	{
-		$cnt = count($this->vzor);
-		if ($vzndx >= $cnt || $vzndx < 0)
+		if (!isset($this->patterns[$patternN]))
 		{
 			return "?";
 		}
 
-		$txt3 = $this->Xedeten($txt);
-		$kndx = $this->isShoda($this->vzor[$vzndx][1], $txt3);
-		if ($kndx < 0 || $nPad < 1 || $nPad > 14) //8-14 je pro plural
+		$broken = $this->breakAccents($word);
+		$left = $this->match($this->patterns[$patternN][1], $broken);
+		if ($left < 0 || $case < 1 || $case > 14) // 8-14 plural
 		{
 			return "?";
 		}
 
-		if ($this->vzor[$vzndx][$nPad] == NULL)
+		if ($this->patterns[$patternN][$case] == NULL)
 		{
 			return NULL;
 		}
 
-		if (!$this->isDebugMode & $nPad == 1) // 1. pad nemenime
+		if (!$this->isDebugMode && $case == 1) // 1st case not changed
 		{
-			$rv = $this->Xdetene($txt3);
+			$rv = $this->fixAccents($broken);
+			// this is surely too soon, this should be done only in the end!
 		}
 		else
 		{
-			$rv = $this->LeftStr($kndx, $txt3) . '-' . $this->CmpFrm($this->vzor[$vzndx][$nPad]);
+			$rv = $this->leftSubstr($left, $broken) . '-' . $this->CmpFrm($this->patterns[$patternN][$case]);
 		}
 
-		if ($this->isDebugMode) //preskoceni filtrovani
+		if ($this->isDebugMode) // skip filtering
 		{
 			return $rv;
 		}
 
-		// Formatovani zivotneho sklonovani
-		$ndx1 = strpos($rv, '-');
-		$ndx2 = strpos($rv, '/');
-
-		if ($ndx1 != FALSE && $ndx2 != FALSE)
+		// animate/inanimate declension
+		$posDash = strpos($rv, '-');
+		$posSlash = strpos($rv, '/');
+		if ($posDash != FALSE && $posSlash != FALSE)
 		{
-			if ($zivotne)
+			if ($animate)
 			{
-				// "text-xxx/yyy" -> "textyyy"
-				$rv = $this->LeftStr($ndx1, $rv) . $this->RightStr($ndx2 + 1, $rv, mb_strlen($rv, 'UTF-8'));
+				$rv = $this->leftSubstr($posDash, $rv) . $this->rightSubstr($posSlash + 1, $rv, mb_strlen($rv, 'UTF-8'));
 			}
 			else
 			{
-				// "text-xxx/yyy" -> "text-xxx"
-				$rv = $this->LeftStr($ndx2, $rv);
+				$rv = $this->leftSubstr($posSlash, $rv);
 			}
 		}
 
+		// clean temp chars
+		$broken = strtr($rv, ['-' => '', '/' => '']);
 
-		// vypusteni pomocnych znaku
-		$txt3 = strtr($rv, ['-' => '', '/' => '']);
-
-		return $this->Xdetene($txt3);
+		return $this->fixAccents($broken);
 	}
 
-	//
-	// Funkce pro praci s retezci
-	//
-	// - levy retezec do indexu n (bez tohoto indexu)
-	private function LeftStr($n, $txt)
+	protected function leftSubstr($n, $txt)
 	{
 		return mb_substr($txt, 0, $n, 'UTF-8');
 	}
 
-	// - pravy retezec od indexu n (vcetne)
-	private function RightStr($n, $txt, $length)
+	protected function rightSubstr($n, $txt, $length)
 	{
 		return mb_substr($txt, $n, $length, 'UTF-8');
 	}
 
 	/**
-	 *
 	 * @param $text
-	 * @param bool $zivotne
-	 * @param string $preferovanyRod
+	 * @param bool $animate
+	 * @param string $gender
 	 * @return array
 	 */
-	public function inflect($text, $zivotne = FALSE, $preferovanyRod = '')
+	public function inflect($text, $animate = FALSE, $gender = '')
 	{
 		$words = array_reverse(explode(' ', $text));
 
-		$this->PrefRod = "0";
+		$this->gender = "0";
 		$out = [];
-		$cnt = count($words);
+		$wordCount = count($words);
 		$astrTvarFirst = $this->astrTvar[0];
-		$prefRodFirst = $this->PrefRod;
+		$preferredGender = $this->gender;
 		foreach ($words as $i => $word)
 		{
 			// vysklonovani
-			$this->skl2($word, $preferovanyRod, $zivotne);
+			$this->skl2($word, $gender, $animate);
 
 			// vynuceni rodu podle posledniho slova
-			if ($i == $cnt - 1)
+			if ($i == $wordCount - 1)
 			{
-				$this->PrefRod = $this->astrTvar[0];
+				$this->gender = $this->astrTvar[0];
 			}
 
 			// pokud nenajdeme $this->vzor tak nesklonujeme
-			if (NULL === $this->astrTvar[0] && $i < $cnt - 1 && $prefRodFirst != '?')
+			if (NULL === $this->astrTvar[0] && $i < $wordCount - 1 && $preferredGender != '?')
 			{
 				for ($j = 1; $j < 15; $j++)
 				{
@@ -655,7 +662,7 @@ class Inflection
 				$this->astrTvar[0] = '';
 			}
 
-			if ($i < $cnt)
+			if ($i < $wordCount)
 			{
 				for ($j = 1; $j < 15; $j++)
 				{
@@ -684,7 +691,7 @@ class Inflection
 	// Sklonovani podle standardniho seznamu pripon
 	private function SklStd($slovo, $ii, $zivotne)
 	{
-		$cnt = count($this->vzor);
+		$cnt = count($this->patterns);
 		if ($ii < 0 || $ii > $cnt)
 		{
 			$this->astrTvar[0] = "!";
@@ -694,7 +701,7 @@ class Inflection
 		$cnt = count($this->v0);
 		for ($jj = 0; $jj < $cnt; $jj++)
 		{
-			if ($this->isShoda($this->v0[$jj], $slovo) >= 0)
+			if ($this->match($this->v0[$jj], $slovo) >= 0)
 			{
 				//str = "Seznam výjimek [" + $jj + "]. "
 				//alert(str + "Lituji, toto $slovo zatím neumím správně vyskloňovat.");
@@ -703,18 +710,18 @@ class Inflection
 		}
 
 		// nastaveni rodu
-		$this->astrTvar[0] = $this->vzor[$ii][0];
+		$this->astrTvar[0] = $this->patterns[$ii][0];
 
 		// vlastni sklonovani
 		for ($jj = 1; $jj < 15; $jj++)
 		{
-			$this->astrTvar[$jj] = $this->Sklon($jj, $ii, $slovo, $zivotne);
+			$this->astrTvar[$jj] = $this->inflectWordWithPattern($jj, $ii, $slovo, $zivotne);
 		}
 
 		// - seznam nepresneho sklonovani
 		for ($jj = 0; $jj < count($this->v3); $jj++)
 		{
-			if ($this->isShoda($this->v3[$jj], $slovo) >= 0)
+			if ($this->match($this->v3[$jj], $slovo) >= 0)
 			{
 				//alert("Pozor, v některých pádech nemusí být skloňování tohoto slova přesné.");
 				return;
@@ -756,8 +763,8 @@ class Inflection
 	// Vybrání vzoru
 	private function StdNdx($slovo)
 	{
-		$char = $this->PrefRod;
-		foreach ($this->vzor as $i => $vzor)
+		$char = $this->gender;
+		foreach ($this->patterns as $i => $vzor)
 		{
 			// filtrace rodu
 			if ($char != "0" && $char != $vzor[0])
@@ -765,7 +772,7 @@ class Inflection
 				continue;
 			}
 
-			if ($this->isShoda($vzor[1], $slovo) >= 0)
+			if ($this->match($vzor[1], $slovo) >= 0)
 			{
 				return $i;
 			}
@@ -807,7 +814,7 @@ class Inflection
 		//    return 0;
 		//  }
 
-		$slovo = $this->Xedeten($slovo);
+		$slovo = $this->breakAccents($slovo);
 
 		//$vNdx = 0;
 
@@ -815,7 +822,7 @@ class Inflection
 		$vs = $preferovanyRod;
 		if ($vs == "m" || $vs == "f" || $vs == "s")
 		{
-			$this->PrefRod = $vs;
+			$this->gender = $vs;
 		}
 		else
 		{
@@ -825,19 +832,19 @@ class Inflection
 
 		if ($this->NdxInVx($this->v10, $slovo) >= 0)
 		{
-			$this->PrefRod = "m";
+			$this->gender = "m";
 		}
 		else
 		{
 			if ($this->NdxInVx($this->v11, $slovo) >= 0)
 			{
-				$this->PrefRod = "f";
+				$this->gender = "f";
 			}
 			else
 			{
 				if ($this->NdxInVx($this->v12, $slovo) >= 0)
 				{
-					$this->PrefRod = "s";
+					$this->gender = "s";
 				}
 			}
 		}
