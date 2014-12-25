@@ -120,16 +120,16 @@ class InflectionTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                "Nováková", Inflection::GENUS_FEMININE
+                "Nováková", 'f'
             ),
             array(
                 "Novák", null
             ),
             array(
-                "Brožová", Inflection::GENUS_FEMININE
+                "Brožová", 'f'
             ),
             array(
-                "Záhlavová-Strýcová", Inflection::GENUS_FEMININE
+                "Záhlavová-Strýcová", 'f'
             )
         );
     }

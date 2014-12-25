@@ -894,7 +894,7 @@ class Inflection
 	{
 		if ('ova' == str_replace('á', 'a', mb_substr(mb_strtolower($surname, 'UTF-8'), -3, 3, 'UTF-8')))
 		{
-			return self::GENUS_FEMININE;
+			return 'f';
 		}
 		else
 		{
