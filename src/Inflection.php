@@ -864,25 +864,28 @@ class Inflection
      */
     public function inflect($text, $zivotne = false, $preferovanyRod = '')
     {
-        $aTxt = explode(' ', $text);
+        $words = explode(' ', $text);
 
         $this->PrefRod = "0";
-        $out = array();
-        $cnt = count($aTxt);
-        $astrTvarFirst = mb_substr($this->astrTvar[0], 0, 1, 'UTF-8');
-        $prefRodFirst = mb_substr($this->PrefRod, 0, 1, 'UTF-8');
-        for ($i = $cnt - 1; $i >= 0; $i--) {
+        $out = [];
+        $cnt = count($words);
+	    $astrTvarFirst = mb_substr($this->astrTvar[0], 0, 1, 'UTF-8');
+        $prefRodFirst = mb_substr($this->PrefRod, 0, 1, 'UTF-8'); // TODO this is always 0, remove
+	    foreach ($words as $i => $word)
+	    {
             // vysklonovani
-            $this->skl2($aTxt[$i], $preferovanyRod, $zivotne);
+            $this->skl2($word, $preferovanyRod, $zivotne);
 
             // vynuceni rodu podle posledniho slova
-            if ($i == $cnt - 1)
+            if ($i == $cnt - 1) {
                 $this->PrefRod = $this->astrTvar[0];
+            }
 
             // pokud nenajdeme $this->vzor tak nesklonujeme
             if (null === $this->astrTvar[0] && $i < $cnt - 1 && $prefRodFirst != '?') {
-                for ($j = 1; $j < 15; $j++)
-                    $this->astrTvar[$j] = $aTxt[$i];
+                for ($j = 1; $j < 15; $j++) {
+	                $this->astrTvar[$j] = $word;
+                }
             }
 
             if ($astrTvarFirst == '?')
@@ -897,8 +900,9 @@ class Inflection
                     }
                 }
             } else {
-                for ($j = 1; $j < 15; $j++)
-                    $out[$j] = $this->astrTvar[$j];
+                for ($j = 1; $j < 15; $j++) {
+	                $out[$j] = $this->astrTvar[$j];
+                }
             }
         }
         return $out;
@@ -912,13 +916,14 @@ class Inflection
             $this->astrTvar[0] = "!!!???";
 
         // - seznam nedoresenych slov
-        $cnt = count($this->v0);
-        for ($jj = 0; $jj < $cnt; $jj++)
-            if ($this->isShoda($this->v0[$jj], $slovo) >= 0) {
-                //str = "Seznam výjimek [" + $jj + "]. "
-                //alert(str + "Lituji, toto $slovo zatím neumím správně vyskloňovat.");
-                return null;
-            }
+	    $cnt = count($this->v0);
+	    for ($jj = 0; $jj < $cnt; $jj++) {
+		    if ($this->isShoda($this->v0[$jj], $slovo) >= 0) {
+			    //str = "Seznam výjimek [" + $jj + "]. "
+			    //alert(str + "Lituji, toto $slovo zatím neumím správně vyskloňovat.");
+			    return null;
+		    }
+	    }
 
         // nastaveni rodu
         $this->astrTvar[0] = $this->vzor[$ii][0];
@@ -991,9 +996,8 @@ class Inflection
 	 */
     private function skl2($slovo, $preferovanyRod = '', $zivotne = false)
     {
-        $this->astrTvar[0] = "???";
-        for ($ii = 1; $ii < 15; $ii++)
-            $this->astrTvar[$ii] = "";
+	    $this->astrTvar = array_fill(0, 16, '');
+	    $this->astrTvar[0] = "???";
 
         $flgV1 = $this->ndxV1($slovo);
         if ($flgV1 >= 0) {
