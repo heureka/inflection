@@ -870,8 +870,8 @@ class Inflection
         $out = [];
         $cnt = count($words);
 	    $astrTvarFirst = mb_substr($this->astrTvar[0], 0, 1, 'UTF-8');
-        $prefRodFirst = mb_substr($this->PrefRod, 0, 1, 'UTF-8'); // TODO this is always 0, remove
-	    foreach ($words as $i => $word)
+        $prefRodFirst = mb_substr($this->PrefRod, 0, 1, 'UTF-8'); // TODO this is always 0, remove? see skl2
+	    foreach (array_reverse($words) as $i => $word)
 	    {
             // vysklonovani
             $this->skl2($word, $preferovanyRod, $zivotne);
