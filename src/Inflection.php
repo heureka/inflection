@@ -864,14 +864,14 @@ class Inflection
      */
     public function inflect($text, $zivotne = false, $preferovanyRod = '')
     {
-        $words = explode(' ', $text);
+        $words = array_reverse(explode(' ', $text));
 
         $this->PrefRod = "0";
         $out = [];
         $cnt = count($words);
 	    $astrTvarFirst = mb_substr($this->astrTvar[0], 0, 1, 'UTF-8');
         $prefRodFirst = mb_substr($this->PrefRod, 0, 1, 'UTF-8'); // TODO this is always 0, remove? see skl2
-	    foreach (array_reverse($words) as $i => $word)
+	    foreach ($words as $i => $word)
 	    {
             // vysklonovani
             $this->skl2($word, $preferovanyRod, $zivotne);
