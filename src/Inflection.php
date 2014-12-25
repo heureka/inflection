@@ -700,12 +700,12 @@ class Inflection
     {
         $cnt = count($this->vzor);
         if ($vzndx >= $cnt || $vzndx < 0)
-            return "???";
+            return "?";
 
         $txt3 = $this->Xedeten($txt);
         $kndx = $this->isShoda($this->vzor[$vzndx][1], $txt3);
         if ($kndx < 0 || $nPad < 1 || $nPad > 14) //8-14 je pro plural
-            return "???";
+            return "?";
 
         if ($this->vzor[$vzndx][$nPad] == null)
             return null;
@@ -767,8 +767,8 @@ class Inflection
         $this->PrefRod = "0";
         $out = [];
         $cnt = count($words);
-	    $astrTvarFirst = mb_substr($this->astrTvar[0], 0, 1, 'UTF-8');
-        $prefRodFirst = mb_substr($this->PrefRod, 0, 1, 'UTF-8'); // TODO this is always 0, remove? see skl2
+	    $astrTvarFirst = $this->astrTvar[0];
+        $prefRodFirst = $this->PrefRod;
 	    foreach ($words as $i => $word)
 	    {
             // vysklonovani
@@ -811,7 +811,7 @@ class Inflection
     {
         $cnt = count($this->vzor);
         if ($ii < 0 || $ii > $cnt)
-            $this->astrTvar[0] = "!!!???";
+            $this->astrTvar[0] = "!";
 
         // - seznam nedoresenych slov
 	    $cnt = count($this->v0);
@@ -866,10 +866,10 @@ class Inflection
     private function StdNdx($slovo)
     {
         $cnt = count($this->vzor);
-        $char = mb_substr($this->PrefRod, 0, 1, 'UTF-8'); // TODO this should not be necessary, remove?
+        $char = $this->PrefRod;
         for ($iii = 0; $iii < $cnt; $iii++) {
             // filtrace rodu
-            if ($char != "0" && $char != mb_substr($this->vzor[$iii][0], 0, 1, 'UTF-8')) // TODO this should not be necessary, remove?
+            if ($char != "0" && $char != $this->vzor[$iii][0])
                 continue;
 
             if ($this->isShoda($this->vzor[$iii][1], $slovo) >= 0)
@@ -896,7 +896,7 @@ class Inflection
     private function skl2($slovo, $preferovanyRod = '', $zivotne = false)
     {
 	    $this->astrTvar = array_fill(0, 16, '');
-	    $this->astrTvar[0] = "???";
+	    $this->astrTvar[0] = "?";
 
         $firstOriginalChar = mb_substr($slovo, 0, 1, 'UTF-8');
         $slovo = mb_strtolower($slovo, 'UTF-8');
