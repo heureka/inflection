@@ -956,10 +956,11 @@ class Inflection
 // Pokud je index>=0, je $slovo výjimka ze seznamu "$vx", definovaného výše.
     private function ndxV1($slovo)
     {
-        $cnt = count($this->v1);
-        for ($this->v1i = 0; $this->v1i < $cnt; $this->v1i++)
-            if ($slovo == $this->v1[$this->v1i][0])
-                return $this->v1i;
+        foreach ($this->v1 as $i => $v)  {
+            if ($slovo == $v[0]) {
+                return $i;
+            }
+        }
 
         return -1;
     }
