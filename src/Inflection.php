@@ -10,14 +10,9 @@ class Inflection
 {
 
 	/**
-	 * @var bool
+	 * @var array
 	 */
-	private $isDebugMode = FALSE;
-
-	/**
-	 * @var string enum (0|m|f|s)
-	 */
-	protected $gender = '0';
+	protected $replacements = [];
 
 	/**
 	 * Inflection patterns
@@ -401,19 +396,8 @@ class Inflection
 		["myš", "myše", "myš"],
 	];
 
-	/**
-	 * Group replacements
-	 * @TODO remove
-	 * @var array
-	 */
-	protected $aCmpReg = [];
-
-
 	public function __construct()
 	{
-
-		$this->aCmpReg = array_fill(0, 9, ""); // TODO remove
-
 		// TODO move higher
 		// $this->v10 - zmena rodu na muzsky
 		$this->v10 = ["sleď", "saša", "saša", "dešť", "koň", "chlast", "plast", "termoplast", "vězeň", "sťežeň", "papež", "ďeda", "zeť", "háj", "lanýž", "sluha", "muž", "velmož", "maťej", "maťej", "táta", "kolega", "mluvka", "strejda", "polda", "moula", "šmoula", "slouha", "drákula", "test", "rest", "trest", "arest", "azbest", "ametyst", "chřest", "protest", "kontest", "motorest", "most", "host", "kříž", "stupeň", "peň", "čaj", "prodej", "výdej", "výprodej", "ďej", "zloďej", "žokej", "hranostaj", "dobroďej", "darmoďej", "čaroďej", "koloďej", "sprej", "displej", "aleš", "aleš", "ambrož", "ambrož", "tomáš", "lukáš", "tobiáš", "jiří", "tomáš", "lukáš", "tobiáš", "jiří", "podkoní", "komoří", "jirka", "jirka", "ilja", "ilja", "pepa", "ondřej", "ondřej", "andrej", "andrej", //  "josef",
@@ -451,8 +435,6 @@ class Inflection
 		// $this->v3 - různé odchylky ve skloňování
 		//    - časem by bylo vhodné opravit
 		$this->v3 = ["jméno", "myš", "vězeň", "sťežeň", "oko", "sole", "šach", "veš", "myš", "klášter", "kněz", "král", "zď", "sto", "smrt", "leden", "len", "les", "únor", "březen", "duben", "květen", "červen", "srpen", "říjen", "pantofel", "žába", "zoja", "zoja", "zoe", "zoe",];
-
-		$this->astrTvar = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
 	}
 
 	public function fasterInflect($text, $animate = FALSE)
@@ -467,6 +449,7 @@ class Inflection
 			{
 				if ($gender && $pattern[0] !== $gender)
 				{
+					echo '.';
 					continue;
 				}
 
@@ -478,7 +461,7 @@ class Inflection
 					for ($case = 2; $case < 14; $case++)
 					{
 						$postfix = $pattern[1 + $case];
-						foreach ($this->aCmpReg as $i => $replacement)
+						foreach ($this->replacements as $i => $replacement)
 						{
 							$postfix = str_replace($i, $replacement, $postfix);
 						}
@@ -506,23 +489,19 @@ class Inflection
 			}
 		}
 
-		return array_reverse($inflected);
+		$result = [];
+		$reversed = array_reverse($inflected);
+		for ($case = 1; $case < 14; $case++)
+		{
+			$partials = [];
+			foreach ($reversed as $word)
+			{
+				$partials[] = $word[$case];
+			}
+			$result[$case] = implode(' ', $partials);
+		}
+		return $result;
 	}
-
-	/**
-	 * @author Jan Navratil <jan.navratil@heureka.cz>
-	 * @param bool $debugMode
-	 */
-	public function setDebugMode($debugMode)
-	{
-		$this->isDebugMode = $debugMode;
-	}
-
-	//
-	//  Fce isShoda vraci index pri shode koncovky (napr. isShoda("-lo","kolo"), isShoda("ko-lo","motovidlo"))
-	//  nebo pri rovnosti slov (napr. isShoda("molo","molo").
-	//  Jinak je navratova hodnota -1.
-	//
 
 	/**
 	 * @param string $pattern
@@ -543,7 +522,7 @@ class Inflection
 			$i = count($matches) - 1;
 			foreach ($matches as $match)
 			{
-				$this->aCmpReg[$i--] = $match;
+				$this->replacements[$i--] = $match;
 			}
 
 			return mb_strlen($word) - mb_strlen($full);
@@ -560,399 +539,6 @@ class Inflection
 	protected function fixAccents($word)
 	{
 		return strtr($word, ['ďi' => 'di', 'ťi' => 'ti', 'ňi' => 'ni', 'ďe' => 'dě', 'ťe' => 'tě', 'ňe' => 'ně']);
-	}
-
-	/**
-	 * @todo DOCUMENT and refactor
-	 * @param $word
-	 * @return string
-	 */
-	protected function CmpFrm($word)
-	{
-		$CmpFrmRV = "";
-		$length = mb_strlen($word, 'UTF-8');
-		$txtChar = preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY);
-		for ($CmpFrmI = 0; $CmpFrmI < $length; $CmpFrmI++)
-		{
-			$char = $txtChar[$CmpFrmI];
-			if ($char == "0")
-			{
-				$CmpFrmRV .= $this->aCmpReg[0];
-			}
-			else
-			{
-				if ($char == "1")
-				{
-					$CmpFrmRV .= $this->aCmpReg[1];
-				}
-				else
-				{
-					if ($char == "2")
-					{
-						$CmpFrmRV .= $this->aCmpReg[2];
-					}
-					else
-					{
-						$CmpFrmRV .= $char;
-					}
-				}
-			}
-
-		}
-
-		return $CmpFrmRV;
-	}
-
-	/**
-	 * @param int $case
-	 * @param int $patternN
-	 * @param string $word
-	 * @param bool $animate
-	 * @return string
-	 */
-	protected function inflectWordWithPattern($case, $patternN, $word, $animate = FALSE)
-	{
-		if (!isset($this->patterns[$patternN]))
-		{
-			return "?";
-		}
-
-		$broken = $this->breakAccents($word);
-		$left = $this->match($this->patterns[$patternN][1], $broken);
-		if ($left < 0 || $case < 1 || $case > 14) // 8-14 plural
-		{
-			return "?";
-		}
-
-		if ($this->patterns[$patternN][$case] == NULL)
-		{
-			return NULL;
-		}
-
-		if (!$this->isDebugMode && $case == 1) // 1st case not changed
-		{
-			$rv = $this->fixAccents($broken);
-			// this is surely too soon, this should be done only in the end!
-		}
-		else
-		{
-			$rv = $this->leftSubstr($left, $broken) . '-' . $this->CmpFrm($this->patterns[$patternN][$case]);
-		}
-
-		if ($this->isDebugMode) // skip filtering
-		{
-			return $rv;
-		}
-
-		// animate/inanimate declension
-		$posDash = mb_strpos($rv, '-');
-		$posSlash = mb_strpos($rv, '/');
-		if ($posDash != FALSE && $posSlash != FALSE)
-		{
-			if ($animate)
-			{
-				$rv = $this->leftSubstr($posDash, $rv) . $this->rightSubstr($posSlash + 1, $rv, mb_strlen($rv, 'UTF-8'));
-			}
-			else
-			{
-				$rv = $this->leftSubstr($posSlash, $rv);
-			}
-		}
-
-		// clean temp chars
-		$broken = strtr($rv, ['-' => '', '/' => '']);
-
-		return $this->fixAccents($broken);
-	}
-
-	protected function leftSubstr($n, $txt)
-	{
-		return mb_substr($txt, 0, $n, 'UTF-8');
-	}
-
-	protected function rightSubstr($n, $txt, $length)
-	{
-		return mb_substr($txt, $n, $length, 'UTF-8');
-	}
-
-	/**
-	 * @param $text
-	 * @param bool $animate
-	 * @param string $gender
-	 * @return array
-	 */
-	public function inflect($text, $animate = FALSE, $gender = '')
-	{
-		$words = array_reverse(explode(' ', $text));
-
-		$this->gender = "0";
-		$out = [];
-		$wordCount = count($words);
-		$astrTvarFirst = $this->astrTvar[0];
-		$preferredGender = $this->gender;
-		foreach ($words as $i => $word)
-		{
-			// vysklonovani
-			$this->skl2($word, $gender, $animate);
-
-			// vynuceni rodu podle posledniho slova
-			if ($i == $wordCount - 1)
-			{
-				$this->gender = $this->astrTvar[0];
-			}
-
-			// pokud nenajdeme $this->vzor tak nesklonujeme
-			if (NULL === $this->astrTvar[0] && $i < $wordCount - 1 && $preferredGender != '?')
-			{
-				for ($j = 1; $j < 15; $j++)
-				{
-					$this->astrTvar[$j] = $word;
-				}
-			}
-
-			if ($astrTvarFirst == '?')
-			{
-				$this->astrTvar[0] = '';
-			}
-
-			if ($i < $wordCount)
-			{
-				for ($j = 1; $j < 15; $j++)
-				{
-					if (NULL === $this->astrTvar[$j] && !isset($out[$j]))
-					{
-						$out[$j] = $this->astrTvar[$j];
-					}
-					else
-					{
-						$out[$j] = $this->astrTvar[$j] . (isset($out[$j]) ? ' ' . $out[$j] : '');
-					}
-				}
-			}
-			else
-			{
-				for ($j = 1; $j < 15; $j++)
-				{
-					$out[$j] = $this->astrTvar[$j];
-				}
-			}
-		}
-
-		return $out;
-	}
-
-	// Sklonovani podle standardniho seznamu pripon
-	private function SklStd($slovo, $ii, $zivotne)
-	{
-		$cnt = count($this->patterns);
-		if ($ii < 0 || $ii > $cnt)
-		{
-			$this->astrTvar[0] = "!";
-		}
-
-		// - seznam nedoresenych slov
-		$cnt = count($this->v0);
-		for ($jj = 0; $jj < $cnt; $jj++)
-		{
-			if ($this->match($this->v0[$jj], $slovo) >= 0)
-			{
-				//str = "Seznam výjimek [" + $jj + "]. "
-				//alert(str + "Lituji, toto $slovo zatím neumím správně vyskloňovat.");
-				return NULL;
-			}
-		}
-
-		// nastaveni rodu
-		$this->astrTvar[0] = $this->patterns[$ii][0];
-
-		// vlastni sklonovani
-		for ($jj = 1; $jj < 15; $jj++)
-		{
-			$this->astrTvar[$jj] = $this->inflectWordWithPattern($jj, $ii, $slovo, $zivotne);
-		}
-
-		// - seznam nepresneho sklonovani
-		for ($jj = 0; $jj < count($this->v3); $jj++)
-		{
-			if ($this->match($this->v3[$jj], $slovo) >= 0)
-			{
-				//alert("Pozor, v některých pádech nemusí být skloňování tohoto slova přesné.");
-				return;
-			}
-		}
-
-		//  return SklFmt( $this->astrTvar );
-	}
-
-	// Pokud je index>=0, je $slovo výjimka ze seznamu "$vx"(v10,...), definovaného výše.
-	private function NdxInVx($vx, $slovo)
-	{
-		$cnt = count($vx);
-		for ($vxi = 0; $vxi < $cnt; $vxi++)
-		{
-			if ($slovo == $vx[$vxi])
-			{
-				return $vxi;
-			}
-		}
-
-		return -1;
-	}
-
-	// Pokud je index>=0, je $slovo výjimka ze seznamu "$vx", definovaného výše.
-	private function ndxV1($slovo)
-	{
-		foreach ($this->v1 as $i => $v)
-		{
-			if ($slovo == $v[0])
-			{
-				return $i;
-			}
-		}
-
-		return -1;
-	}
-
-	// Vybrání vzoru
-	private function StdNdx($slovo)
-	{
-		$char = $this->gender;
-		foreach ($this->patterns as $i => $vzor)
-		{
-			// filtrace rodu
-			if ($char != "0" && $char != $vzor[0])
-			{
-				continue;
-			}
-
-			if ($this->match($vzor[1], $slovo) >= 0)
-			{
-				return $i;
-			}
-		}
-
-		return -1;
-	}
-
-	// Sklonovani podle seznamu vyjimek typu $this->v1
-	private function SklV1($slovo, $ii, $zivotne)
-	{
-		$this->SklStd($this->v1[$ii][1], $this->StdNdx($this->v1[$ii][1]), $zivotne);
-		$this->astrTvar[1] = $slovo; //1.p nechame jak je
-		$this->astrTvar[4] = $this->v1[$ii][2];
-	}
-
-	/**
-	 * Nastavuje globalni astrTVar (sklonovane tvary) a PrefRod (vynuceni rodu predchozich slov)
-	 */
-	private function skl2($slovo, $preferovanyRod = '', $zivotne = FALSE)
-	{
-		$this->astrTvar = array_fill(0, 16, '');
-		$this->astrTvar[0] = "?";
-
-		$firstOriginalChar = mb_substr($slovo, 0, 1, 'UTF-8');
-		$slovo = mb_strtolower($slovo, 'UTF-8');
-
-		$flgV1 = $this->ndxV1($slovo);
-		if ($flgV1 >= 0)
-		{
-			$slovoV1 = $slovo;
-			$slovo = $this->v1[$flgV1][1];
-		}
-		//  if( $ii>=0 )
-		//  {
-		//    $this->astrTvar[1] = "v1: " + $ii;
-		//    $this->SklV1( $slovo, $ii );
-		//    return SklFmt( $this->astrTvar );
-		//    return 0;
-		//  }
-
-		$slovo = $this->breakAccents($slovo);
-
-		//$vNdx = 0;
-
-		// Pretypovani rodu?
-		$vs = $preferovanyRod;
-		if ($vs == "m" || $vs == "f" || $vs == "s")
-		{
-			$this->gender = $vs;
-		}
-		else
-		{
-			$vs = "";
-		}
-
-
-		if ($this->NdxInVx($this->v10, $slovo) >= 0)
-		{
-			$this->gender = "m";
-		}
-		else
-		{
-			if ($this->NdxInVx($this->v11, $slovo) >= 0)
-			{
-				$this->gender = "f";
-			}
-			else
-			{
-				if ($this->NdxInVx($this->v12, $slovo) >= 0)
-				{
-					$this->gender = "s";
-				}
-			}
-		}
-
-		// Nalezeni $this->vzoru
-		$ii = $this->StdNdx($slovo);
-		if ($ii < 0)
-		{
-			//alert("Chyba: proto toto $slovo nebyl nalezen $this->vzor.");
-			return -1; //    return "\n  Sorry, nenasel jsem $this->vzor.";
-		}
-
-		// Vlastni sklonovani
-		$this->SklStd($slovo, $ii, $zivotne);
-
-		if ($flgV1 >= 0)
-		{
-			$this->astrTvar[1] = $slovoV1; //1.p nechame jak je
-			$this->astrTvar[4] = $this->v1[$flgV1][2];
-		}
-
-		// Pokud bylo zadané slovo s velkým písmenem na začátku,
-		// vrať velké písmeno i ve skloňovaných tvarech
-		if (mb_strtoupper($firstOriginalChar) === $firstOriginalChar)
-		{
-			for ($i = 1; $i <= 15; $i++)
-			{
-				if ($this->astrTvar[$i])
-				{
-					$this->astrTvar[$i] = mb_convert_case($this->astrTvar[$i], MB_CASE_TITLE, "UTF-8");
-				}
-			}
-		}
-
-		return 0; //return SklFmt( $this->astrTvar ); //  return "$this->vzor: "+$this->vzor[$ii][1];
-	}
-
-	/**
-	 * Try to detect feminine genus by given surname
-	 * - only basic detection
-	 *
-	 * @author Jan Navratil <jan.navratil@heureka.cz>
-	 * @param $surname
-	 * @return null|string
-	 */
-	public function isFeminineGenusSurname($surname)
-	{
-		if ('ova' == str_replace('á', 'a', mb_substr(mb_strtolower($surname, 'UTF-8'), -3, 3, 'UTF-8')))
-		{
-			return 'f';
-		}
-		else
-		{
-			return NULL;
-		}
 	}
 
 }
