@@ -986,6 +986,9 @@ class Inflection
         $this->astrTvar[4] = $this->v1[$ii][2];
     }
 
+	/**
+	 * Nastavuje globalni astrTVar (sklonovane tvary) a PrefRod (vynuceni rodu predchozich slov)
+	 */
     private function skl2($slovo, $preferovanyRod = '', $zivotne = false)
     {
         $this->astrTvar[0] = "???";
@@ -1040,6 +1043,21 @@ class Inflection
             $this->astrTvar[1] = $slovoV1; //1.p nechame jak je
             $this->astrTvar[4] = $this->v1[$flgV1][2];
         }
+
+        // Pokud bylo zadané slovo s velkým písmenem na začátku,
+        // vrať velké písmeno i ve skloňovaných tvarech
+        $firstChar = mb_substr($slovo, 0, 1, 'UTF-8');
+        if (mb_strtoupper($firstChar) === $firstChar)
+        {
+            for ($i = 1; $i <= 15; $i++)
+            {
+                if ($this->astrTvar[$i])
+                {
+                    $this->astrTvar[$i] = mb_convert_case($this->astrTvar[$i], MB_CASE_TITLE, "UTF-8");
+                }
+            }
+        }
+
         return 0; //return SklFmt( $this->astrTvar ); //  return "$this->vzor: "+$this->vzor[$ii][1];
     }
 
