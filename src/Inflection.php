@@ -674,37 +674,14 @@ class Inflection
 //
     private function Xdetene($txt2)
     {
-        $XdeteneRV = "";
-        $length = mb_strlen($txt2, 'UTF-8');
-        for ($XdeteneI = 0; $XdeteneI < $length - 1; $XdeteneI++) {
-            $charN = mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
-            $charNplus1 = mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8');
-            if ($charN == "ď" && ($charNplus1 == "e" || $charNplus1 == "i" || $charNplus1 == "í")) {
-                $XdeteneRV .= "d";
-                if ($charNplus1 == "e") {
-                    $XdeteneRV .= "ě";
-                    $XdeteneI++;
-                }
-            } else if ($charN == "ť" && ($charNplus1 == "e" || $charNplus1 == "i" || $charNplus1 == "í")) {
-                $XdeteneRV .= "t";
-                if ($charNplus1 == "e") {
-                    $XdeteneRV .= "ě";
-                    $XdeteneI++;
-                }
-            } else if ($charN == "ň" && ($charNplus1 == "e" || $charNplus1 == "i" || $charNplus1 == "í")) {
-                $XdeteneRV .= "n";
-                if ($charNplus1 == "e") {
-                    $XdeteneRV .= "ě";
-                    $XdeteneI++;
-                }
-            } else
-                $XdeteneRV .= $charN;
-        }
-
-        if ($XdeteneI == $length - 1)
-            $XdeteneRV .= mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
-
-        return $XdeteneRV;
+        return strtr($txt2, array(
+            'ďi' => 'di',
+            'ťi' => 'ti',
+            'ňi' => 'ni',
+            'ďe' => 'dě',
+            'ťe' => 'tě',
+            'ňe' => 'ně',
+        ));
     }
 
 //
@@ -712,39 +689,14 @@ class Inflection
 //
     private function Xedeten($txt2)
     {
-        $XdeteneRV = "";
-        $length = mb_strlen($txt2, 'UTF-8');
-        for ($XdeteneI = 0; $XdeteneI < $length - 1; $XdeteneI++) {
-
-            $charN = mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
-            $charNplus1 = mb_substr($txt2, $XdeteneI + 1, 1, 'UTF-8');
-
-            if ($charN == "d" && ($charNplus1 == "ě" || $charNplus1 == "i")) {
-                $XdeteneRV .= "ď";
-                if ($charNplus1 == "ě") {
-                    $XdeteneRV .= "e";
-                    $XdeteneI++;
-                }
-            } else if ($charN == "t" && ($charNplus1 == "ě" || $charNplus1 == "i")) {
-                $XdeteneRV .= "ť";
-                if ($charNplus1 == "ě") {
-                    $XdeteneRV .= "e";
-                    $XdeteneI++;
-                }
-            } else if ($charN == "n" && ($charNplus1 == "ě" || $charNplus1 == "i")) {
-                $XdeteneRV .= "ň";
-                if ($charNplus1 == "ě") {
-                    $XdeteneRV .= "e";
-                    $XdeteneI++;
-                }
-            } else
-                $XdeteneRV .= $charN;
-        }
-
-        if ($XdeteneI == $length - 1)
-            $XdeteneRV .= mb_substr($txt2, $XdeteneI, 1, 'UTF-8');
-
-        return $XdeteneRV;
+        return strtr($txt2, array(
+            'di' => 'ďi',
+            'ti' => 'ťi',
+            'ni' => 'ňi',
+            'dě' => 'ďe',
+            'tě' => 'ťe',
+            'ně' => 'ňe',
+        ));
     }
 
 //
