@@ -848,35 +848,6 @@ class Inflection
         return mb_substr($txt, $n, $length, 'UTF-8');
     }
 
-// Rozdeleni textu na slova
-    private function txtSplit($txt)
-    {
-        $skp = 1;
-        $rv = array();
-
-        $rvx = 0;
-        $acc = "";
-
-        $length = mb_strlen($txt, 'UTF-8');
-        for ($i = 0; $i < $length; $i++) {
-            $char = mb_substr($txt, $i, 1, 'UTF-8');
-            if ($char == ' ') {
-                if ($skp)
-                    continue;
-                $skp = 1;
-                $rv[$rvx++] = $acc;
-                $acc = "";
-                continue;
-            }
-            $skp = 0;
-            $acc .= $char;
-        }
-        if (!$skp)
-            $rv[$rvx++] = $acc;
-
-        return $rv;
-    }
-
     /**
      *
      * @param $text
@@ -886,7 +857,7 @@ class Inflection
      */
     public function inflect($text, $zivotne = false, $preferovanyRod = '')
     {
-        $aTxt = $this->txtSplit($text);
+        $aTxt = explode(' ', $text);
 
         $this->PrefRod = "0";
         $out = array();
