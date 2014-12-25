@@ -751,14 +751,14 @@ class Inflection
         // Formatovani zivotneho sklonovani
         // - nalezeni pomlcky
         $length = mb_strlen($rv, 'UTF-8');
-        for ($nnn = 0; $nnn < $length; $nnn++)
+        for ($nnn = 0; $nnn < $length; $nnn++) // TODO use simple strpos
             if ($rvChar[$nnn] == "-")
                 break;
 
         $ndx1 = $nnn;
 
         // - nalezeni lomitka
-        for ($nnn = 0; $nnn < $length; $nnn++)
+        for ($nnn = 0; $nnn < $length; $nnn++) // TODO use simple strpos
             if ($rvChar[$nnn] == "/")
                 break;
 
@@ -780,7 +780,7 @@ class Inflection
 
         // vypusteni pomocnych znaku
         $txt3 = "";
-        for ($nnn = 0; $nnn < $length; $nnn++) {
+        for ($nnn = 0; $nnn < $length; $nnn++) { // TODO use simple strreplace
             $char = $rvChar[$nnn];
             if (!($char == '-' || $char == '/'))
                 $txt3 .= $char;
