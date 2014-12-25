@@ -484,7 +484,7 @@ class Inflection
 
 		$matches = [];
 		$regex = strtr(substr($pattern, 1), ['[' => '([', ']' => '])']);
-		if (preg_match('/' . $regex . '$/', $word, $matches))
+		if (preg_match('/' . $regex . '$/u', $word, $matches))
 		{
 			$full = array_shift($matches);
 			$i = count($matches) - 1;
@@ -592,8 +592,8 @@ class Inflection
 		}
 
 		// animate/inanimate declension
-		$posDash = strpos($rv, '-');
-		$posSlash = strpos($rv, '/');
+		$posDash = mb_strpos($rv, '-');
+		$posSlash = mb_strpos($rv, '/');
 		if ($posDash != FALSE && $posSlash != FALSE)
 		{
 			if ($animate)
