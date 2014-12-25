@@ -119,8 +119,8 @@ class Inflection
     , array("m", "-vztek", "vzteku", "vzteku", "vztek", "vzteku", "vzteku", "vztekem", "vzteky", "vzteků", "vztekům", "vzteky", "vzteky", "vztecích", "vzteky")
     , array("m", "-dotek", "doteku", "doteku", "dotek", "doteku", "doteku", "dotekem", "doteky", "doteků", "dotekům", "doteky", "doteky", "dotecích", "doteky")
     , array("ž", "-hra", "hry", "hře", "hru", "hro", "hře", "hrou", "hry", "her", "hrám", "hry", "hry", "hrách", "hrami")
-    , array("m", "Zeus", "Dia", "Diovi", "Dia", "Die", "Diovi", "Diem", "Diové", "Diů", "Diům", null, "Diové", null, null)
-    , array("ž", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol", "Nikol")
+    , array("m", "zeus", "dia", "diovi", "dia", "die", "diovi", "diem", "diové", "diů", "diům", null, "diové", null, null)
+    , array("ž", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol")
 
         // číslovky
     , array("-", "-tdva", "tidvou", "tidvoum", "tdva", "tdva", "tidvou", "tidvěmi", null, null, null, null, null, null, null)
@@ -290,16 +290,16 @@ class Inflection
 
     , array("s", "-[sljřň]e", "0ete", "0eti", "0e", "0e", "0eti", "0etem", "0ata", "0at", "0atům", "0ata", "0ata", "0atech", "0aty")
         // , array( "ž","-cí",        "cí", "cí",  "cí", "cí", "cí", "cí",   "cí", "cích", "cím", "cí", "cí", "cích", "cími" )
-        // čaj, prodej, Ondřej, žokej
+        // čaj, prodej, ondřej, žokej
     , array("m", "-j", "je", "ji", "j", "ji", "ji", "jem", "je/jové", "jů", "jům", "je", "je/jové", "jích", "ji")
-        // Josef, Detlef, ... ?
+        // josef, detlef, ... ?
     , array("m", "-f", "fa", "fu/fovi", "f/fa", "fe", "fu/fovi", "fem", "fy/fové", "fů", "fům", "fy", "fy/fové", "fech", "fy")
         // zbroj, výzbroj, výstroj, trofej, neteř
         // jiří, podkoní, ... ?
     , array("m", "-í", "ího", "ímu", "ího", "í", "ímu", "ím", "í", "ích", "ím", "í", "í", "ích", "ími")
-        // Hugo
+        // hugo
     , array("m", "-go", "a", "govi", "ga", "ga", "govi", "gem", "gové", "gů", "gům", "gy", "gové", "zích", "gy")
-        // Kvido
+        // kvido
     , array("m", "-o", "a", "ovi", "a", "a", "ovi", "em", "ové", "ů", "ům", "y", "ové", "ech", "y")
 
 
@@ -324,14 +324,14 @@ class Inflection
     protected $v1 = array(
         array("osel", "osl", "osla")
     , array("karel", "karl", "karla")
-    , array("Karel", "Karl", "Karla")
+    , array("karel", "karl", "karla")
     , array("pavel", "pavl", "pavla")
-    , array("Pavel", "Pavl", "Pavla")
-    , array("Havel", "Havl", "Havla")
+    , array("pavel", "pavl", "pavla")
     , array("havel", "havl", "havla")
-    , array("Bořek", "Bořk", "Bořka")
+    , array("havel", "havl", "havla")
     , array("bořek", "bořk", "bořka")
-    , array("Luděk", "Luďk", "Luďka")
+    , array("bořek", "bořk", "bořka")
+    , array("luděk", "luďk", "luďka")
     , array("luděk", "luďk", "luďka")
     , array("pes", "ps", "psa")
     , array("pytel", "pytl", "pytel")
@@ -386,7 +386,7 @@ class Inflection
         $this->v10 = array(
             "sleď",
             "saša",
-            "Saša",
+            "saša",
             "dešť",
             "koň",
             "chlast",
@@ -402,7 +402,7 @@ class Inflection
             "sluha",
             "muž",
             "velmož",
-            "Maťej",
+            "maťej",
             "maťej",
             "táta",
             "kolega",
@@ -442,54 +442,54 @@ class Inflection
             "koloďej",
             "sprej",
             "displej",
-            "Aleš",
             "aleš",
-            "Ambrož",
+            "aleš",
             "ambrož",
-            "Tomáš",
-            "Lukáš",
-            "Tobiáš",
-            "Jiří",
+            "ambrož",
+            "tomáš",
+            "lukáš",
+            "tobiáš",
+            "jiří",
             "tomáš",
             "lukáš",
             "tobiáš",
             "jiří",
             "podkoní",
             "komoří",
-            "Jirka",
             "jirka",
-            "Ilja",
+            "jirka",
             "ilja",
-            "Pepa",
-            "Ondřej",
+            "ilja",
+            "pepa",
             "ondřej",
-            "Andrej",
+            "ondřej",
+            "andrej",
             "andrej",
     //  "josef",
             "mikuláš",
-            "Mikuláš",
-            "Mikoláš",
+            "mikuláš",
             "mikoláš",
-            "Kvido",
+            "mikoláš",
             "kvido",
-            "Hugo",
+            "kvido",
             "hugo",
-            "Oto",
+            "hugo",
             "oto",
-            "Otto",
+            "oto",
             "otto",
-            "Alexej",
+            "otto",
             "alexej",
-            "Ivo",
+            "alexej",
             "ivo",
-            "Bruno",
+            "ivo",
             "bruno",
-            "Alois",
+            "bruno",
+            "alois",
             "alois",
             "bartoloměj",
-            "Bartoloměj",
+            "bartoloměj",
             "noe",
-            "Noe");
+            "noe");
 
         // $this->v11 - zmena rodu na zensky
         $this->v11 = array(
@@ -523,10 +523,10 @@ class Inflection
             "trofej",
             "obec",
             "otep",
-            "Miriam",
+            "miriam",
             // "miriam",
-            "Ester",
-            "Dagmar"
+            "ester",
+            "dagmar"
         );
 
             // "transmise,
@@ -549,10 +549,10 @@ class Inflection
         // $this->v0 - nedořešené výjimky
         $this->v0 = array(
             "sten",
-//      "Ester,
-//      "Dagmar,
+//      "ester,
+//      "dagmar,
 //      "ovoce,
-//      "Zeus,
+//      "zeus,
 //      "zbroj,
 //      "výzbroj,
 //      "výstroj,
@@ -562,9 +562,9 @@ class Inflection
 //      "humus,
 //      "muka,
 //      "noe,
-//      "Noe,
+//      "noe,
         );
-        //  "Miriam,
+        //  "miriam,
         //  "miriam,
         // Je Nikola ženské nebo mužské jméno??? (podobně Sáva)
         // $this->v3 - různé odchylky ve skloňování
@@ -598,8 +598,8 @@ class Inflection
             "pantofel",
             "žába",
             "zoja",
-            "Zoja",
-            "Zoe",
+            "zoja",
+            "zoe",
             "zoe",
         );
 
@@ -623,7 +623,6 @@ class Inflection
     private function isShoda($vz, $txt)
     {
         $txt = mb_strtolower($txt, 'UTF-8');
-        $vz = mb_strtolower($vz, 'UTF-8');
         $i = mb_strlen($vz, 'UTF-8');
         $j = mb_strlen($txt, 'UTF-8');
 
