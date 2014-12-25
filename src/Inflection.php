@@ -863,23 +863,22 @@ class Inflection
         return -1;
     }
 
+// Vybrání vzoru
     private function StdNdx($slovo)
     {
-        $cnt = count($this->vzor);
         $char = $this->PrefRod;
-        for ($iii = 0; $iii < $cnt; $iii++) {
+        foreach ($this->vzor as $i => $vzor) {
             // filtrace rodu
-            if ($char != "0" && $char != $this->vzor[$iii][0])
+            if ($char != "0" && $char != $vzor[0]) {
                 continue;
+            }
 
-            if ($this->isShoda($this->vzor[$iii][1], $slovo) >= 0)
-                break;
+            if ($this->isShoda($vzor[1], $slovo) >= 0) {
+                return $i;
+            }
         }
 
-        if ($iii >= $cnt)
-            return -1;
-
-        return $iii;
+        return -1;
     }
 
 // Sklonovani podle seznamu vyjimek typu $this->v1
