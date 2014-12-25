@@ -383,222 +383,225 @@ class Inflection
         $this->aCmpReg = array_fill(0, 9, "");
 
         // $this->v10 - zmena rodu na muzsky
-        $this->v10 = array();
-        $this->v10[] = "sleď";
-        $this->v10[] = "saša";
-        $this->v10[] = "Saša";
-        $this->v10[] = "dešť";
-        $this->v10[] = "koň";
-        $this->v10[] = "chlast";
-        $this->v10[] = "plast";
-        $this->v10[] = "termoplast";
-        $this->v10[] = "vězeň";
-        $this->v10[] = "sťežeň";
-        $this->v10[] = "papež";
-        $this->v10[] = "ďeda";
-        $this->v10[] = "zeť";
-        $this->v10[] = "háj";
-        $this->v10[] = "lanýž";
-        $this->v10[] = "sluha";
-        $this->v10[] = "muž";
-        $this->v10[] = "velmož";
-        $this->v10[] = "Maťej";
-        $this->v10[] = "maťej";
-        $this->v10[] = "táta";
-        $this->v10[] = "kolega";
-        $this->v10[] = "mluvka";
-        $this->v10[] = "strejda";
-        $this->v10[] = "polda";
-        $this->v10[] = "moula";
-        $this->v10[] = "šmoula";
-        $this->v10[] = "slouha";
-        $this->v10[] = "drákula";
-        $this->v10[] = "test";
-        $this->v10[] = "rest";
-        $this->v10[] = "trest";
-        $this->v10[] = "arest";
-        $this->v10[] = "azbest";
-        $this->v10[] = "ametyst";
-        $this->v10[] = "chřest";
-        $this->v10[] = "protest";
-        $this->v10[] = "kontest";
-        $this->v10[] = "motorest";
-        $this->v10[] = "most";
-        $this->v10[] = "host";
-        $this->v10[] = "kříž";
-        $this->v10[] = "stupeň";
-        $this->v10[] = "peň";
-        $this->v10[] = "čaj";
-        $this->v10[] = "prodej";
-        $this->v10[] = "výdej";
-        $this->v10[] = "výprodej";
-        $this->v10[] = "ďej";
-        $this->v10[] = "zloďej";
-        $this->v10[] = "žokej";
-        $this->v10[] = "hranostaj";
-        $this->v10[] = "dobroďej";
-        $this->v10[] = "darmoďej";
-        $this->v10[] = "čaroďej";
-        $this->v10[] = "koloďej";
-        $this->v10[] = "sprej";
-        $this->v10[] = "displej";
-        $this->v10[] = "Aleš";
-        $this->v10[] = "aleš";
-        $this->v10[] = "Ambrož";
-        $this->v10[] = "ambrož";
-        $this->v10[] = "Tomáš";
-        $this->v10[] = "Lukáš";
-        $this->v10[] = "Tobiáš";
-        $this->v10[] = "Jiří";
-        $this->v10[] = "tomáš";
-        $this->v10[] = "lukáš";
-        $this->v10[] = "tobiáš";
-        $this->v10[] = "jiří";
-        $this->v10[] = "podkoní";
-        $this->v10[] = "komoří";
-        $this->v10[] = "Jirka";
-        $this->v10[] = "jirka";
-        $this->v10[] = "Ilja";
-        $this->v10[] = "ilja";
-        $this->v10[] = "Pepa";
-        $this->v10[] = "Ondřej";
-        $this->v10[] = "ondřej";
-        $this->v10[] = "Andrej";
-        $this->v10[] = "andrej";
-//  $this->v10[] = "josef";
-        $this->v10[] = "mikuláš";
-        $this->v10[] = "Mikuláš";
-        $this->v10[] = "Mikoláš";
-        $this->v10[] = "mikoláš";
-        $this->v10[] = "Kvido";
-        $this->v10[] = "kvido";
-        $this->v10[] = "Hugo";
-        $this->v10[] = "hugo";
-        $this->v10[] = "Oto";
-        $this->v10[] = "oto";
-        $this->v10[] = "Otto";
-        $this->v10[] = "otto";
-        $this->v10[] = "Alexej";
-        $this->v10[] = "alexej";
-        $this->v10[] = "Ivo";
-        $this->v10[] = "ivo";
-        $this->v10[] = "Bruno";
-        $this->v10[] = "bruno";
-        $this->v10[] = "Alois";
-        $this->v10[] = "alois";
-        $this->v10[] = "bartoloměj";
-        $this->v10[] = "Bartoloměj";
-        $this->v10[] = "noe";
-        $this->v10[] = "Noe";
+        $this->v10 = array(
+            "sleď",
+            "saša",
+            "Saša",
+            "dešť",
+            "koň",
+            "chlast",
+            "plast",
+            "termoplast",
+            "vězeň",
+            "sťežeň",
+            "papež",
+            "ďeda",
+            "zeť",
+            "háj",
+            "lanýž",
+            "sluha",
+            "muž",
+            "velmož",
+            "Maťej",
+            "maťej",
+            "táta",
+            "kolega",
+            "mluvka",
+            "strejda",
+            "polda",
+            "moula",
+            "šmoula",
+            "slouha",
+            "drákula",
+            "test",
+            "rest",
+            "trest",
+            "arest",
+            "azbest",
+            "ametyst",
+            "chřest",
+            "protest",
+            "kontest",
+            "motorest",
+            "most",
+            "host",
+            "kříž",
+            "stupeň",
+            "peň",
+            "čaj",
+            "prodej",
+            "výdej",
+            "výprodej",
+            "ďej",
+            "zloďej",
+            "žokej",
+            "hranostaj",
+            "dobroďej",
+            "darmoďej",
+            "čaroďej",
+            "koloďej",
+            "sprej",
+            "displej",
+            "Aleš",
+            "aleš",
+            "Ambrož",
+            "ambrož",
+            "Tomáš",
+            "Lukáš",
+            "Tobiáš",
+            "Jiří",
+            "tomáš",
+            "lukáš",
+            "tobiáš",
+            "jiří",
+            "podkoní",
+            "komoří",
+            "Jirka",
+            "jirka",
+            "Ilja",
+            "ilja",
+            "Pepa",
+            "Ondřej",
+            "ondřej",
+            "Andrej",
+            "andrej",
+    //  "josef",
+            "mikuláš",
+            "Mikuláš",
+            "Mikoláš",
+            "mikoláš",
+            "Kvido",
+            "kvido",
+            "Hugo",
+            "hugo",
+            "Oto",
+            "oto",
+            "Otto",
+            "otto",
+            "Alexej",
+            "alexej",
+            "Ivo",
+            "ivo",
+            "Bruno",
+            "bruno",
+            "Alois",
+            "alois",
+            "bartoloměj",
+            "Bartoloměj",
+            "noe",
+            "Noe");
 
         // $this->v11 - zmena rodu na zensky
-        $this->v11 = array();
-        $this->v11[] = "vš";
-        $this->v11[] = "dešť";
-        $this->v11[] = "zteč";
-        $this->v11[] = "řeč";
-        $this->v11[] = "křeč";
-        $this->v11[] = "kleč";
-        $this->v11[] = "maštal";
-        $this->v11[] = "vš";
-        $this->v11[] = "kancelář";
-        $this->v11[] = "závěj";
-        $this->v11[] = "zvěř";
-        $this->v11[] = "sbeř";
-        $this->v11[] = "neteř";
-        $this->v11[] = "ves";
-        $this->v11[] = "rozkoš";
-        // $this->v11[] = "myša";
-        $this->v11[] = "postel";
-        $this->v11[] = "prdel";
-        $this->v11[] = "koudel";
-        $this->v11[] = "koupel";
-        $this->v11[] = "ocel";
-        $this->v11[] = "digestoř";
-        $this->v11[] = "konzervatoř";
-        $this->v11[] = "oratoř";
-        $this->v11[] = "zbroj";
-        $this->v11[] = "výzbroj";
-        $this->v11[] = "výstroj";
-        $this->v11[] = "trofej";
-        $this->v11[] = "obec";
-        $this->v11[] = "otep";
-        $this->v11[] = "Miriam";
-        // $this->v11[] = "miriam";
-        $this->v11[] = "Ester";
-        $this->v11[] = "Dagmar";
+        $this->v11 = array(
+            "vš",
+            "dešť",
+            "zteč",
+            "řeč",
+            "křeč",
+            "kleč",
+            "maštal",
+            "vš",
+            "kancelář",
+            "závěj",
+            "zvěř",
+            "sbeř",
+            "neteř",
+            "ves",
+            "rozkoš",
+            // "myša",
+            "postel",
+            "prdel",
+            "koudel",
+            "koupel",
+            "ocel",
+            "digestoř",
+            "konzervatoř",
+            "oratoř",
+            "zbroj",
+            "výzbroj",
+            "výstroj",
+            "trofej",
+            "obec",
+            "otep",
+            "Miriam",
+            // "miriam",
+            "Ester",
+            "Dagmar"
+        );
 
-        // $this->v11[] = "transmise"
+            // "transmise,
         // $this->v12 - zmena rodu na stredni
-        $this->v12 = array();
-        $this->v12[] = "nemluvňe";
-        $this->v12[] = "slůně";
-        $this->v12[] = "kůzle";
-        $this->v12[] = "sele";
-        $this->v12[] = "osle";
-        $this->v12[] = "zvíře";
-        $this->v12[] = "kuře";
-        $this->v12[] = "tele";
-        $this->v12[] = "prase";
-        $this->v12[] = "house";
-        $this->v12[] = "vejce";
+        $this->v12 = array(
+            "nemluvňe",
+            "slůně",
+            "kůzle",
+            "sele",
+            "osle",
+            "zvíře",
+            "kuře",
+            "tele",
+            "prase",
+            "house",
+            "vejce",
+        );
 
 
         // $this->v0 - nedořešené výjimky
-        $this->v0 = array();
-        $this->v0[] = "sten";
-//  $this->v0[] = "Ester"
-//  $this->v0[] = "Dagmar"
-//  $this->v0[] = "ovoce"
-//  $this->v0[] = "Zeus"
-//  $this->v0[] = "zbroj"
-//  $this->v0[] = "výzbroj"
-//  $this->v0[] = "výstroj"
-//  $this->v0[] = "obec"
-//  $this->v0[] = "konzervatoř"
-//  $this->v0[] = "digestoř"
-//  $this->v0[] = "humus"
-//  $this->v0[] = "muka"
-//  $this->v0[] = "noe"
-//  $this->v0[] = "Noe"
-        // $this->v0[] = "Miriam"
-        // $this->v0[] = "miriam"
+        $this->v0 = array(
+            "sten",
+//      "Ester,
+//      "Dagmar,
+//      "ovoce,
+//      "Zeus,
+//      "zbroj,
+//      "výzbroj,
+//      "výstroj,
+//      "obec,
+//      "konzervatoř,
+//      "digestoř,
+//      "humus,
+//      "muka,
+//      "noe,
+//      "Noe,
+        );
+        //  "Miriam,
+        //  "miriam,
         // Je Nikola ženské nebo mužské jméno??? (podobně Sáva)
         // $this->v3 - různé odchylky ve skloňování
         //    - časem by bylo vhodné opravit
-        $this->v3 = array();
-        $this->v3[] = "jméno";
-        $this->v3[] = "myš";
-        $this->v3[] = "vězeň";
-        $this->v3[] = "sťežeň";
-        $this->v3[] = "oko";
-        $this->v3[] = "sole";
-        $this->v3[] = "šach";
-        $this->v3[] = "veš";
-        $this->v3[] = "myš";
-        $this->v3[] = "klášter";
-        $this->v3[] = "kněz";
-        $this->v3[] = "král";
-        $this->v3[] = "zď";
-        $this->v3[] = "sto";
-        $this->v3[] = "smrt";
-        $this->v3[] = "leden";
-        $this->v3[] = "len";
-        $this->v3[] = "les";
-        $this->v3[] = "únor";
-        $this->v3[] = "březen";
-        $this->v3[] = "duben";
-        $this->v3[] = "květen";
-        $this->v3[] = "červen";
-        $this->v3[] = "srpen";
-        $this->v3[] = "říjen";
-        $this->v3[] = "pantofel";
-        $this->v3[] = "žába";
-        $this->v3[] = "zoja";
-        $this->v3[] = "Zoja";
-        $this->v3[] = "Zoe";
-        $this->v3[] = "zoe";
-
+        $this->v3 = array(
+            "jméno",
+            "myš",
+            "vězeň",
+            "sťežeň",
+            "oko",
+            "sole",
+            "šach",
+            "veš",
+            "myš",
+            "klášter",
+            "kněz",
+            "král",
+            "zď",
+            "sto",
+            "smrt",
+            "leden",
+            "len",
+            "les",
+            "únor",
+            "březen",
+            "duben",
+            "květen",
+            "červen",
+            "srpen",
+            "říjen",
+            "pantofel",
+            "žába",
+            "zoja",
+            "Zoja",
+            "Zoe",
+            "zoe",
+        );
 
         $this->astrTvar = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
     }
