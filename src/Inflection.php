@@ -455,6 +455,58 @@ class Inflection
 		$this->astrTvar = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
 	}
 
+	public function fasterInflect($text, $animate = FALSE)
+	{
+		$words = array_reverse(explode(' ', $text));
+		$gender = NULL;
+		$inflected = [];
+		foreach ($words as $word)
+		{
+			foreach ($this->patterns as $pattern)
+			{
+				if ($gender && $pattern[0] !== $gender)
+				{
+					continue;
+				}
+
+				$left = $this->match($pattern[1], $word);
+				if ($left !== -1)
+				{
+					$inflectedWord = [1 => $word];
+					$prefix = mb_substr($word, 0, $left, 'UTF-8');
+					for ($case = 2; $case < 14; $case++)
+					{
+						$postfix = $pattern[1 + $case];
+						foreach ($this->aCmpReg as $i => $replacement)
+						{
+							$postfix = str_replace($i, $replacement, $postfix);
+						}
+
+						$posSlash = mb_strpos($postfix, '/');
+						if ($posSlash)
+						{
+							if ($animate)
+							{
+								$postfix = mb_substr($postfix, $posSlash + 1);
+							}
+							else
+							{
+								$postfix = mb_substr($postfix, 0, $posSlash);
+							}
+						}
+
+						$inflectedWord[$case] = $prefix . $postfix;
+					}
+					$inflected[] = $inflectedWord;
+					$gender = $pattern[0];
+					break;
+				}
+			}
+		}
+
+		return array_reverse($inflected);
+	}
+
 	/**
 	 * @author Jan Navratil <jan.navratil@heureka.cz>
 	 * @param bool $debugMode
