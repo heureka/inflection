@@ -620,51 +620,23 @@ class Inflection
 //  nebo pri rovnosti slov (napr. isShoda("molo","molo").
 //  Jinak je navratova hodnota -1.
 //
-    private function isShoda($vz, $txt)
+    public function isShoda($vz, $txt)
     {
-        $i = mb_strlen($vz, 'UTF-8');
-        $j = mb_strlen($txt, 'UTF-8');
-
-        if ($i == 0 || $j == 0)
-            return -1;
-        $i--;
-        $j--;
-
-        $nCmpReg = 0;
-
-	    $txtChar = preg_split('//u', $txt, -1, PREG_SPLIT_NO_EMPTY);
-	    $vzChar = preg_split('//u', $vz, -1, PREG_SPLIT_NO_EMPTY);
-
-        while ($i >= 0 && $j >= 0) {
-            if ($vzChar[$i] == "]") {
-                $i--;
-                $quit = 1;
-                while ($i >= 0 && $vzChar[$i] != "[") {
-                    if ($vzChar[$i] == $txtChar[$j]) {
-                        $quit = 0;
-                        $this->aCmpReg[$nCmpReg] = $vzChar[$i];
-                        $nCmpReg++;
-                    }
-                    $i--;
+        if (substr($vz, 0, 1) === '-')
+        {
+            $matches = array();
+            $regex = strtr(substr($vz, 1), array('[' => '([', ']' => '])'));
+            if (preg_match('/' . $regex . '$/', $txt, $matches)) {
+                $full = array_shift($matches);
+                $i = count($matches) - 1;
+                foreach ($matches as $match) {
+                    $this->aCmpReg[$i--] = $match;
                 }
-
-                if ($quit == 1)
-                    return -1;
-            } else {
-                if ($vzChar[$i] == '-')
-                    return $j + 1;
-                if ($vzChar[$i] != $txtChar[$j])
-                    return -1;
+                return mb_strlen($txt) - mb_strlen($full);
             }
-            $i--;
-            $j--;
+            return -1;
         }
-        if ($i < 0 && $j < 0)
-            return 0;
-        if ($i >= 0 && $vzChar[$i] == '-')
-            return 0;
-
-        return -1;
+        return strcmp($vz, $txt) === 0 ? 0 : -1;
     }
 
 //
@@ -919,10 +891,10 @@ class Inflection
     private function StdNdx($slovo)
     {
         $cnt = count($this->vzor);
-        $char = mb_substr($this->PrefRod, 0, 1, 'UTF-8');
+        $char = mb_substr($this->PrefRod, 0, 1, 'UTF-8'); // TODO this should not be necessary, remove?
         for ($iii = 0; $iii < $cnt; $iii++) {
             // filtrace rodu
-            if ($char != "0" && $char != mb_substr($this->vzor[$iii][0], 0, 1, 'UTF-8'))
+            if ($char != "0" && $char != mb_substr($this->vzor[$iii][0], 0, 1, 'UTF-8')) // TODO this should not be necessary, remove?
                 continue;
 
             if ($this->isShoda($this->vzor[$iii][1], $slovo) >= 0)
