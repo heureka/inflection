@@ -622,7 +622,6 @@ class Inflection
 //
     private function isShoda($vz, $txt)
     {
-        $txt = mb_strtolower($txt, 'UTF-8');
         $i = mb_strlen($vz, 'UTF-8');
         $j = mb_strlen($txt, 'UTF-8');
 
@@ -952,6 +951,9 @@ class Inflection
 	    $this->astrTvar = array_fill(0, 16, '');
 	    $this->astrTvar[0] = "???";
 
+        $firstOriginalChar = mb_substr($slovo, 0, 1, 'UTF-8');
+        $slovo = mb_strtolower($slovo, 'UTF-8');
+
         $flgV1 = $this->ndxV1($slovo);
         if ($flgV1 >= 0) {
             $slovoV1 = $slovo;
@@ -1003,8 +1005,7 @@ class Inflection
 
         // Pokud bylo zadané slovo s velkým písmenem na začátku,
         // vrať velké písmeno i ve skloňovaných tvarech
-        $firstChar = mb_substr($slovo, 0, 1, 'UTF-8');
-        if (mb_strtoupper($firstChar) === $firstChar)
+        if (mb_strtoupper($firstOriginalChar) === $firstOriginalChar)
         {
             for ($i = 1; $i <= 15; $i++)
             {
