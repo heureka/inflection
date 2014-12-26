@@ -27,6 +27,14 @@ echo "$inflected[11] jsou nejlepší";
 
 Based on original work by [Pavel Sedlák](http://www.pteryx.net/sklonovani.html), Tomáš Režnar and [Heureka](https://github.com/heureka/inflection).
 
+Links
+-----
+
+- http://prirucka.ujc.cas.cz/
+- http://www.pteryx.net/sklonovani.html
+- https://en.wikipedia.org/wiki/Czech_declension
+- https://en.wikipedia.org/wiki/Grammatical_gender
+
 License
 -------
 
