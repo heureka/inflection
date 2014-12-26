@@ -27,6 +27,8 @@ echo "$inflected[11] jsou nejlepší";
 
 Based on original work by [Pavel Sedlák](http://www.pteryx.net/sklonovani.html), Tomáš Režnar and [Heureka](https://github.com/heureka/inflection).
 
+This library is about 6 times faster then Heureka implementation and 9 times faster then the original implementation.
+
 Links
 -----
 
