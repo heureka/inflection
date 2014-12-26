@@ -24,7 +24,7 @@ $inflected = $inflection->inflect('kožená bunda');
 echo "Natrhnul jsem si $inflected[4]";
 // Natrhnul jsem si koženou bundu
 
-echo "$inflected[11] jsou nejlepší";
+echo "$inflected[8] jsou nejlepší";
 // kožené bundy jsou nejlepší
 ```
 
