@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @author Pavel Sedlák 2009-2013
- * @author Mikuláš Dítě
- *
+ * @author Pavel Sedlák 2009-2013 (patterns)
  * @url: http://www.pteryx.net/sklonovani.html
+ *
+ * @author Mikuláš Dítě 2014
  */
 class Inflection
 {
@@ -474,7 +474,6 @@ class Inflection
 		"žokej",
 	];
 
-	// $this->v11 - zmena rodu na zensky
 	protected $forceF = [
 		"dagmar",
 		"dešť",
