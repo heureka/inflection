@@ -1,6 +1,9 @@
 Czech inclension (declension), české skloňování
 ===============================================
 
+This extension should provide same functionality and API
+as [this PHP extension](https://github.com/Mikulas/inflection-ext). Do note however that c extension performs way better.
+
 Usage
 -----
 
