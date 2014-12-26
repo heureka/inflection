@@ -344,7 +344,7 @@ class Inflection
 	 *  @var string accusative
 	 * }
 	 */
-	protected $v1 = [
+	protected $exceptions = [
 		["osel", "osl", "osla"],
 		["karel", "karl", "karla"],
 		["karel", "karl", "karla"],
@@ -396,23 +396,24 @@ class Inflection
 		["myš", "myše", "myš"],
 	];
 
+	protected $forceM = [
+		"sleď", "saša", "saša", "dešť", "koň", "chlast", "plast", "termoplast", "vězeň", "sťežeň", "papež", "ďeda", "zeť", "háj", "lanýž", "sluha", "muž", "velmož", "maťej", "maťej", "táta", "kolega", "mluvka", "strejda", "polda", "moula", "šmoula", "slouha", "drákula", "test", "rest", "trest", "arest", "azbest", "ametyst", "chřest", "protest", "kontest", "motorest", "most", "host", "kříž", "stupeň", "peň", "čaj", "prodej", "výdej", "výprodej", "ďej", "zloďej", "žokej", "hranostaj", "dobroďej", "darmoďej", "čaroďej", "koloďej", "sprej", "displej", "aleš", "aleš", "ambrož", "ambrož", "tomáš", "lukáš", "tobiáš", "jiří", "tomáš", "lukáš", "tobiáš", "jiří", "podkoní", "komoří", "jirka", "jirka", "ilja", "ilja", "pepa", "ondřej", "ondřej", "andrej", "andrej",
+		"mikuláš", "mikuláš", "mikoláš", "mikoláš", "kvido", "kvido", "hugo", "hugo", "oto", "oto", "otto", "otto", "alexej", "alexej", "ivo", "ivo", "bruno", "bruno", "alois", "alois", "bartoloměj", "bartoloměj", "noe", "noe",
+	];
+
+	// $this->v11 - zmena rodu na zensky
+	protected $forceF = [
+		"vš", "dešť", "zteč", "řeč", "křeč", "kleč", "maštal", "vš", "kancelář", "závěj", "zvěř", "sbeř", "neteř", "ves", "rozkoš",
+		"postel", "prdel", "koudel", "koupel", "ocel", "digestoř", "konzervatoř", "oratoř", "zbroj", "výzbroj", "výstroj", "trofej", "obec", "otep", "miriam",
+		"ester", "dagmar",
+	];
+
+	protected $forceS = [
+		"nemluvňe", "slůně", "kůzle", "sele", "osle", "zvíře", "kuře", "tele", "prase", "house", "vejce",
+	];
+
 	public function __construct()
 	{
-		// TODO move higher
-		// $this->v10 - zmena rodu na muzsky
-		$this->v10 = ["sleď", "saša", "saša", "dešť", "koň", "chlast", "plast", "termoplast", "vězeň", "sťežeň", "papež", "ďeda", "zeť", "háj", "lanýž", "sluha", "muž", "velmož", "maťej", "maťej", "táta", "kolega", "mluvka", "strejda", "polda", "moula", "šmoula", "slouha", "drákula", "test", "rest", "trest", "arest", "azbest", "ametyst", "chřest", "protest", "kontest", "motorest", "most", "host", "kříž", "stupeň", "peň", "čaj", "prodej", "výdej", "výprodej", "ďej", "zloďej", "žokej", "hranostaj", "dobroďej", "darmoďej", "čaroďej", "koloďej", "sprej", "displej", "aleš", "aleš", "ambrož", "ambrož", "tomáš", "lukáš", "tobiáš", "jiří", "tomáš", "lukáš", "tobiáš", "jiří", "podkoní", "komoří", "jirka", "jirka", "ilja", "ilja", "pepa", "ondřej", "ondřej", "andrej", "andrej", //  "josef",
-			"mikuláš", "mikuláš", "mikoláš", "mikoláš", "kvido", "kvido", "hugo", "hugo", "oto", "oto", "otto", "otto", "alexej", "alexej", "ivo", "ivo", "bruno", "bruno", "alois", "alois", "bartoloměj", "bartoloměj", "noe", "noe"];
-
-		// $this->v11 - zmena rodu na zensky
-		$this->v11 = ["vš", "dešť", "zteč", "řeč", "křeč", "kleč", "maštal", "vš", "kancelář", "závěj", "zvěř", "sbeř", "neteř", "ves", "rozkoš", // "myša",
-			"postel", "prdel", "koudel", "koupel", "ocel", "digestoř", "konzervatoř", "oratoř", "zbroj", "výzbroj", "výstroj", "trofej", "obec", "otep", "miriam", // "miriam",
-			"ester", "dagmar"];
-
-		// "transmise,
-		// $this->v12 - zmena rodu na stredni
-		$this->v12 = ["nemluvňe", "slůně", "kůzle", "sele", "osle", "zvíře", "kuře", "tele", "prase", "house", "vejce",];
-
-
 		// $this->v0 - nedořešené výjimky
 		$this->v0 = ["sten", //      "ester,
 			//      "dagmar,
@@ -432,6 +433,7 @@ class Inflection
 		//  "miriam,
 		//  "miriam,
 		// Je Nikola ženské nebo mužské jméno??? (podobně Sáva)
+
 		// $this->v3 - různé odchylky ve skloňování
 		//    - časem by bylo vhodné opravit
 		$this->v3 = ["jméno", "myš", "vězeň", "sťežeň", "oko", "sole", "šach", "veš", "myš", "klášter", "kněz", "král", "zď", "sto", "smrt", "leden", "len", "les", "únor", "březen", "duben", "květen", "červen", "srpen", "říjen", "pantofel", "žába", "zoja", "zoja", "zoe", "zoe",];
@@ -445,11 +447,27 @@ class Inflection
 		foreach ($words as $word)
 		{
 			$word = $this->breakAccents($word);
+
+			if ($gender === NULL)
+			{
+				if (in_array($word, $this->forceM))
+				{
+					$gender = 'm';
+				}
+				if (in_array($word, $this->forceF))
+				{
+					$gender = 'f';
+				}
+				if (in_array($word, $this->forceS))
+				{
+					$gender = 's';
+				}
+			}
+
 			foreach ($this->patterns as $pattern)
 			{
 				if ($gender && $pattern[0] !== $gender)
 				{
-					echo '.';
 					continue;
 				}
 
