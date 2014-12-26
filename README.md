@@ -1,27 +1,33 @@
-Inflection for czech words
-==========================
-Class for basic inflection of czech words. For example names or surnames.
+Czech inclension (declension), české skloňování
+===============================================
 
 Usage
 -----
 
-Basic usage is add to your project via composer.
+Install with [composer](https://getcomposer.org/):
 
-```php
-$name = 'František';
-$inflected = (new Inflection())->inflect($name, true);
-print "Dobrý den " . $inflected[5]; //Dobrý den Františku
+```bash
+composer require mikulas/inflection
 ```
 
-or
-
 ```php
-require_one inflection/src/Inflection.php
-$name = 'František';
-$inflected = (new Inflection())->inflect($name, true);
-print "Dobrý den " . $inflected[5]; //Dobrý den Františku
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$inflection = new Inflection();
+$inflected = $inflection->inflect('kožená bunda');
+
+echo "Natrhnul jsem si $inflected[4]";
+// Natrhnul jsem si koženou bundu
+
+echo "$inflected[11] jsou nejlepší";
+// kožené bundy jsou nejlepší
 ```
 
+Based on original work by [Pavel Sedlák](http://www.pteryx.net/sklonovani.html), Tomáš Režnar and [Heureka](https://github.com/heureka/inflection).
 
-Třída je postavena na základě práce [Pavla Sedláka](http://www.pteryx.net/sklonovani.html), která byla zveřejněna pod GNU Lesser General Public License.
-Z tohoto důvodu jsme se rozhodli ji upravit, zveřejnit a umožnit tak její využití, vylepšení a rozšíření dalším lidem.
+License
+-------
+
+GPL 2.1
