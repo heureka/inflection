@@ -85,10 +85,10 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                     8 => "Diové",
                     9 => "Diů",
                     10 => "Diům",
-                    11 => null,
+                    11 => '',
                     12 => "Diové",
-                    13 => null,
-                    14 => null
+                    13 => '',
+                    14 => ''
                 )
             ),
             array(

@@ -530,6 +530,10 @@ class Inflection
 		$inflected = [];
 		foreach ($words as $word)
 		{
+			$_ = mb_substr($word, 0, 1, 'UTF-8');
+			$isUpper = mb_strtoupper($_) === $_;
+
+			$inflectedWord = [1 => $word];
 			$word = $this->breakAccents($word);
 
 			if ($gender === NULL)
@@ -558,7 +562,6 @@ class Inflection
 				}
 			}
 
-			$inflectedWord = [1 => $word];
 			foreach ($this->patterns as $pattern)
 			{
 				if ($gender && $pattern[0] !== $gender)
@@ -571,7 +574,7 @@ class Inflection
 				if ($left !== -1)
 				{
 					$prefix = mb_substr($word, 0, $left, 'UTF-8');
-					for ($case = 2; $case < 14; $case++)
+					for ($case = 2; $case < 15; $case++)
 					{
 						if ($exception && $case === 4)
 						{
@@ -579,7 +582,7 @@ class Inflection
 							continue;
 						}
 
-						$postfix = $pattern[1 + $case];
+						$postfix = $pattern[$case];
 						foreach ($this->replacements as $i => $replacement)
 						{
 							$postfix = str_replace($i, $replacement, $postfix);
@@ -599,6 +602,10 @@ class Inflection
 						}
 
 						$result = $this->fixAccents($prefix . $postfix);
+						if ($isUpper)
+						{
+							$result = mb_convert_case($result, MB_CASE_TITLE);
+						}
 						$inflectedWord[$case] = $result;
 					}
 					$inflected[] = $inflectedWord;
@@ -616,7 +623,7 @@ class Inflection
 
 		$result = [];
 		$reversed = array_reverse($inflected);
-		for ($case = 1; $case < 14; $case++)
+		for ($case = 1; $case < 15; $case++)
 		{
 			$partials = [];
 			foreach ($reversed as $word)
