@@ -606,6 +606,12 @@ class Inflection
 					break;
 				}
 			}
+
+			if (!isset($inflectedWord[2]))
+			{
+				// appropriate pattern not found, returning original
+				$inflected[] = array_fill(1, 14, $inflectedWord[1]);
+			}
 		}
 
 		$result = [];
