@@ -266,7 +266,7 @@ class Inflection
 		["m", "-([mnp])en", "0enu/0ena", "0enu/0enovi", "0en/0na", "0ene", "0enu/0enovi", "0enem", "0eny/0enové", "0enů", "0enům", "0eny", "0eny/0enové", "0enech", "0eny"],
 		// hřeben
 		["m", "-([bcčdstvz])en", "0nu/0na", "0nu/0novi", "0en/0na", "0ne", "0nu/0novi", "0nem", "0ny/0nové", "0nů", "0nům", "0ny", "0ny/0nové", "0nech", "0ny"],
-		// vtip
+		// vtip/pes
 		["m", "-([dglmnpbtvzs])", "0u/0a", "0u/0ovi", "0/0a", "0e", "0u/0ovi", "0em", "0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y"],
 		// reflex
 		["m", "-([x])", "0u/0e", "0u/0ovi", "0/0e", "0i", "0u/0ovi", "0em", "0y/0ové", "0ů", "0ům", "0y", "0y/0ové", "0ech", "0y"],
@@ -337,7 +337,6 @@ class Inflection
 	];
 
 	/**
-	 * Výjimky:
 	 * @var array {
 	 *  @var string nominative
 	 *  @var string replacement
@@ -412,33 +411,6 @@ class Inflection
 		"nemluvňe", "slůně", "kůzle", "sele", "osle", "zvíře", "kuře", "tele", "prase", "house", "vejce",
 	];
 
-	public function __construct()
-	{
-		// $this->v0 - nedořešené výjimky
-		$this->v0 = ["sten", //      "ester,
-			//      "dagmar,
-			//      "ovoce,
-			//      "zeus,
-			//      "zbroj,
-			//      "výzbroj,
-			//      "výstroj,
-			//      "obec,
-			//      "konzervatoř,
-			//      "digestoř,
-			//      "humus,
-			//      "muka,
-			//      "noe,
-			//      "noe,
-		];
-		//  "miriam,
-		//  "miriam,
-		// Je Nikola ženské nebo mužské jméno??? (podobně Sáva)
-
-		// $this->v3 - různé odchylky ve skloňování
-		//    - časem by bylo vhodné opravit
-		$this->v3 = ["jméno", "myš", "vězeň", "sťežeň", "oko", "sole", "šach", "veš", "myš", "klášter", "kněz", "král", "zď", "sto", "smrt", "leden", "len", "les", "únor", "březen", "duben", "květen", "červen", "srpen", "říjen", "pantofel", "žába", "zoja", "zoja", "zoe", "zoe",];
-	}
-
 	public function inflect($text, $animate = FALSE)
 	{
 		$words = array_reverse(explode(' ', $text));
@@ -454,16 +426,27 @@ class Inflection
 				{
 					$gender = 'm';
 				}
-				if (in_array($word, $this->forceF))
+				else if (in_array($word, $this->forceF))
 				{
 					$gender = 'f';
 				}
-				if (in_array($word, $this->forceS))
+				else if (in_array($word, $this->forceS))
 				{
 					$gender = 's';
 				}
 			}
 
+			$exception = NULL;
+			foreach ($this->exceptions as $e)
+			{
+				if ($word === $e[0])
+				{
+					$exception = $e;
+					break;
+				}
+			}
+
+			$inflectedWord = [1 => $word];
 			foreach ($this->patterns as $pattern)
 			{
 				if ($gender && $pattern[0] !== $gender)
@@ -471,13 +454,19 @@ class Inflection
 					continue;
 				}
 
+				$word = $exception ? $exception[1] : $word;
 				$left = $this->match($pattern[1], $word);
 				if ($left !== -1)
 				{
-					$inflectedWord = [1 => $word];
 					$prefix = mb_substr($word, 0, $left, 'UTF-8');
 					for ($case = 2; $case < 14; $case++)
 					{
+						if ($exception && $case === 4)
+						{
+							$inflectedWord[$case] = $exception[2];
+							continue;
+						}
+
 						$postfix = $pattern[1 + $case];
 						foreach ($this->replacements as $i => $replacement)
 						{
