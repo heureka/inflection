@@ -530,7 +530,7 @@ class Inflection
 		foreach ($words as $word)
 		{
 			$_ = mb_substr($word, 0, 1, 'UTF-8');
-			$isUpper = mb_strtoupper($_) === $_;
+			$isUpper = mb_strtoupper($_, 'UTF-8') === $_;
 
 			$inflectedWord = [1 => $word];
 			$word = $this->breakAccents($word);
@@ -587,23 +587,23 @@ class Inflection
 							$postfix = str_replace($i, $replacement, $postfix);
 						}
 
-						$posSlash = mb_strpos($postfix, '/');
+						$posSlash = mb_strpos($postfix, '/', NULL, 'UTF-8');
 						if ($posSlash)
 						{
 							if ($animate)
 							{
-								$postfix = mb_substr($postfix, $posSlash + 1);
+								$postfix = mb_substr($postfix, $posSlash + 1, NULL, 'UTF-8');
 							}
 							else
 							{
-								$postfix = mb_substr($postfix, 0, $posSlash);
+								$postfix = mb_substr($postfix, 0, $posSlash, 'UTF-8');
 							}
 						}
 
 						$result = $this->fixAccents($prefix . $postfix);
 						if ($isUpper)
 						{
-							$result = mb_convert_case($result, MB_CASE_TITLE);
+							$result = mb_convert_case($result, MB_CASE_TITLE, 'UTF-8');
 						}
 						$inflectedWord[$case] = $result;
 					}
@@ -641,13 +641,13 @@ class Inflection
 	 */
 	protected function match($pattern, $word)
 	{
-		if (substr($pattern, 0, 1) !== '-')
+		if (substr($pattern, 0, 1) !== '-') // compare if the first byte is ascii `-`
 		{
 			return strcasecmp($pattern, $word) === 0 ? 0 : -1;
 		}
 
 		$matches = [];
-		if (preg_match('/' . substr($pattern, 1) . '$/u', $word, $matches))
+		if (preg_match('/' . substr($pattern, 1) . '$/iu', $word, $matches))
 		{
 			var_dumP($pattern);
 			for ($i = count($matches) - 1; $i > 0; $i--)
@@ -655,7 +655,7 @@ class Inflection
 				$this->replacements[$i - 1] = $matches[count($matches) - $i];
 			}
 
-			return mb_strlen($word) - mb_strlen($matches[0]);
+			return mb_strlen($word, 'UTF-8') - mb_strlen($matches[0], 'UTF-8');
 		}
 
 		return -1;

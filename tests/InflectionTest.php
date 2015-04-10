@@ -111,6 +111,27 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                     13 => "Monikách",
                     14 => "Monikami"
                 )
+            ),
+            array(
+                "Čtyři", //name to inflection
+                null, //environment ? - životné
+                null, //preferred genus
+                array( //expected result
+                    1 => "Čtyři",
+                    2 => "Čtyřech",
+                    3 => "Čtyřem",
+                    4 => "Čtyři",
+                    5 => "Čtyři",
+                    6 => "Čtyřech",
+                    7 => "Čtyřmi",
+                    8 => '',
+                    9 => '',
+                    10 => '',
+                    11 => '',
+                    12 => '',
+                    13 => '',
+                    14 => ''
+                )
             )
 
         );
