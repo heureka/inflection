@@ -85,10 +85,10 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                     8 => "Diové",
                     9 => "Diů",
                     10 => "Diům",
-                    11 => null,
+                    11 => '',
                     12 => "Diové",
-                    13 => null,
-                    14 => null
+                    13 => '',
+                    14 => ''
                 )
             ),
             array(
@@ -111,26 +111,29 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                     13 => "Monikách",
                     14 => "Monikami"
                 )
+            ),
+            array(
+                "Čtyři", //name to inflection
+                null, //environment ? - životné
+                null, //preferred genus
+                array( //expected result
+                    1 => "Čtyři",
+                    2 => "Čtyřech",
+                    3 => "Čtyřem",
+                    4 => "Čtyři",
+                    5 => "Čtyři",
+                    6 => "Čtyřech",
+                    7 => "Čtyřmi",
+                    8 => '',
+                    9 => '',
+                    10 => '',
+                    11 => '',
+                    12 => '',
+                    13 => '',
+                    14 => ''
+                )
             )
 
-        );
-    }
-
-    public function providerSurnames()
-    {
-        return array(
-            array(
-                "Nováková", Inflection::GENUS_FEMININE
-            ),
-            array(
-                "Novák", null
-            ),
-            array(
-                "Brožová", Inflection::GENUS_FEMININE
-            ),
-            array(
-                "Záhlavová-Strýcová", Inflection::GENUS_FEMININE
-            )
         );
     }
 
@@ -143,11 +146,4 @@ class InflectionTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expected, $inflected);
     }
 
-    /**
-     * @dataProvider providerSurnames
-     */
-    public function testIsFeminineGenusSurname($surname, $expected)
-    {
-        $this->assertSame($this->inflection->isFeminineGenusSurname($surname), $expected);
-    }
 }

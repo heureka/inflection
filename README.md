@@ -1,27 +1,46 @@
-Inflection for czech words
-==========================
-Class for basic inflection of czech words. For example names or surnames.
+Czech inclension (declension), české skloňování
+===============================================
+
+This extension should provide same functionality and API
+as [this PHP extension](https://github.com/Mikulas/inflection-ext). Do note however that c extension performs way better.
 
 Usage
 -----
 
-Basic usage is add to your project via composer.
+Install with [composer](https://getcomposer.org/):
 
-```php
-$name = 'František';
-$inflected = (new Inflection())->inflect($name, true);
-print "Dobrý den " . $inflected[5]; //Dobrý den Františku
+```bash
+composer require mikulas/inflection
 ```
 
-or
-
 ```php
-require_one inflection/src/Inflection.php
-$name = 'František';
-$inflected = (new Inflection())->inflect($name, true);
-print "Dobrý den " . $inflected[5]; //Dobrý den Františku
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$inflection = new Inflection();
+$inflected = $inflection->inflect('kožená bunda');
+
+echo "Natrhnul jsem si $inflected[4]";
+// Natrhnul jsem si koženou bundu
+
+echo "$inflected[8] jsou nejlepší";
+// kožené bundy jsou nejlepší
 ```
 
+Based on original work by [Pavel Sedlák](http://www.pteryx.net/sklonovani.html), Tomáš Režnar and [Heureka](https://github.com/heureka/inflection).
 
-Třída je postavena na základě práce [Pavla Sedláka](http://www.pteryx.net/sklonovani.html), která byla zveřejněna pod GNU Lesser General Public License.
-Z tohoto důvodu jsme se rozhodli ji upravit, zveřejnit a umožnit tak její využití, vylepšení a rozšíření dalším lidem.
+This library is about 6 times faster then Heureka implementation and 9 times faster then the original implementation.
+
+Links
+-----
+
+- http://prirucka.ujc.cas.cz/
+- http://www.pteryx.net/sklonovani.html
+- https://en.wikipedia.org/wiki/Czech_declension
+- https://en.wikipedia.org/wiki/Grammatical_gender
+
+License
+-------
+
+GPL 2.1

@@ -1,9 +1,9 @@
 <?php
 
-require_once '../src/Inflection.php';
+require_once __DIR__ . '/../src/Inflection.php';
 
-$name = 'František';
 $inflection = new Inflection();
-$inflected = $inflection->inflect($name, true);
+$inflected = $inflection->inflect('desítková soustava');
 
-print "Dobrý den " . $inflected[5] . PHP_EOL;
+print "Je potřeba znát " . $inflected[4] . PHP_EOL;
+// Je potřeba znát desítkovou soustavu

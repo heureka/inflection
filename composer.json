@@ -1,6 +1,9 @@
 {
-    "name": "heureka/inflection",
-    "description": "Class for czech inflection of names and words",
+    "name": "mikulas/inflection",
+	"type": "library",
+    "description": "Czech inflection library",
+	"keywords": ["czech", "inflection", "declension", "language", "linguistics"],
+	"license": ["GPL-2.1"],
     "authors": [
         {
             "name": "Pavel Sedlák",
@@ -9,12 +12,18 @@
         {
             "name": "Heureka",
             "email": "podpora@heureka.cz"
-        }
-
+        },
+	    {
+		    "name": "Mikuláš Dítě",
+		    "email": "mikulas@dite.pro"
+	    }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
-        "php": ">=5.1.0"
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
     },
     "autoload": {
         "files": ["src/Inflection.php"]
