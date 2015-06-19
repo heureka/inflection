@@ -1,5 +1,5 @@
 {
-    "name": "mikulas/inflection",
+    "name": "heureka/inflection",
 	"type": "library",
     "description": "Czech inflection library",
 	"keywords": ["czech", "inflection", "declension", "language", "linguistics"],
