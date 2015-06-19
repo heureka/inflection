@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/heureka/inflection.svg)](https://travis-ci.org/heureka/inflection)
+
 Czech inclension (declension), české skloňování
 ===============================================
 
