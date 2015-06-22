@@ -31,7 +31,6 @@ class InflectionTest extends PHPUnit_Framework_TestCase
             array(
                 "Jan", //name to inflection
                 true, //environment ? - životné
-                null, //preferred genus
                 array( //expected result
                     1 => "Jan",
                     2 => "Jana",
@@ -52,7 +51,6 @@ class InflectionTest extends PHPUnit_Framework_TestCase
             array(
                 "Josef", //name to inflection
                 true, //environment ? - životné
-                null, //preferred genus
                 array( //expected result
                     1 => "Josef",
                     2 => "Josefa",
@@ -73,7 +71,6 @@ class InflectionTest extends PHPUnit_Framework_TestCase
             array(
                 "Zeus", //name to inflection
                 true, //environment ? - životné
-                null, //preferred genus
                 array( //expected result
                     1 => "Zeus",
                     2 => "Dia",
@@ -94,7 +91,6 @@ class InflectionTest extends PHPUnit_Framework_TestCase
             array(
                 "Monika", //name to inflection
                 true, //environment ? - životné
-                null, //preferred genus
                 array( //expected result
                     1 => "Monika",
                     2 => "Moniky",
@@ -115,7 +111,6 @@ class InflectionTest extends PHPUnit_Framework_TestCase
             array(
                 "Čtyři", //name to inflection
                 null, //environment ? - životné
-                null, //preferred genus
                 array( //expected result
                     1 => "Čtyři",
                     2 => "Čtyřech",
@@ -132,6 +127,26 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                     13 => '',
                     14 => ''
                 )
+            ),
+            array(
+                "Marcel", //name to inflection
+                null, //environment ? - životné - null because it is inferred from the array with exceptional words
+                array( //expected result
+                       1 => "Marcel",
+                       2 => "Marcela",
+                       3 => "Marcelovi",
+                       4 => "Marcela",
+                       5 => "Marceli",
+                       6 => "Marcelovi",
+                       7 => "Marcelem",
+                       8 => 'Marcelové',
+                       9 => 'Marcelů',
+                       10 => 'Marcelům',
+                       11 => 'Marcely',
+                       12 => 'Marcelové',
+                       13 => 'Marcelích',
+                       14 => 'Marcely'
+                )
             )
 
         );
@@ -140,9 +155,9 @@ class InflectionTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerNames
      */
-    public function testInflectionNames($name, $env, $preferredGenus, $expected)
+    public function testInflectionNames($name, $env, $expected)
     {
-        $inflected = $this->inflection->inflect($name, $env, $preferredGenus);
+        $inflected = $this->inflection->inflect($name, $env);
         $this->assertSame($expected, $inflected);
     }
 
