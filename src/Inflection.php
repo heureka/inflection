@@ -57,9 +57,9 @@ class Inflection
         // přítel
         ["m", "-([í])tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "átelé", "áteli", "átelům", "átele", "átelé", "átelích", "áteli"],
         // Marcel
-        ["m", "-([c])el", "0ela", "0elovi", "0ela", "0eli", "0elovi", "0elem", "celové", "celové", "celům", "cely", "celé", "celích", "celi"],
+        ["m", "-([c])el", "0ela", "0elovi", "0ela", "0eli", "0elovi", "0elem", "celové", "celů", "celům", "cely", "celové", "celích", "cely"],
         // Daniel
-        ["m", "-([i])el", "0ela", "0elovi", "0ela", "0eli", "0elovi", "0elem", "ielové", "ielové", "ielům", "iely", "ielové", "ielích", "ieli"],
+        ["m", "-([i])el", "0ela", "0elovi", "0ela", "0eli", "0elovi", "0elem", "ielové", "ielů", "ielům", "iely", "ielové", "ielích", "iely"],
         // malé
         ["s", "-é", "ého", "ému", "é", "é", "ém", "ým", "á", "ých", "ým", "á", "á", "ých", "ými"],
         // malá
