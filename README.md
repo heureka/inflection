@@ -33,7 +33,8 @@ echo "$inflected[8] nejsou vždy to nejlepší";
 
 Based on original work by [Pavel Sedlák](http://www.pteryx.net/sklonovani.html), Tomáš Režnar.
 
-This library is about 6 times faster then first Heureka implementation and 9 times faster then the original implementation.
+This library is about 6 times faster than first Heureka implementation and 9 times faster than the original 
+implementation.
 
 Links
 -----
