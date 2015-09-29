@@ -147,6 +147,26 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                        13 => 'Marcelích',
                        14 => 'Marcely'
                 )
+            ),
+            array(
+                "Dagmar", //name to inflection
+                null, //environment ? - životné - null because it is inferred from the array with exceptional words
+                array( //expected result
+                    1 => "Dagmar",
+                    2 => "Dagmary",
+                    3 => "Dagmaře",
+                    4 => "Dagmar",
+                    5 => "Dagmar",
+                    6 => "Dagmar",
+                    7 => "Dagmar",
+                    8 => 'Dagmary',
+                    9 => 'Dagmar',
+                    10 => 'Dagmarám',
+                    11 => 'Dagmary',
+                    12 => 'Dagmary',
+                    13 => 'Dagmarách',
+                    14 => 'Dagmarami'
+                )
             )
 
         );
