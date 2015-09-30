@@ -537,20 +537,20 @@ class Inflection
 
             $inflectedWord = [1 => $word];
             $word = $this->breakAccents($word);
-
+            $wordLower = strtolower($word);
             if ($gender === NULL) {
-                if (in_array($word, $this->forceM)) {
+                if (in_array($wordLower, $this->forceM)) {
                     $gender = 'm';
-                } else if (in_array($word, $this->forceF)) {
+                } else if (in_array($wordLower, $this->forceF)) {
                     $gender = 'f';
-                } else if (in_array($word, $this->forceS)) {
+                } else if (in_array($wordLower, $this->forceS)) {
                     $gender = 's';
                 }
             }
 
             $exception = NULL;
             foreach ($this->exceptions as $e) {
-                if ($word === $e[0]) {
+                if ($wordLower === $e[0]) {
                     $exception = $e;
                     break;
                 }
