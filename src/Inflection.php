@@ -53,7 +53,7 @@ class Inflection
         ["f", "-([bcčdhklmnprsštvzž])ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními"],
         ["s", "-([bcčdhklmnprsštvzž])ní", "0ního", "0nímu", "0ní/0ního", "0ní", "0ním", "0ním", "0ní", "0ních", "0ním", "0ní", "0ní", "0ních", "0ními"],
         // držitel
-        ["m", "-([i])tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "0telé", "0telů", "0telům", "0tele", "0telé", "0telích", "0teli"],
+        ["m", "-([i])tel", "0tele", "0teli", "0tele", "0teli", "0teli", "0telem", "0telé", "0tel", "0telům", "0tele", "0telé", "0telích", "0teli"],
         // přítel
         ["m", "-([í])tel", "0tele", "0teli", "0tele", "0tel", "0teli", "0telem", "átelé", "áteli", "átelům", "átele", "átelé", "átelích", "áteli"],
         // Marcel
