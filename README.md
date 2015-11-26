@@ -47,6 +47,6 @@ Links
 License
 -------
 
-GPL 2.1
+LGPL v2.1
 
 Huge thanks [mikulas](https://github.com/mikulas/inflection) for his great job with improvements.
