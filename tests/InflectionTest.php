@@ -132,20 +132,20 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                 "Marcel", //name to inflection
                 null, //environment ? - životné - null because it is inferred from the array with exceptional words
                 array( //expected result
-                       1 => "Marcel",
-                       2 => "Marcela",
-                       3 => "Marcelovi",
-                       4 => "Marcela",
-                       5 => "Marceli",
-                       6 => "Marcelovi",
-                       7 => "Marcelem",
-                       8 => 'Marcelové',
-                       9 => 'Marcelů',
-                       10 => 'Marcelům',
-                       11 => 'Marcely',
-                       12 => 'Marcelové',
-                       13 => 'Marcelích',
-                       14 => 'Marcely'
+                    1 => "Marcel",
+                    2 => "Marcela",
+                    3 => "Marcelovi",
+                    4 => "Marcela",
+                    5 => "Marceli",
+                    6 => "Marcelovi",
+                    7 => "Marcelem",
+                    8 => 'Marcelové',
+                    9 => 'Marcelů',
+                    10 => 'Marcelům',
+                    11 => 'Marcely',
+                    12 => 'Marcelové',
+                    13 => 'Marcelích',
+                    14 => 'Marcely'
                 )
             ),
             array(
@@ -167,8 +167,47 @@ class InflectionTest extends PHPUnit_Framework_TestCase
                     13 => 'Dagmarách',
                     14 => 'Dagmarami'
                 )
+            ),
+            array(
+                "Ivo", //name to inflection
+                true, //environment ? - životné
+                array( //expected result
+                    1 => "Ivo",
+                    2 => "Iva",
+                    3 => "Ivovi",
+                    4 => "Iva",
+                    5 => "Ivo",
+                    6 => "Ivovi",
+                    7 => "Ivem",
+                    8 => 'Ivové',
+                    9 => 'Ivů',
+                    10 => 'Ivům',
+                    11 => 'Ivy',
+                    12 => 'Ivové',
+                    13 => 'Ivech',
+                    14 => 'Ivy'
+                )
+            ),
+            array(
+                "Iva", //name to inflection
+                true, //environment ? - životné
+                array( //expected result
+                    1 => "Iva",
+                    2 => "Ivy",
+                    3 => "Ivě",
+                    4 => "Ivu",
+                    5 => "Ivo",
+                    6 => "Ivě",
+                    7 => "Ivou",
+                    8 => 'Ivy',
+                    9 => 'Iv',
+                    10 => 'Ivám',
+                    11 => 'Ivy',
+                    12 => 'Ivy',
+                    13 => 'Ivách',
+                    14 => 'Ivami'
+                )
             )
-
         );
     }
 
