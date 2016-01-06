@@ -324,7 +324,7 @@ class Inflection
         // Hugo
         ["m", "-go", "a", "govi", "ga", "ga", "govi", "gem", "gové", "gů", "gům", "gy", "gové", "zích", "gy"],
         // Kvido
-        ["m", "-o", "a", "ovi", "a", "a", "ovi", "em", "ové", "ů", "ům", "y", "ové", "ech", "y"],
+        ["m", "-o", "a", "ovi", "a", "o", "ovi", "em", "ové", "ů", "ům", "y", "ové", "ech", "y"],
         // šaty
         [NULL, "-([tp])y", NULL, NULL, NULL, NULL, NULL, NULL, "0y", "0", "0ům", "0y", "0y", "0ech", "0ami"],
         // dřeváky
@@ -337,7 +337,8 @@ class Inflection
         ["f", "-er", "er", "er", "er", "er", "er", "er", "ery", "er", "erám", "ery", "ery", "erách", "erami"],
         // Joe
         ["m", "-oe", "oema", "oemovi", "oema", "oeme", "emovi", "emem", "oemové", "oemů", "oemům", "oemy", "oemové", "oemech", "oemy"],
-
+        //Iva
+        ["f", "-a", "y", "ě", "u", "o", "ě", "ou", "y", "", "ám", "y", "y", "ách", "ami"],
     ];
 
     /**
