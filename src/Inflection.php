@@ -60,6 +60,8 @@ class Inflection
         ["m", "-([c])el", "0ela", "0elovi", "0ela", "0eli", "0elovi", "0elem", "celové", "celů", "celům", "cely", "celové", "celích", "cely"],
         // Daniel
         ["m", "-([i])el", "0ela", "0elovi", "0ela", "0eli", "0elovi", "0elem", "ielové", "ielů", "ielům", "iely", "ielové", "ielích", "iely"],
+        // Alois
+        ["m", "-([i])s", "0sa", "0sovi", "0se", "0si", "0sovi", "0sem", "sové", "sů", "sům", "sovy", "sové", "sích", "si"],
         // malé
         ["s", "-é", "ého", "ému", "é", "é", "ém", "ým", "á", "ých", "ým", "á", "á", "ých", "ými"],
         // malá
