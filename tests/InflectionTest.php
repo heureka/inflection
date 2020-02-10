@@ -10,7 +10,7 @@
 
 require_once __DIR__ . './../src/Inflection.php';
 
-class InflectionTest extends PHPUnit_Framework_TestCase
+class InflectionTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -19,7 +19,7 @@ class InflectionTest extends PHPUnit_Framework_TestCase
      */
     private $inflection = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->inflection = new Inflection();
