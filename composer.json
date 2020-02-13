@@ -3,7 +3,7 @@
 	"type": "library",
     "description": "Czech inflection library",
 	"keywords": ["czech", "inflection", "declension", "language", "linguistics"],
-	"license": ["GPL-2.1"],
+	"license": ["LGPL-2.1-or-later"],
     "authors": [
         {
             "name": "Pavel Sedlák",
