@@ -19,7 +19,7 @@ class InflectionTest extends \PHPUnit\Framework\TestCase
      */
     private $inflection = null;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->inflection = new Inflection();

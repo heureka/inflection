@@ -3,7 +3,7 @@
 	"type": "library",
     "description": "Czech inflection library",
 	"keywords": ["czech", "inflection", "declension", "language", "linguistics"],
-	"license": ["GPL-2.1"],
+	"license": ["LGPL-2.1-or-later"],
     "authors": [
         {
             "name": "Pavel Sedlák",
@@ -20,8 +20,10 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=7.2.0",
-        "phpunit/phpunit": "~8.0"
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+      "phpunit/phpunit": "~6"
     },
     "autoload": {
         "files": ["src/Inflection.php"]
