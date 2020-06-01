@@ -12,7 +12,7 @@ Usage
 Install with [composer](https://getcomposer.org/):
 
 ```bash
-composer require heureka/inflection
+$ composer require heureka/inflection
 ```
 
 ```php
@@ -30,6 +30,15 @@ echo "$inflected[8] nejsou vždy to nejlepší";
 // vlastní písečky nejsou vždy to nejlepší
 
 ```
+
+Tests
+-----
+
+```bash
+$ docker build . -t inflection
+$ docker run -t inflection vendor/bin/phpunit tests
+```
+
 
 Based on original work by [Pavel Sedlák](http://www.pteryx.net/sklonovani.html), Tomáš Režnar.
 
