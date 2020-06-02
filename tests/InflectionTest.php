@@ -207,7 +207,27 @@ class InflectionTest extends \PHPUnit\Framework\TestCase
                     13 => 'Ivách',
                     14 => 'Ivami'
                 )
-            )
+            ),
+            array(
+                "Luděk", //name to inflection
+                true, //environment ? - životné
+                array( //expected result
+                    1 => "Luděk",
+                    2 => "Luďka",
+                    3 => "Luďkovi",
+                    4 => "Luďka",
+                    5 => "Luďku",
+                    6 => "Luďkovi",
+                    7 => "Luďkem",
+                    8 => "Luďkové",
+                    9 => "Luďků",
+                    10 => "Luďkům",
+                    11 => "Luďky",
+                    12 => "Luďkové",
+                    13 => "Luďcích",
+                    14 => "Luďky"
+                )
+            ),
         );
     }
 

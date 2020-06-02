@@ -62,6 +62,8 @@ class Inflection
         ["m", "-([i])el", "0ela", "0elovi", "0ela", "0eli", "0elovi", "0elem", "ielové", "ielů", "ielům", "iely", "ielové", "ielích", "iely"],
         // Alois
         ["m", "-([o])is", "0ise", "0isovi", "0ise", "0isi", "0isovi", "0isem", "isové", "isů", "isům", "isovy", "isové", "isích", "isi"],
+        // Luděk
+        ["m", "-([o])děk", "0ďka", "0ďkovi", "0ďka", "0ďku", "0ďkovi", "0ďkem", "ďkové", "ďků", "ďkům", "ďky", "ďkové", "ďcích", "ďky"],
         // malé
         ["s", "-é", "ého", "ému", "é", "é", "ém", "ým", "á", "ých", "ým", "á", "á", "ých", "ými"],
         // malá
@@ -540,7 +542,7 @@ class Inflection
 
             $inflectedWord = [1 => $word];
             $word = $this->breakAccents($word);
-            $wordLower = strtolower($word);
+            $wordLower = mb_strtolower($word, 'UTF-8');
             if ($gender === NULL) {
                 if (in_array($wordLower, $this->forceM)) {
                     $gender = 'm';
@@ -553,7 +555,7 @@ class Inflection
 
             $exception = NULL;
             foreach ($this->exceptions as $e) {
-                if ($wordLower === $e[0]) {
+                if ($wordLower === $this->breakAccents($e[0])) {
                     $exception = $e;
                     break;
                 }
@@ -566,11 +568,12 @@ class Inflection
 
                 $word = $exception ? $exception[1] : $word;
                 $left = $this->match($pattern[1], $word);
+
                 if ($left !== -1) {
                     $prefix = mb_substr($word, 0, $left, 'UTF-8');
                     for ($case = 2; $case < 15; $case++) {
                         if ($exception && $case === 4) {
-                            $inflectedWord[$case] = $exception[2];
+                            $inflectedWord[$case] = ucfirst($exception[2]);
                             continue;
                         }
 
