@@ -128,41 +128,41 @@ class Inflection
         ["m", "-vztek", "vzteku", "vzteku", "vztek", "vzteku", "vzteku", "vztekem", "vzteky", "vzteků", "vztekům", "vzteky", "vzteky", "vztecích", "vzteky"],
         ["m", "-dotek", "doteku", "doteku", "dotek", "doteku", "doteku", "dotekem", "doteky", "doteků", "dotekům", "doteky", "doteky", "dotecích", "doteky"],
         ["f", "-hra", "hry", "hře", "hru", "hro", "hře", "hrou", "hry", "her", "hrám", "hry", "hry", "hrách", "hrami"],
-        ["m", "zeus", "dia", "diovi", "dia", "die", "diovi", "diem", "diové", "diů", "diům", NULL, "diové", NULL, NULL],
+        ["m", "zeus", "dia", "diovi", "dia", "die", "diovi", "diem", "diové", "diů", "diům", "", "diové", "", ""],
         ["f", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol", "nikol"],
 
         // číslovky
-        ["-", "-tdva", "tidvou", "tidvoum", "tdva", "tdva", "tidvou", "tidvěmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tdvě", "tidvou", "tidvěma", "tdva", "tdva", "tidvou", "tidvěmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-ttři", "titří", "titřem", "ttři", "ttři", "titřech", "titřemi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tčtyři", "tičtyřech", "tičtyřem", "tčtyři", "tčtyři", "tičtyřech", "tičtyřmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tpět", "tipěti", "tipěti", "tpět", "tpět", "tipěti", "tipěti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tšest", "tišesti", "tišesti", "tšest", "tšest", "tišesti", "tišesti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tsedm", "tisedmi", "tisedmi", "tsedm", "tsedm", "tisedmi", "tisedmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tosm", "tiosmi", "tiosmi", "tosm", "tosm", "tiosmi", "tiosmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tdevět", "tidevíti", "tidevíti", "tdevět", "tdevět", "tidevíti", "tidevíti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
+        ["-", "-tdva", "tidvou", "tidvoum", "tdva", "tdva", "tidvou", "tidvěmi", "", "", "", "", "", "", ""],
+        ["-", "-tdvě", "tidvou", "tidvěma", "tdva", "tdva", "tidvou", "tidvěmi", "", "", "", "", "", "", ""],
+        ["-", "-ttři", "titří", "titřem", "ttři", "ttři", "titřech", "titřemi", "", "", "", "", "", "", ""],
+        ["-", "-tčtyři", "tičtyřech", "tičtyřem", "tčtyři", "tčtyři", "tičtyřech", "tičtyřmi", "", "", "", "", "", "", ""],
+        ["-", "-tpět", "tipěti", "tipěti", "tpět", "tpět", "tipěti", "tipěti", "", "", "", "", "", "", ""],
+        ["-", "-tšest", "tišesti", "tišesti", "tšest", "tšest", "tišesti", "tišesti", "", "", "", "", "", "", ""],
+        ["-", "-tsedm", "tisedmi", "tisedmi", "tsedm", "tsedm", "tisedmi", "tisedmi", "", "", "", "", "", "", ""],
+        ["-", "-tosm", "tiosmi", "tiosmi", "tosm", "tosm", "tiosmi", "tiosmi", "", "", "", "", "", "", ""],
+        ["-", "-tdevět", "tidevíti", "tidevíti", "tdevět", "tdevět", "tidevíti", "tidevíti", "", "", "", "", "", "", ""],
 
-        ["f", "-jedna", "jedné", "jedné", "jednu", "jedno", "jedné", "jednou", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["m", "-jeden", "jednoho", "jednomu", "jednoho", "jeden", "jednom", "jedním", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["s", "-jedno", "jednoho", "jednomu", "jednoho", "jedno", "jednom", "jedním", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-dva", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-dvě", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-tři", "tří", "třem", "tři", "tři", "třech", "třemi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-čtyři", "čtyřech", "čtyřem", "čtyři", "čtyři", "čtyřech", "čtyřmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-pět", "pěti", "pěti", "pět", "pět", "pěti", "pěti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-šest", "šesti", "šesti", "šest", "šest", "šesti", "šesti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-sedm", "sedmi", "sedmi", "sedm", "sedm", "sedmi", "sedmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-osm", "osmi", "osmi", "osm", "osm", "osmi", "osmi", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-devět", "devíti", "devíti", "devět", "devět", "devíti", "devíti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
+        ["f", "-jedna", "jedné", "jedné", "jednu", "jedno", "jedné", "jednou", "", "", "", "", "", "", ""],
+        ["m", "-jeden", "jednoho", "jednomu", "jednoho", "jeden", "jednom", "jedním", "", "", "", "", "", "", ""],
+        ["s", "-jedno", "jednoho", "jednomu", "jednoho", "jedno", "jednom", "jedním", "", "", "", "", "", "", ""],
+        ["-", "-dva", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", "", "", "", "", "", "", ""],
+        ["-", "-dvě", "dvou", "dvoum", "dva", "dva", "dvou", "dvěmi", "", "", "", "", "", "", ""],
+        ["-", "-tři", "tří", "třem", "tři", "tři", "třech", "třemi", "", "", "", "", "", "", ""],
+        ["-", "-čtyři", "čtyřech", "čtyřem", "čtyři", "čtyři", "čtyřech", "čtyřmi", "", "", "", "", "", "", ""],
+        ["-", "-pět", "pěti", "pěti", "pět", "pět", "pěti", "pěti", "", "", "", "", "", "", ""],
+        ["-", "-šest", "šesti", "šesti", "šest", "šest", "šesti", "šesti", "", "", "", "", "", "", ""],
+        ["-", "-sedm", "sedmi", "sedmi", "sedm", "sedm", "sedmi", "sedmi", "", "", "", "", "", "", ""],
+        ["-", "-osm", "osmi", "osmi", "osm", "osm", "osmi", "osmi", "", "", "", "", "", "", ""],
+        ["-", "-devět", "devíti", "devíti", "devět", "devět", "devíti", "devíti", "", "", "", "", "", "", ""],
 
-        ["-", "deset", "deseti", "deseti", "deset", "deset", "deseti", "deseti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
+        ["-", "deset", "deseti", "deseti", "deset", "deset", "deseti", "deseti", "", "", "", "", "", "", ""],
 
-        ["-", "-ná([cs])t", "ná0ti", "ná0ti", "ná0t", "náct", "ná0ti", "ná0ti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
+        ["-", "-ná([cs])t", "ná0ti", "ná0ti", "ná0t", "náct", "ná0ti", "ná0ti", "", "", "", "", "", "", ""],
 
-        ["-", "-dvacet", "dvaceti", "dvaceti", "dvacet", "dvacet", "dvaceti", "dvaceti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-třicet", "třiceti", "třiceti", "třicet", "třicet", "třiceti", "třiceti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-čtyřicet", "čtyřiceti", "čtyřiceti", "čtyřicet", "čtyřicet", "čtyřiceti", "čtyřiceti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
-        ["-", "-desát", "desáti", "desáti", "desát", "desát", "desáti", "desáti", NULL, NULL, NULL, NULL, NULL, NULL, NULL],
+        ["-", "-dvacet", "dvaceti", "dvaceti", "dvacet", "dvacet", "dvaceti", "dvaceti", "", "", "", "", "", "", ""],
+        ["-", "-třicet", "třiceti", "třiceti", "třicet", "třicet", "třiceti", "třiceti", "", "", "", "", "", "", ""],
+        ["-", "-čtyřicet", "čtyřiceti", "čtyřiceti", "čtyřicet", "čtyřicet", "čtyřiceti", "čtyřiceti", "", "", "", "", "", "", ""],
+        ["-", "-desát", "desáti", "desáti", "desát", "desát", "desáti", "desáti", "", "", "", "", "", "", ""],
 
         ["m", "-([i])sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "0sté", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty"],
         ["m", "-([o])sta", "0sty", "0stovi", "0stu", "0sto", "0stovi", "0stou", "0stové", "0stů", "0stům", "0sty", "0sté", "0stech", "0sty"],
@@ -330,9 +330,9 @@ class Inflection
         // Kvido
         ["m", "-o", "a", "ovi", "a", "o", "ovi", "em", "ové", "ů", "ům", "y", "ové", "ech", "y"],
         // šaty
-        [NULL, "-([tp])y", NULL, NULL, NULL, NULL, NULL, NULL, "0y", "0", "0ům", "0y", "0y", "0ech", "0ami"],
+        ["", "-([tp])y", "", "", "", "", "", "", "0y", "0", "0ům", "0y", "0y", "0ech", "0ami"],
         // dřeváky
-        [NULL, "-([k])y", NULL, NULL, NULL, NULL, NULL, NULL, "0y", "e0", "0ám", "0y", "0y", "0ách", "0ami"],
+        ["", "-([k])y", "", "", "", "", "", "", "0y", "e0", "0ám", "0y", "0y", "0ách", "0ami"],
         // ???
         ["f", "-ar", "ary", "aře", "ar", "ar", "ar", "ar", "ary", "ar", "arám", "ary", "ary", "arách", "arami"],
         // madam
@@ -582,7 +582,7 @@ class Inflection
                             $postfix = str_replace($i, $replacement, $postfix);
                         }
 
-                        $posSlash = mb_strpos($postfix, '/', NULL, 'UTF-8');
+                        $posSlash = mb_strpos($postfix, '/', 0, 'UTF-8');
                         if ($posSlash) {
                             if ($animate) {
                                 $postfix = mb_substr($postfix, $posSlash + 1, NULL, 'UTF-8');
