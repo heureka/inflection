@@ -216,7 +216,7 @@ class Inflection
         // píseň
         ["f", "-eň", "ně", "ni", "eň", "ni", "ni", "ní", "ně", "ní", "ním", "ně", "ně", "ních", "němi"],
         // obec
-        ["f", "-ec", "ce", "ci", "ci", "ec", "ci", "cí", "ce", "cí", "cím", "ce", "ce", "cích", "cemi"],
+        ["f", "-ec", "ce", "ci", "ec", "ci", "ci", "cí", "cí", "ce", "cí", "cím", "ce", "ce", "cích", "cemi"],
         // Třeboň
         ["f", "-oň", "oně", "oni", "oň", "oni", "oni", "oní", "oně", "oní", "oním", "oně", "oně", "oních", "oněmi"],
         // beznaděj
