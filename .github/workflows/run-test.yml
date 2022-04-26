@@ -1,0 +1,25 @@
+name: Reusable test flow
+
+on:
+  workflow_call:
+    inputs:
+      php_version:
+        required: true
+        type: string
+      composer_args:
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with: 
+          php-version: ${{ inputs.php_version }}
+          tools: composer:v2.2.12
+      - run: composer install --no-interaction --prefer-source ${{ inputs.composer_args }}
+      - run: composer exec phpunit tests
