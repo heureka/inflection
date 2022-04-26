@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  - push
+
+jobs:
+  test-php7:
+    uses: ./.github/workflows/run-test.yml
+    with:
+      php_version: "7.0"
+
+  test-php71:
+    uses: ./.github/workflows/run-test.yml
+    with:
+      php_version: "7.1"
+
+  test-php72:
+    uses: ./.github/workflows/run-test.yml
+    with:
+      php_version: "7.2"
+
+  test-php73:
+    uses: ./.github/workflows/run-test.yml
+    with:
+      php_version: "7.3"
+
+  test-php74:
+    uses: ./.github/workflows/run-test.yml
+    with:
+      php_version: "7.4"
+
+  test-php8:
+    uses: ./.github/workflows/run-test.yml
+    with:
+      php_version: "8.0"
+      composer_args: "--ignore-platform-req=php"
+
+  test-php81:
+    uses: ./.github/workflows/run-test.yml
+    with:
+      php_version: "8.1"
+      composer_args: "--ignore-platform-req=php"

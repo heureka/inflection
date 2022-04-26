@@ -35,8 +35,8 @@ Tests
 -----
 
 ```bash
-$ docker build . -t inflection
-$ docker run -t inflection vendor/bin/phpunit tests
+$ docker build . -t inflection:latest
+$ docker run --rm -ti inflection:latest composer exec phpunit tests
 ```
 
 
