@@ -49,7 +49,7 @@ Links
 -----
 
 - http://prirucka.ujc.cas.cz/
-- http://www.pteryx.net/sklonovani.html
+- [https://web.archive.org/web/20170426075025/http://www.pteryx.net/sklonovani.html](https://web.archive.org/web/20170426075025/http://www.pteryx.net/sklonovani.html)
 - https://en.wikipedia.org/wiki/Czech_declension
 - https://en.wikipedia.org/wiki/Grammatical_gender
 
